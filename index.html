@@ -11,9 +11,9 @@
 
         /* Variáveis para fácil manutenção */
         :root {
-            --cor-primaria: #007bff; /* Azul: Para o "Pro" e para o "conectou" */
-            --cor-secundaria: #28a745; /* Verde: Para o check e para o "Resolveu" */
-            --cor-fundo-splash: #1a1a2e; /* Fundo escuro moderno */
+            --cor-primaria: #007bff; 
+            --cor-secundaria: #28a745; 
+            --cor-fundo-splash: #1a1a2e; 
             --cor-texto-claro: #ffffff; 
         }
 
@@ -29,7 +29,6 @@
         }
 
         /* --- ESTILO DA VINHETA (SPLASH) --- */
-
         #splash-screen {
             position: fixed;
             top: 0;
@@ -45,17 +44,9 @@
             transition: opacity 1s ease-out, visibility 1s ease-out;
         }
 
-        /* SVG Container */
-        #logo-icon {
-            animation: pulse-pin 1.5s infinite; 
-        }
-
-        /* O corpo do balão do mapa (pin) */
-        #map-pin {
-            fill: var(--cor-texto-claro); 
-        }
-
-        /* O círculo interno do pin (o ponto de conexão) */
+        /* SVG Icon Animations remain the same... */
+        #logo-icon { animation: pulse-pin 1.5s infinite; }
+        #map-pin { fill: var(--cor-texto-claro); }
         #map-center {
             fill: var(--cor-primaria); 
             opacity: 0;
@@ -64,8 +55,6 @@
             animation: scale-in-center 0.5s ease-out forwards;
             animation-delay: 0.8s; 
         }
-
-        /* Animação do "Check" (resolução) */
         #check-mark {
             stroke: var(--cor-secundaria);
             stroke-dasharray: 20; 
@@ -75,23 +64,10 @@
         }
 
         /* --- ESTILO DO NOME E SLOGAN --- */
-
         #brand-container {
             margin-top: 30px; 
             text-align: center;
-            /* Garante que o container ocupe a largura total para o padding funcionar */
             width: 100%; 
-        }
-        
-        /* O padding é aplicado no slogan-container para limitar a largura do texto */
-        #slogan-container {
-            opacity: 0; 
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
-            margin-top: 15px; 
-            /* === APLICANDO O PADDING NAS LATERAIS === */
-            padding: 0 3%; 
-            box-sizing: border-box; /* Garante que o padding não aumente a largura total */
         }
 
         #chama-pro-name {
@@ -106,20 +82,19 @@
             display: inline-block; 
             line-height: 1; 
         }
+        #chama-pro-name.visible { opacity: 1; transform: translateY(0); }
+        #chama-pro-name span { color: var(--cor-primaria); }
 
-        #chama-pro-name.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Contém o padding lateral para telas menores */
+        #slogan-container {
+            opacity: 0; 
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+            margin-top: 15px; 
+            padding: 0 3%; /* Padding em mobile */
+            box-sizing: border-box; 
         }
-
-        #chama-pro-name span {
-            color: var(--cor-primaria); 
-        }
-
-        #slogan-container.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        #slogan-container.visible { opacity: 1; transform: translateY(0); }
 
         #slogan {
             font-size: 1.8em; 
@@ -128,8 +103,7 @@
             font-weight: 500;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
             line-height: 0; 
-            /* Limita a largura do texto do slogan para que ele quebre a linha dentro do padding */
-            max-width: 94%; 
+            max-width: 100%; /* Ocupa a largura total disponível dentro do container */
             display: inline-block; 
         }
 
@@ -138,7 +112,9 @@
             content: attr(data-text); 
             display: inline-block;
             overflow: hidden;
-            white-space: nowrap;
+            /* === PROPRIEDADE QUE CAUSAVA O PROBLEMA EM MOBILE === */
+            white-space: nowrap; 
+            /* --------------------------------------------------- */
             border-right: 3px solid white; 
             width: 0;
             line-height: 1.2;
@@ -149,42 +125,48 @@
         }
 
         /* --- ANIMAÇÕES KEYFRAMES --- */
-        @keyframes pulse-pin {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1) translateY(-5px); }
-        }
-
-        @keyframes scale-in-center {
-            to {
-                opacity: 1;
-                transform: scale(1);
+        @keyframes pulse-pin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1) translateY(-5px); } }
+        @keyframes scale-in-center { to { opacity: 1; transform: scale(1); } }
+        @keyframes draw-check { to { stroke-dashoffset: 0; } }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-cursor { from, to { border-color: transparent } 50% { border-color: white } }
+        
+        
+        /* ========================================================== */
+        /* === CORREÇÃO: MEDIA QUERY PARA QUEBRA DE LINHA EM MOBILE === */
+        /* ========================================================== */
+        @media (max-width: 767px) {
+            #slogan::before {
+                /* Permite que o texto quebre a linha em telas pequenas */
+                white-space: normal; 
+                /* O cursor de digitação vai para a próxima linha */
+                border-right: none; 
+                /* Se o texto quebra a linha, a animação de width (typing) precisa ser desativada
+                   ou o texto aparecerá instantaneamente, pois o CSS não tem como animar
+                   a digitação com quebra de linha de forma simples. */
+                width: 100%; 
+                animation: none;
             }
-        }
-
-        @keyframes draw-check {
-            to {
-                stroke-dashoffset: 0; 
+            #slogan {
+                 /* Em mobile, ajustamos o tamanho da fonte para não ficar muito grande */
+                font-size: 1.5em; 
+                line-height: 1.4; /* Espaçamento de linha melhor para texto quebrado */
             }
-        }
-
-        /* Corrigindo a animação 'typing' para garantir quebra de linha em telas pequenas */
-        @keyframes typing {
-            from { max-width: 0 }
-            to { max-width: 100% } 
-        }
-
-        @keyframes blink-cursor {
-            from, to { border-color: transparent }
-            50% { border-color: white }
+            #slogan::after {
+                /* Reintroduz o cursor manualmente após o texto ser renderizado */
+                content: '|';
+                animation: blink-cursor 0.75s step-end infinite;
+            }
+            
+            /* Em telas maiores, mantemos a animação de digitação */
+            #chama-pro-name {
+                font-size: 2.2em;
+            }
         }
         
-        /* Ajuste para telas grandes (desktop) para manter o slogan em uma linha, se possível */
         @media (min-width: 768px) {
             #slogan-container {
                 padding: 0; /* Remove o padding em telas maiores */
-            }
-            #slogan {
-                max-width: 100%; /* Permite que o texto se estenda */
             }
             #slogan::before {
                  white-space: nowrap; /* Garante que não haja quebra de linha na digitação em desktop */
