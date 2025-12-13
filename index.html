@@ -47,7 +47,7 @@
 
         /* SVG Container */
         #logo-icon {
-            animation: pulse-pin 1.5s infinite; /* Animação de pulso contínua no pin */
+            animation: pulse-pin 1.5s infinite; 
         }
 
         /* O corpo do balão do mapa (pin) */
@@ -62,7 +62,7 @@
             transform: scale(0);
             transform-origin: center center;
             animation: scale-in-center 0.5s ease-out forwards;
-            animation-delay: 0.8s; /* Aparece após o pulso inicial do pin */
+            animation-delay: 0.8s; 
         }
 
         /* Animação do "Check" (resolução) */
@@ -71,7 +71,7 @@
             stroke-dasharray: 20; 
             stroke-dashoffset: 20;
             animation: draw-check 0.8s ease-out forwards;
-            animation-delay: 1.8s; /* Aparece depois do centro do mapa */
+            animation-delay: 1.8s; 
         }
 
         /* --- ESTILO DO NOME E SLOGAN --- */
@@ -79,6 +79,19 @@
         #brand-container {
             margin-top: 30px; 
             text-align: center;
+            /* Garante que o container ocupe a largura total para o padding funcionar */
+            width: 100%; 
+        }
+        
+        /* O padding é aplicado no slogan-container para limitar a largura do texto */
+        #slogan-container {
+            opacity: 0; 
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+            margin-top: 15px; 
+            /* === APLICANDO O PADDING NAS LATERAIS === */
+            padding: 0 3%; 
+            box-sizing: border-box; /* Garante que o padding não aumente a largura total */
         }
 
         #chama-pro-name {
@@ -100,14 +113,7 @@
         }
 
         #chama-pro-name span {
-            color: var(--cor-primaria); /* Destaque azul para o "Pro" */
-        }
-
-        #slogan-container {
-            opacity: 0; 
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
-            margin-top: 15px; 
+            color: var(--cor-primaria); 
         }
 
         #slogan-container.visible {
@@ -121,7 +127,10 @@
             letter-spacing: 0.5px;
             font-weight: 500;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            line-height: 0; /* Esconde o texto original */
+            line-height: 0; 
+            /* Limita a largura do texto do slogan para que ele quebre a linha dentro do padding */
+            max-width: 94%; 
+            display: inline-block; 
         }
 
         /* Efeito de digitação no slogan */
@@ -158,9 +167,10 @@
             }
         }
 
+        /* Corrigindo a animação 'typing' para garantir quebra de linha em telas pequenas */
         @keyframes typing {
-            from { width: 0 }
-            to { width: 100% } 
+            from { max-width: 0 }
+            to { max-width: 100% } 
         }
 
         @keyframes blink-cursor {
@@ -168,7 +178,20 @@
             50% { border-color: white }
         }
         
-        /* O Conteúdo Principal é apenas um fallback, pois o usuário será redirecionado */
+        /* Ajuste para telas grandes (desktop) para manter o slogan em uma linha, se possível */
+        @media (min-width: 768px) {
+            #slogan-container {
+                padding: 0; /* Remove o padding em telas maiores */
+            }
+            #slogan {
+                max-width: 100%; /* Permite que o texto se estenda */
+            }
+            #slogan::before {
+                 white-space: nowrap; /* Garante que não haja quebra de linha na digitação em desktop */
+            }
+        }
+
+        /* Conteúdo de fallback */
         #main-content {
             text-align: center;
             padding: 40px;
@@ -216,10 +239,9 @@
             // ====================================================================
             const targetURL = "home.html"; 
             
-            // Tempos de animação (em milissegundos)
-            const delayBeforeName = 2800; // Tempo para o nome aparecer
-            const delayBeforeSlogan = 3500; // Tempo para o slogan começar a digitar
-            const totalSplashDuration = 5500; // Tempo total da vinheta antes de redirecionar
+            const delayBeforeName = 2800; 
+            const delayBeforeSlogan = 3500; 
+            const totalSplashDuration = 5500; 
 
             // 1. Faz o nome "ChamaPro" aparecer
             setTimeout(() => {
@@ -233,9 +255,7 @@
 
             // 3. REDIRECIONAMENTO AUTOMÁTICO
             setTimeout(() => {
-                // Redireciona o navegador para o URL alvo
                 window.location.href = targetURL; 
-
             }, totalSplashDuration);
 
         });
