@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChamaPro | Vinheta de Inicialização</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 🎨 CSS: ESTILOS E ANIMAÇÕES --- */
+
+        /* Variáveis para fácil manutenção */
+        :root {
+            --cor-primaria: #007bff; /* Azul: Para o "Pro" e para o "conectou" */
+            --cor-secundaria: #28a745; /* Verde: Para o check e para o "Resolveu" */
+            --cor-fundo-splash: #1a1a2e; /* Fundo escuro moderno */
+            --cor-texto-claro: #ffffff; 
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #f4f4f4; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        /* --- ESTILO DA VINHETA (SPLASH) --- */
+
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cor-fundo-splash);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; 
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+        }
+
+        /* SVG Container */
+        #logo-icon {
+            animation: pulse-pin 1.5s infinite; /* Animação de pulso contínua no pin */
+        }
+
+        /* O corpo do balão do mapa (pin) */
+        #map-pin {
+            fill: var(--cor-texto-claro); 
+        }
+
+        /* O círculo interno do pin (o ponto de conexão) */
+        #map-center {
+            fill: var(--cor-primaria); 
+            opacity: 0;
+            transform: scale(0);
+            transform-origin: center center;
+            animation: scale-in-center 0.5s ease-out forwards;
+            animation-delay: 0.8s; /* Aparece após o pulso inicial do pin */
+        }
+
+        /* Animação do "Check" (resolução) */
+        #check-mark {
+            stroke: var(--cor-secundaria);
+            stroke-dasharray: 20; 
+            stroke-dashoffset: 20;
+            animation: draw-check 0.8s ease-out forwards;
+            animation-delay: 1.8s; /* Aparece depois do centro do mapa */
+        }
+
+        /* --- ESTILO DO NOME E SLOGAN --- */
+
+        #brand-container {
+            margin-top: 30px; 
+            text-align: center;
+        }
+
+        #chama-pro-name {
+            font-size: 2.8em; 
+            color: var(--cor-texto-claro);
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            display: inline-block; 
+            line-height: 1; 
+        }
+
+        #chama-pro-name.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #chama-pro-name span {
+            color: var(--cor-primaria); /* Destaque azul para o "Pro" */
+        }
+
+        #slogan-container {
+            opacity: 0; 
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+            margin-top: 15px; 
+        }
+
+        #slogan-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #slogan {
+            font-size: 1.8em; 
+            color: white;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            line-height: 0; /* Esconde o texto original */
+        }
+
+        /* Efeito de digitação no slogan */
+        #slogan::before {
+            content: attr(data-text); 
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid white; 
+            width: 0;
+            line-height: 1.2;
+            animation: 
+                typing 1.8s steps(30, end) forwards,
+                blink-cursor 0.75s step-end infinite;
+            animation-delay: 0.3s, 0.3s; 
+        }
+
+        /* --- ANIMAÇÕES KEYFRAMES --- */
+        @keyframes pulse-pin {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1) translateY(-5px); }
+        }
+
+        @keyframes scale-in-center {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes draw-check {
+            to {
+                stroke-dashoffset: 0; 
+            }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% } 
+        }
+
+        @keyframes blink-cursor {
+            from, to { border-color: transparent }
+            50% { border-color: white }
+        }
+        
+        /* O Conteúdo Principal é apenas um fallback, pois o usuário será redirecionado */
+        #main-content {
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <svg id="logo-icon" width="90" height="90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="map-pin" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="var(--cor-texto-claro)"/>
+            <circle id="map-center" cx="12" cy="9.5" r="2.5" fill="var(--cor-primaria)"/>
+            <path id="check-mark" d="M16 8L10.5 13.5L8 11" stroke="transparent" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <div id="brand-container">
+            <h2 id="chama-pro-name">Chama<span>Pro</span></h2>
+            <div id="slogan-container">
+                <p id="slogan" data-text="• Chamou, conectou. Resolveu."></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <h1>Redirecionando...</h1>
+        <p>Se o redirecionamento automático não funcionar, clique <a href="home.html">aqui</a>.</p>
+    </div>
+
+    <script>
+        /* --- 🧠 JavaScript: FLUXO DE ANIMAÇÃO E REDIRECIONAMENTO AUTOMÁTICO --- */
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chamaProName = document.getElementById('chama-pro-name');
+            const sloganContainer = document.getElementById('slogan-container');
+            
+            // ====================================================================
+            // ⚠️ ATENÇÃO: SUBSTITUA ESTE URL PELO ENDEREÇO DA SUA PÁGINA PRINCIPAL!
+            // ====================================================================
+            const targetURL = "home.html"; 
+            
+            // Tempos de animação (em milissegundos)
+            const delayBeforeName = 2800; // Tempo para o nome aparecer
+            const delayBeforeSlogan = 3500; // Tempo para o slogan começar a digitar
+            const totalSplashDuration = 5500; // Tempo total da vinheta antes de redirecionar
+
+            // 1. Faz o nome "ChamaPro" aparecer
+            setTimeout(() => {
+                chamaProName.classList.add('visible');
+            }, delayBeforeName);
+
+            // 2. Faz o slogan aparecer e iniciar a digitação
+            setTimeout(() => {
+                sloganContainer.classList.add('visible');
+            }, delayBeforeSlogan);
+
+            // 3. REDIRECIONAMENTO AUTOMÁTICO
+            setTimeout(() => {
+                // Redireciona o navegador para o URL alvo
+                window.location.href = targetURL; 
+
+            }, totalSplashDuration);
+
+        });
+    </script>
+</body>
+</html>
