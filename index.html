@@ -3,244 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChamaPro | Vinheta de Inicialização</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- 🎨 CSS: ESTILOS E ANIMAÇÕES --- */
+    <title>ChamaPro | Vinheta</title>
 
-        /* Variáveis para fácil manutenção */
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <style>
         :root {
-            --cor-primaria: #007bff; 
-            --cor-secundaria: #28a745; 
-            --cor-fundo-splash: #1a1a2e; 
-            --cor-texto-claro: #ffffff; 
+            --cor-primaria: #007bff;
+            --cor-secundaria: #28a745;
+            --cor-fundo-splash: #1a1a2e;
+            --cor-texto-claro: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            font-family: 'Montserrat', sans-serif; 
-            background-color: #f4f4f4; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
             min-height: 100vh;
-            overflow: hidden; 
+            overflow: hidden;
         }
 
-        /* --- ESTILO DA VINHETA (SPLASH) --- */
+        /* SPLASH */
         #splash-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-color: var(--cor-fundo-splash);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000; 
+            z-index: 1000;
             transition: opacity 1s ease-out, visibility 1s ease-out;
         }
 
-        /* SVG Icon Animations remain the same... */
-        #logo-icon { animation: pulse-pin 1.5s infinite; }
-        #map-pin { fill: var(--cor-texto-claro); }
-        #map-center {
-            fill: var(--cor-primaria); 
-            opacity: 0;
-            transform: scale(0);
-            transform-origin: center center;
-            animation: scale-in-center 0.5s ease-out forwards;
-            animation-delay: 0.8s; 
-        }
-        #check-mark {
-            stroke: var(--cor-secundaria);
-            stroke-dasharray: 20; 
-            stroke-dashoffset: 20;
-            animation: draw-check 0.8s ease-out forwards;
-            animation-delay: 1.8s; 
+        /* LOGO */
+        #logo-icon {
+            width: 90px;
+            height: 90px;
+            animation: pulse-pin 1.5s infinite;
         }
 
-        /* --- ESTILO DO NOME E SLOGAN --- */
+        #map-pin {
+            fill: var(--cor-texto-claro);
+        }
+
+        #map-center {
+            fill: var(--cor-primaria);
+            opacity: 0;
+            transform: scale(0);
+            transform-origin: center;
+            animation: scale-in-center 0.5s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+
+        #check-mark {
+            stroke: var(--cor-secundaria);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 20;
+            stroke-dashoffset: 20;
+            animation: draw-check 0.8s ease-out forwards;
+            animation-delay: 1.8s;
+        }
+
+        /* BRAND */
         #brand-container {
-            margin-top: 30px; 
+            margin-top: 30px;
             text-align: center;
-            width: 100%; 
         }
 
         #chama-pro-name {
-            font-size: 2.8em; 
-            color: var(--cor-texto-claro);
+            font-size: 2.8em;
             font-weight: 800;
             letter-spacing: 2px;
-            margin-bottom: 10px;
+            color: var(--cor-texto-claro);
+            margin: 0;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            display: inline-block; 
-            line-height: 1; 
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        #chama-pro-name.visible { opacity: 1; transform: translateY(0); }
-        #chama-pro-name span { color: var(--cor-primaria); }
 
-        /* Contém o padding lateral para telas menores */
-        #slogan-container {
-            opacity: 0; 
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
-            margin-top: 15px; 
-            padding: 0 3%; /* Padding em mobile */
-            box-sizing: border-box; 
+        #chama-pro-name span {
+            color: var(--cor-primaria);
         }
-        #slogan-container.visible { opacity: 1; transform: translateY(0); }
+
+        #chama-pro-name.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SLOGAN */
+        #slogan-container {
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        #slogan-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         #slogan {
-            font-size: 1.8em; 
-            color: white;
-            letter-spacing: 0.5px;
+            font-size: 1.6em;
             font-weight: 500;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            line-height: 0; 
-            max-width: 100%; /* Ocupa a largura total disponível dentro do container */
-            display: inline-block; 
+            letter-spacing: 0.5px;
+            color: transparent; /* CORREÇÃO MOBILE */
+            line-height: 1.2;
+            min-height: 1.2em;
         }
 
-        /* Efeito de digitação no slogan */
         #slogan::before {
-            content: attr(data-text); 
-            display: inline-block;
+            content: attr(data-text);
+            display: inline-block; /* ESSENCIAL PARA SAFARI */
+            white-space: nowrap;
             overflow: hidden;
-            /* === PROPRIEDADE QUE CAUSAVA O PROBLEMA EM MOBILE === */
-            white-space: nowrap; 
-            /* --------------------------------------------------- */
-            border-right: 3px solid white; 
+            border-right: 3px solid white;
             width: 0;
-            line-height: 1.2;
-            animation: 
+            color: white;
+            animation:
                 typing 1.8s steps(30, end) forwards,
                 blink-cursor 0.75s step-end infinite;
-            animation-delay: 0.3s, 0.3s; 
+            animation-delay: 0.3s, 0.3s;
         }
 
-        /* --- ANIMAÇÕES KEYFRAMES --- */
-        @keyframes pulse-pin { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1) translateY(-5px); } }
-        @keyframes scale-in-center { to { opacity: 1; transform: scale(1); } }
-        @keyframes draw-check { to { stroke-dashoffset: 0; } }
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-cursor { from, to { border-color: transparent } 50% { border-color: white } }
-        
-        
-        /* ========================================================== */
-        /* === CORREÇÃO: MEDIA QUERY PARA QUEBRA DE LINHA EM MOBILE === */
-        /* ========================================================== */
-        @media (max-width: 767px) {
-            #slogan::before {
-                /* Permite que o texto quebre a linha em telas pequenas */
-                white-space: normal; 
-                /* O cursor de digitação vai para a próxima linha */
-                border-right: none; 
-                /* Se o texto quebra a linha, a animação de width (typing) precisa ser desativada
-                   ou o texto aparecerá instantaneamente, pois o CSS não tem como animar
-                   a digitação com quebra de linha de forma simples. */
-                width: 100%; 
-                animation: none;
+        /* ANIMAÇÕES */
+        @keyframes pulse-pin {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1) translateY(-5px); }
+        }
+
+        @keyframes scale-in-center {
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
-            #slogan {
-                 /* Em mobile, ajustamos o tamanho da fonte para não ficar muito grande */
-                font-size: 1.5em; 
-                line-height: 1.4; /* Espaçamento de linha melhor para texto quebrado */
+        }
+
+        @keyframes draw-check {
+            to {
+                stroke-dashoffset: 0;
             }
-            #slogan::after {
-                /* Reintroduz o cursor manualmente após o texto ser renderizado */
-                content: '|';
-                animation: blink-cursor 0.75s step-end infinite;
-            }
-            
-            /* Em telas maiores, mantemos a animação de digitação */
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-cursor {
+            50% { border-color: transparent; }
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
             #chama-pro-name {
                 font-size: 2.2em;
             }
-        }
-        
-        @media (min-width: 768px) {
-            #slogan-container {
-                padding: 0; /* Remove o padding em telas maiores */
-            }
-            #slogan::before {
-                 white-space: nowrap; /* Garante que não haja quebra de linha na digitação em desktop */
-            }
-        }
 
-        /* Conteúdo de fallback */
-        #main-content {
-            text-align: center;
-            padding: 40px;
-            opacity: 0;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .hidden {
-            display: none;
+            #slogan {
+                font-size: 1.3em;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div id="splash-screen">
-        <svg id="logo-icon" width="90" height="90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="map-pin" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="var(--cor-texto-claro)"/>
-            <circle id="map-center" cx="12" cy="9.5" r="2.5" fill="var(--cor-primaria)"/>
-            <path id="check-mark" d="M16 8L10.5 13.5L8 11" stroke="transparent" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+<div id="splash-screen">
+    <svg id="logo-icon" viewBox="0 0 24 24" fill="none">
+        <path id="map-pin"
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+        <circle id="map-center" cx="12" cy="9.5" r="2.5" />
+        <path id="check-mark" d="M16 8L10.5 13.5L8 11" />
+    </svg>
 
-        <div id="brand-container">
-            <h2 id="chama-pro-name">Chama<span>Pro</span></h2>
-            <div id="slogan-container">
-                <p id="slogan" data-text="• Chamou, conectou. Resolveu."></p>
-            </div>
+    <div id="brand-container">
+        <h1 id="chama-pro-name">Chama<span>Pro</span></h1>
+        <div id="slogan-container">
+            <p id="slogan" data-text="• Chamou, conectou. Resolveu."></p>
         </div>
     </div>
+</div>
 
-    <div id="main-content" class="hidden">
-        <h1>Redirecionando...</h1>
-        <p>Se o redirecionamento automático não funcionar, clique <a href="home.html">aqui</a>.</p>
-    </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-    <script>
-        /* --- 🧠 JavaScript: FLUXO DE ANIMAÇÃO E REDIRECIONAMENTO AUTOMÁTICO --- */
+    const name = document.getElementById('chama-pro-name');
+    const slogan = document.getElementById('slogan-container');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const chamaProName = document.getElementById('chama-pro-name');
-            const sloganContainer = document.getElementById('slogan-container');
-            
-            // ====================================================================
-            // ⚠️ ATENÇÃO: SUBSTITUA ESTE URL PELO ENDEREÇO DA SUA PÁGINA PRINCIPAL!
-            // ====================================================================
-            const targetURL = "home.html"; 
-            
-            const delayBeforeName = 2800; 
-            const delayBeforeSlogan = 3500; 
-            const totalSplashDuration = 5500; 
+    const targetURL = "home.html"; // ALTERE AQUI
+    const delayName = 2800;
+    const delaySlogan = 3500;
+    const totalTime = 5500;
 
-            // 1. Faz o nome "ChamaPro" aparecer
-            setTimeout(() => {
-                chamaProName.classList.add('visible');
-            }, delayBeforeName);
+    setTimeout(() => {
+        name.classList.add('visible');
+    }, delayName);
 
-            // 2. Faz o slogan aparecer e iniciar a digitação
-            setTimeout(() => {
-                sloganContainer.classList.add('visible');
-            }, delayBeforeSlogan);
+    setTimeout(() => {
+        slogan.classList.add('visible');
+    }, delaySlogan);
 
-            // 3. REDIRECIONAMENTO AUTOMÁTICO
-            setTimeout(() => {
-                window.location.href = targetURL; 
-            }, totalSplashDuration);
+    setTimeout(() => {
+        window.location.href = targetURL;
+    }, totalTime);
 
-        });
-    </script>
+});
+</script>
+
 </body>
 </html>
