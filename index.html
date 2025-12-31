@@ -1,802 +1,343 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="ChamaPro conecta clientes a profissionais locais com rapidez, transparência e sem burocracia. Chamou, conectou. Resolveu.">
-
-    <meta property="og:title" content="ChamaPro Conectando Clientes a Profissionais.">
-
-    <meta property="og:description"
-        content="Solicite agora serviços de montagem de móveis, hidráulica, elétrica, pintura e dentre outros. Serviços em geral.">
-
-    <meta property="og:image" content="https://www.chamapro.com.br/logotipo-chamapro.png">
-
-    <meta property="og:url" content="https://www.chamapro.com.br">
-
-    <meta property="og:type" content="website">
-
-    <title>ChamaPro - Conexão Profissional Impecável</title>
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap"
-        rel="stylesheet">
-
+    <title>Site Profissional por R$297 - Entrega Rápida</title>
     <style>
-        /* --- DESIGN SYSTEM DO SITE PRINCIPAL --- */
         :root {
-            --cor-primaria: #004a7c;
-            --cor-secundaria: #28a745;
-            --cor-destaque: #ffc107;
-            --cor-texto-escuro: #212529;
-            --cor-texto-claro: #f8f9fa;
-            --cor-fundo-secao: #f4f4f7;
-            --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --transicao-rapida: 0.3s ease;
-            --cor-fundo-splash: #1a1a2e;
-            /* Fundo escuro moderno para a vinheta */
+            --primary-color: #2528d3;
+            /* Verde WhatsApp */
+            --secondary-color: #14075e;
+            --dark-color: #1a1a1a;
+            --light-color: #f4f4f4;
         }
 
-        /* Reset e Base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            color: var(--cor-texto-escuro);
+            background-color: var(--light-color);
+            color: var(--dark-color);
             line-height: 1.6;
-            background-color: var(--cor-fundo-claro);
-            scroll-behavior: smooth;
-        }
-
-        /* Oculta o scrollbar enquanto a vinheta está ativa */
-        body.splash-active {
-            overflow: hidden;
-            min-height: 100vh;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--cor-primaria);
-            font-weight: 700;
-        }
-
-        /* ------------------------------------------- */
-        /* --- ESTILOS DA VINHETA (SPLASH SCREEN) --- */
-        /* ------------------------------------------- */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--cor-fundo-splash);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            /* Z-index muito alto para cobrir tudo */
-            transition: opacity 1s ease-out, visibility 1s ease-out;
-        }
-
-        #splash-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* (Resto dos estilos da VINHETA: #logo-icon, #map-pin, #map-center, #check-mark, #brand-container, #chama-pro-name, #slogan-container, #slogan, @keyframes...) */
-
-        #logo-icon {
-            animation: pulse-pin 1.5s infinite;
-        }
-
-        #map-pin {
-            fill: var(--cor-texto-claro);
-        }
-
-        #map-center {
-            fill: var(--cor-primaria);
-            opacity: 0;
-            transform: scale(0);
-            transform-origin: center center;
-            animation: scale-in-center 0.5s ease-out forwards;
-            animation-delay: 0.8s;
-        }
-
-        #check-mark {
-            stroke: var(--cor-secundaria);
-            stroke-dasharray: 20;
-            stroke-dashoffset: 20;
-            animation: draw-check 0.8s ease-out forwards;
-            animation-delay: 1.8s;
-        }
-
-        #brand-container {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        #chama-pro-name {
-            font-size: 2.8em;
-            color: var(--cor-texto-claro);
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            display: inline-block;
-            line-height: 1;
-        }
-
-        #chama-pro-name.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #chama-pro-name span {
-            color: var(--cor-primaria);
-        }
-
-        #slogan-container {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
-            margin-top: 15px;
-        }
-
-        #slogan-container.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #slogan {
-            font-size: 1.8em;
-            color: white;
-            letter-spacing: 0.5px;
-            font-weight: 500;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            line-height: 0;
-        }
-
-        #slogan::before {
-            content: attr(data-text);
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid white;
-            width: 0;
-            line-height: 1.2;
-            animation: typing 1.8s steps(30, end) forwards, blink-cursor 0.75s step-end infinite;
-            animation-delay: 0.3s, 0.3s;
-        }
-
-        @keyframes pulse-pin {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1) translateY(-5px);
-            }
-        }
-
-        @keyframes scale-in-center {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes draw-check {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes typing {
-            from {
-                width: 0
-            }
-
-            to {
-                width: 100%
-            }
-        }
-
-        @keyframes blink-cursor {
-
-            from,
-            to {
-                border-color: transparent
-            }
-
-            50% {
-                border-color: white
-            }
-        }
-
-        /* ------------------------------------------- */
-        /* --- ESTILOS DO CONTEÚDO PRINCIPAL (APP) --- */
-        /* ------------------------------------------- */
-        #main-app-content {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 1s ease-in;
-        }
-
-        #main-app-content.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* (Aqui começa o restante do CSS do seu site principal) */
-
-        section {
-            padding: 80px 5%;
-            max-width: 1300px;
-            margin: auto;
         }
 
         header {
-            background-color: var(--cor-primaria);
-            padding: 18px 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-svg {
-            display: flex;
-            align-items: center;
-            height: 40px;
-        }
-
-        .logo-svg-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--cor-texto-claro);
-            letter-spacing: 1px;
-            margin-left: 8px;
-        }
-
-        nav a {
-            color: var(--cor-texto-claro);
-            text-decoration: none;
-            margin-left: 35px;
-            font-weight: 500;
-            transition: color var(--transicao-rapida);
-            position: relative;
-        }
-
-        nav a:hover {
-            color: var(--cor-destaque);
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0, 74, 124, 0.85), rgba(0, 74, 124, 0.85)),
-                url('placeholder-conexao-segura.jpg') no-repeat center center/cover;
-            color: var(--cor-texto-claro);
-            padding: 30px 5% 120px;
+            height: 37px;
+            background: rgb(17, 28, 121);
+            padding: 5px;
             text-align: center;
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
         }
 
-        .slogan {
-            font-size: 1.3em;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            font-weight: 600;
-            color: var(--cor-destaque);
-            padding: 5px 15px;
-            border: 1px solid var(--cor-destaque);
-            border-radius: 4px;
-        }
-
-        .hero h1 {
-            font-size: 3.8em;
-            margin-bottom: 25px;
-            color: var(--cor-texto-claro);
-            line-height: 1.1;
-        }
-
-        .cta-button {
-            background-color: var(--cor-secundaria);
-            color: white;
-            padding: 16px 35px;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 6px;
-            transition: background-color var(--transicao-rapida), transform var(--transicao-rapida);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: var(--sombra-suave);
-            border: none;
-        }
-
-        .cta-button:hover {
-            background-color: #1e7e34;
-            transform: translateY(-1px);
-        }
-
-        .estrategia-leitura {
-            text-align: center;
-            background-color: var(--cor-fundo-secao);
-        }
-
-        .estrategia-leitura h2 {
-            margin-bottom: 40px;
-            font-size: 2.5em;
-        }
-
-        .passos-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .passo {
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: var(--sombra-suave);
-            background: var(--cor-fundo-claro);
-            border-top: 4px solid var(--cor-secundaria);
-            transition: all var(--transicao-rapida);
-        }
-
-        .passo:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .passo h3 {
-            color: var(--cor-primaria);
-            margin-bottom: 10px;
-            font-size: 1.6em;
-        }
-
-        .passo p {
-            font-size: 0.95em;
-            color: #555;
-        }
-
-        .solicitacao-servico {
-            background-image: url('placeholder-tools-bg-dark.jpg');
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            padding: 100px 5%;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .formulario-wrapper {
-            background-color: rgba(255, 255, 255, 0.98);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            max-width: 650px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            border: 1px solid #e0e0e0;
-        }
-
-        .formulario-wrapper h3 {
+            padding: 5px 20px;
             text-align: center;
-            margin-bottom: 10px;
-            font-size: 2.4em;
-            color: var(--cor-primaria);
         }
 
-        .modelo-info-form {
-            text-align: center;
-            color: #555;
-            margin-bottom: 35px;
-            font-weight: 400;
-            font-size: 1.05em;
-        }
-
-        .form-group {
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 20px;
+            color: var(--dark-color);
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: var(--cor-texto-escuro);
-            font-size: 0.95em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        h1 span {
+            color: var(--primary-color);
         }
 
-        input:not([type="radio"]),
-        textarea,
-        select {
-            width: 100%;
-            padding: 14px 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1em;
-            color: var(--cor-texto-escuro);
-            background-color: #ffffff;
-            transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
+        .highlight {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: var(--cor-secundaria);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(40, 167, 69, 0.2);
-            outline: none;
+        .card-promo {
+            /* Caminho para a sua imagem */
+            background-image: url('Gemini_Generated_Image_8f6zn98f6zn98f6z.png');
+
+            /* Garante que a imagem cubra toda a tela */
+            background-size: cover;
+
+            /* Fixa a imagem para ela não rolar com o conteúdo */
+            background-attachment: fixed;
+
+            /* Centraliza a imagem */
+            background-position: center;
+
+            /* Evita que a imagem se repita caso seja pequena */
+            background-repeat: no-repeat;
+
+            /* Define uma cor de fundo caso a imagem demore a carregar */
+            background-color: #333;
+
+            margin: 0;
+            padding: 0;
+            height: 50vh;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
         }
 
-        .formulario-wrapper h4 {
-            margin-top: 25px;
-            margin-bottom: 15px;
-            color: var(--cor-primaria);
-            font-size: 1.2em;
-            font-weight: 700;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin: 20px 0;
         }
 
-        .endereco-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 18px;
+        .price small {
+            font-size: 1rem;
+            color: #777;
         }
 
-        .endereco-grid-full {
-            grid-column: 1 / span 2;
+        .features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+            display: inline-block;
         }
 
-        .vantagens {
+        .features li {
+            background-color:#260cb8;
+            border-radius: 10px;
             text-align: center;
-            margin-top: 35px;
-            font-weight: 600;
-            color: var(--cor-primaria);
-            font-size: 1em;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            padding: 5px;
+            color: rgb(255, 255, 255);
         }
 
-        .vantagens span {
-            margin: 0 10px;
-            color: #28a745;
-        }
-
-        .vantagens span::before {
-            content: '✔ ';
-        }
-
-        .formulario-wrapper .cta-button {
-            background-color: var(--cor-secundaria);
+        .btn-whatsapp {
+            text-transform: uppercase;
+            display: inline-block;
+            background-color: var(--primary-color);
             color: white;
-            padding: 16px 35px;
-            font-size: 1.1em;
-            font-weight: 700;
-            width: 100%;
-            margin-top: 30px;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
         }
 
-        .formulario-wrapper .cta-button:hover {
-            background-color: #1e7e34;
-            transform: translateY(-1px);
+        .btn-whatsapp:hover {
+            transform: scale(1.05);
+            background-color: #20ba5a;
         }
 
         footer {
-            background-color: var(--cor-primaria);
-            color: var(--cor-texto-claro);
             text-align: center;
-            padding: 30px 5%;
-            font-size: 0.9em;
+            padding: 40px;
+            background: #eeeeee;
+            border-top: 1px solid #ddd;
+            font-size: 0.9rem;
         }
 
-        footer .links-legais a {
-            color: var(--cor-destaque);
-            text-decoration: none;
-            margin: 0 10px;
-            transition: color var(--transicao-rapida);
-        }
+        @media screen and (min-width: 600px) {
 
-        footer .links-legais a:hover {
-            color: #fff;
-        }
-
-        /* Responsividade Profissional */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.8em;
-            }
-
-            .passos-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .endereco-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .endereco-grid-full {
-                grid-column: 1 / span 1;
-            }
-
-            header {
+            .card-promo {
+                display: flex;
                 flex-direction: column;
+                height: 60vh;
+            }
+        }
+
+
+        .about {
+
+                        /* Caminho para a sua imagem */
+            background-image: url('chama-pro-background.png');
+
+            /* Garante que a imagem cubra toda a tela */
+            background-size: 80%;
+
+
+            /* Fixa a imagem para ela não rolar com o conteúdo */
+            background-attachment: fixed;
+
+            /* Centraliza a imagem */
+            background-position: center;
+
+            /* Evita que a imagem se repita caso seja pequena */
+            background-repeat: no-repeat;
+
+            /* Define uma cor de fundo caso a imagem demore a carregar */
+            background-color: #0004ff;
+            
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 15px;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .about .container {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .about h3 {
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .about p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .about .intro {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .about .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .about .features li {
+            padding: 10px 0;
+            font-size: 1rem;
+        }
+
+        .about .note {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #ffffff;
+        }
+
+        .about .cta {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 14px 28px;
+            background: #14803b;
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .about .cta:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            
+            .about h2 {
+                font-size: 1.6rem;
             }
 
-            nav {
-                margin-top: 10px;
-            }
-
-            nav a {
-                margin: 0 10px;
+            .about h3 {
+                font-size: 1.2rem;
             }
         }
     </style>
+
 </head>
 
-<body class="splash-active">
+<body>
 
-    <div id="splash-screen">
-        <svg id="logo-icon" width="90" height="90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="map-pin" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-                fill="var(--cor-texto-claro)" />
-            <circle id="map-center" cx="12" cy="9.5" r="2.5" fill="var(--cor-primaria)" />
-            <path id="check-mark" d="M16 8L10.5 13.5L8 11" stroke="transparent" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <div id="brand-container">
-            <h2 id="chama-pro-name">Chama<span>Pro</span></h2>
-            <div id="slogan-container">
-                <p id="slogan" data-text="• Chamou, conectou. Resolveu."></p>
+    <header>
+        <img style="width: 200px;" src="ChamaPro-logo-transparente-atualizado.png" alt="">
+    </header>
+
+    <div class="container">
+        <h1>Seu negócio precisa <span>vender mais</span> pelo WhatsApp?</h1>
+        <p class="highlight">Criamos seu site simples e profissional que leva clientes direto para o seu fechamento.</p>
+
+        <div class="card-promo">
+            <div>
+                <ul class="features">
+                    <li>Site Profissional</li>
+                    <li>Focado em Vendas</li>
+                    <li>Entrega em tempo recorde</li>
+                    <li>Sem taxas mensais</li>
+                </ul>
             </div>
+            <div>
+                <a href="https://wa.me/5511937457836?text=Olá! Quero um site para o meu negócio.*"
+                    class="btn-whatsapp">
+                    Chamar no WhatsApp
+                </a>
+            </div>
+
         </div>
+
+        <section class="about">
+            <div class="container">
+
+                <p class="intro">
+                    Criação de sites objetivos e funcionais para quem quer apresentar seu serviço
+                    e levar o cliente direto para o WhatsApp, sem complicação e sem promessas irreais.
+                </p>
+
+                <p>
+                    Somos a <mark style="border-radius: 4px; padding: 2px; background-color: #2528d3; color: white;"><strong>ChamaPRO</strong></mark> e trabalhamos com páginas simples, rápidas e responsivas,
+                    pensadas para pequenos negócios e profissionais autônomos que precisam apenas
+                    do essencial para estar online.
+                </p>
+
+                <h3>O que nós entregamos</h3>
+
+                <ul class="features">
+                    <li>Site simples (One Page)</li>
+                    <li>Design limpo e profissional</li>
+                    <li>Botão direto para WhatsApp</li>
+                    <li>Responsivo (celular, tablet e desktop)</li>
+                    <li>Entrega rápida e sem reuniões</li>
+                </ul>
+
+                <p class="note">
+                    Não vendemos promessas de faturamento, tráfego garantido ou resultados milagrosos.
+                    Entregamos um site organizado, funcional e pronto para você divulgar.
+                </p>
+
+                <div>
+                <a href="https://wa.me/5511937457836?text=Olá! Quero um site para o meu negócio.*"
+                    class="btn-whatsapp">
+                    Chamar no WhatsApp
+                </a>
+            </div>
+
+            </div>
+        </section>
+
+
+        <p><strong>Mais de 90% dos brasileiros usam o WhatsApp para comprar. Sua empresa está pronta para isso?</strong>
+        </p>
     </div>
 
-    <div id="main-app-content">
+    <footer>
+       ChamaPRO &copy; 2025 - Desenvolvido com foco em resultados.
+    </footer>
 
-        <header>
-            <div class="logo-svg">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                        fill="var(--cor-texto-claro)" />
-                    <path d="M16 8L10.5 13.5L8 11" stroke="var(--cor-secundaria)" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="logo-svg-text">ChamaPro</span>
-            </div>
-            <nav>
-                <a href="#home">Início</a>
-                <a href="#solicitar">Solicitar Serviço</a>
-                <a href="#sobre">Sobre Nós</a>
-            </nav>
-        </header>
-
-        <section class="hero" id="home">
-            <p class="slogan">•Elétrica •Hidráulica •Montagem de móveis</p>
-            <p style="margin-bottom: 40px; font-size: 1.2em; max-width: 700px; font-weight: 300;">(serviços em geral)
-            </p>
-            <h1>Plataforma de intermediação que conecta clientes a profissionais locais.</h1>
-            <p style="letter-spacing: 1px; margin-bottom: 40px; font-size: 1.2em; max-width: 700px; font-weight: 300;">
-                Conectamos você a
-                profissionais disponíveis da sua região para um atendimento rápido, claro e sem burocracia.</p>
-            <a href="#solicitar" class="cta-button">Iniciar Solicitação Gratuita</a>
-        </section>
-
-        <section class="estrategia-leitura" id="sobre">
-            <h2>Transparência e Eficiência: Como a ChamaPro Funciona</h2>
-            <div class="passos-grid">
-                <div class="passo">
-                    <h3>1. Descreva a Necessidade</h3>
-                    <p>O cliente detalha o que precisa no nosso formulário. Simples, rápido e acessível.</p>
-                </div>
-                <div class="passo">
-                    <h3>2. Conexão Inteligente</h3>
-                    <p>Analisamos sua solicitação e localizamos profissionais disponíveis na sua região para atender sua
-                        necessidade.</p>
-                </div>
-                <div class="passo">
-                    <h3>3. Atendimento e Conexão</h3>
-                    <p>Após analisar a solicitação, alinhamos os detalhes com o profissional e, em seguida, conectamos
-                        as
-                        partes para a realização do serviço com transparência.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="solicitacao-servico" id="solicitar">
-            <div class="formulario-wrapper">
-                <h3>Solicitação de Serviço</h3>
-                <p class="modelo-info-form">Informe seus dados e o que precisa. Sem taxas iniciais, sem compromisso.</p>
-
-                <form id="form-chamapro" onsubmit="sendToWhatsApp(event)">
-
-                    <div class="form-group">
-                        <label for="nome">Seu Nome Completo *</label>
-                        <input type="text" id="nome" name="nome" placeholder="Nome" required>
-                    </div>
-
-                    <h4 style="margin-top: 20px; margin-bottom: 10px; color: var(--cor-primaria); font-size: 1.1em;">
-                        Local
-                        de Atendimento:</h4>
-                    <div class="endereco-grid">
-                        <div class="form-group"><input type="text" name="cep" id="cep" placeholder="CEP *" required>
-                        </div>
-                        <div class="form-group"><input type="text" name="cidade" id="cidade" placeholder="Cidade *"
-                                required></div>
-                    </div>
-                    <div class="endereco-grid">
-                        <div class="form-group"><input type="text" name="bairro" id="bairro" placeholder="Bairro *"
-                                required></div>
-                        <div class="form-group endereco-grid-full"><input type="text" name="rua" id="rua"
-                                placeholder="Rua / Avenida *" required></div>
-                    </div>
-                    <div class="endereco-grid">
-                        <div class="form-group"><input type="text" name="numero" id="numero" placeholder="Número *"
-                                required></div>
-                        <div class="form-group"><input type="text" name="complemento" id="complemento"
-                                placeholder="Complemento (Opcional)"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="descricao">Explique em detalhes o que você precisa *</label>
-                        <textarea id="descricao" name="descricao" rows="4"
-                            placeholder="Ex: Chuveiro não esquenta, ou instalar prateleiras e quadro na sala..."
-                            required></textarea>
-                    </div>
-
-                    <div class="form-group" style="font-size: 0.85em;">
-                        <label>
-                            <input type="checkbox" required>
-                            Autorizo o contato da ChamaPro e de profissionais parceiros para tratar desta solicitação.
-                        </label>
-                    </div>
-
-                    <button type="submit" class="cta-button" style="width: 100%;">ENVIAR SOLICITAÇÃO</button>
-
-                    <div class="vantagens">
-                        <span>Gratuito</span> <span>Sem compromisso</span> <span>Atendimento local</span>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <footer>
-            <p>ChamaPro - Conexão de Profissionais Locais © 2025 | Soluções Inteligentes em Serviço.</p>
-            <p style="font-size: 0.75em; margin-top: 10px; opacity: 0.85;"> A ChamaPro atua como intermediadora entre
-                clientes e profissionais independentes. Não executamos os serviços anunciados. </p>
-            <div class="links-legais" style="margin-top: 10px;">
-                <a href="#">Termos de Uso</a> | <a href="#">Política de Privacidade</a> | <a href="#">Fale Conosco</a>
-            </div>
-        </footer>
-
-    </div>
-
-    <script>
-        /* --- LÓGICA DE INICIALIZAÇÃO DA VINHETA E WHATSAPP --- */
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const splashScreen = document.getElementById('splash-screen');
-            const mainContent = document.getElementById('main-app-content');
-            const chamaProName = document.getElementById('chama-pro-name');
-            const sloganContainer = document.getElementById('slogan-container');
-
-            // Tempos de animação (em milissegundos)
-            const delayBeforeName = 2800;
-            const delayBeforeSlogan = 3500;
-            const totalSplashDuration = 5500;
-            const fadeOutDuration = 1000; // Tempo de transição do CSS
-
-            // 1. Inicia as animações da vinheta
-            setTimeout(() => {
-                chamaProName.classList.add('visible');
-            }, delayBeforeName);
-
-            setTimeout(() => {
-                sloganContainer.classList.add('visible');
-            }, delayBeforeSlogan);
-
-            // 2. Transição para o Conteúdo Principal
-            setTimeout(() => {
-                // Esconde a vinheta
-                splashScreen.classList.add('hidden');
-
-                // Mostra o conteúdo principal
-                mainContent.classList.add('visible');
-
-                // Remove a classe de overflow do body após a transição
-                setTimeout(() => {
-                    document.body.classList.remove('splash-active');
-                }, fadeOutDuration);
-
-            }, totalSplashDuration);
-
-
-            // 3. Função de WhatsApp (Código original)
-            function sendToWhatsApp(event) {
-                event.preventDefault();
-
-                const form = document.getElementById('form-chamapro');
-                const data = new FormData(form);
-
-                // Coleta de dados
-                const nome = data.get('nome');
-                const cep = data.get('cep');
-                const cidade = data.get('cidade');
-                const bairro = data.get('bairro');
-                const rua = data.get('rua');
-                const numero = data.get('numero');
-                const complemento = data.get('complemento');
-                const descricao = data.get('descricao');
-
-                // !!! SUBSTITUIR ESTE VALOR PELO NÚMERO REAL DA CHAMAPRO (Ex: 5511987654321) !!!
-                const numeroEmpresa = 'SEU_NUMERO_WHATSAPP';
-
-                // Montagem da mensagem formatada
-                let message = `*Nova Solicitação de Serviço - ChamaPro*
-*DADOS DO CLIENTE:*
-Nome: ${nome}
-*DETALHES DO SERVIÇO:*
-Descrição: ${descricao}
-*ENDEREÇO DE ATENDIMENTO:*
-CEP: ${cep}
-Cidade: ${cidade}
-Bairro: ${bairro}
-Rua/Av: ${rua}, N° ${numero}
-Complemento: ${complemento || 'Não informado'}`;
-
-                const encodedMessage = encodeURIComponent(message).replace(/%0A%0A/g, '%0A');
-
-                const whatsappURL = `https://wa.me/${numeroEmpresa}?text=${encodedMessage}`;
-
-                window.open(whatsappURL, '_blank');
-            }
-
-            // Atribui a função ao formulário globalmente para o evento onsubmit
-            window.sendToWhatsApp = sendToWhatsApp;
-        });
-
-        // 4. Registro do Service Worker para PWA (Manter esta parte)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // Lembre-se de ter o arquivo 'sw.js' e 'manifest.json' na raiz do seu projeto!
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('Service Worker PWA registrado.');
-                    })
-                    .catch(err => {
-                        console.error('Falha no registro do Service Worker:', err);
-                    });
-            });
-        }
-    </script>
 </body>
 
 </html>
