@@ -125,11 +125,12 @@ input[type=date]{min-height:44px;display:block}
 .work{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:18px;margin-top:22px;align-items:start}
 .vid video{width:100%;border-radius:12px;background:#000;display:block;aspect-ratio:9/16;object-fit:cover}
 @media(max-width:700px){.work{grid-template-columns:minmax(0,1fr)}.vid video{max-height:70vh}}
-.gal{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-top:0}
+.gal{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:8px;margin-top:0}
 .gal figure{flex:0 0 min(78%,300px);margin:0;scroll-snap-align:start}
 .gal img{width:100%;height:380px;object-fit:cover;border-radius:12px}@supports (aspect-ratio:3/4){.gal img{height:auto;aspect-ratio:3/4}}
 .gal figcaption{font-size:14px;color:var(--soft);margin-top:6px}
 .navg{display:flex;gap:8px;margin-top:10px}
+.navg button:disabled{opacity:.3;cursor:default}
 .navg button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font:800 18px Inter,sans-serif;cursor:pointer}
 .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:22px}
 .list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:9px}
@@ -142,17 +143,28 @@ input[type=date]{min-height:44px;display:block}
 details{border-top:1px solid var(--line);padding:14px 0}
 summary{font-weight:600;cursor:pointer;font-size:17px}
 details p{margin-top:8px;color:var(--soft)}
-footer{background:var(--kraft);color:#fff;padding-block:28px}
+footer{background:var(--kraft);color:#fff;padding-block:28px 40px}
 footer .pill{background:#fff;color:#1d3cff}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--card);color:var(--ink);border-top:3px solid var(--ink);padding:18px max(16px,5vw) calc(18px + env(safe-area-inset-bottom,0px));display:none;box-shadow:0 -6px 30px rgba(0,0,0,.25)}
 .sheet.on{display:block}
 .sheet .wrap{display:grid;gap:10px;max-width:640px}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;max-width:90vw;text-align:center}
-.toast.on{opacity:1}
+.toast.on{opacity:1;transform:translateX(-50%)}
 @media(max-width:900px){.tool{grid-template-columns:minmax(0,1fr)}.tag{position:static}}
-@media(max-width:700px){.how,.cols{grid-template-columns:minmax(0,1fr)}.mob{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:12px;align-items:center;justify-content:space-between;background:#0c0f1a;color:#fff;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}.mob strong{font-size:22px;white-space:nowrap}.mob small{opacity:.8}.mob .go{width:auto;min-height:46px;padding:0 18px;font-size:16px}body{padding-bottom:78px}.card{flex-basis:150px}}
+@media(max-width:700px){.how,.cols{grid-template-columns:minmax(0,1fr)}.mob{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:12px;align-items:center;justify-content:space-between;background:#0c0f1a;color:#fff;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}.mob strong{font-size:22px;white-space:nowrap}.mob small{opacity:.8}.mob .go{width:auto;min-height:46px;padding:0 18px;font-size:16px}footer.band{padding-bottom:calc(var(--mobh,80px) + 28px)}.card{flex-basis:150px}}
 @media(max-width:420px){.two{grid-template-columns:minmax(0,1fr)}}
+
+/* animações */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.card{transition:transform .2s,box-shadow .2s,border-color .2s}
+@media(hover:hover){.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(12,15,40,.12)}.go:hover{transform:translateY(-2px)}.gal img{transition:transform .4s}.gal figure:hover img{transform:scale(1.03)}}
+.gal figure{overflow:hidden;border-radius:12px}
+.go:active,.add:active,.qty button:active{transform:scale(.96)}
+.bump{animation:bump .35s ease}@keyframes bump{40%{transform:scale(1.12)}}
+.toast{transform:translate(-50%,10px);transition:opacity .25s,transform .25s}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.bump{animation:none}.card,.gal img{transition:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.go{transition:none}}
 </style>
 </head>
@@ -302,6 +314,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 <div class="toast" id="toast"></div>
 
 <script>
+document.documentElement.classList.add("js");
 {
 const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:110,combo:.1,fixacao:30,hoje:40,ajudante:100,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,kmMax:70,fator:1.35};
 const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["outro","Não achei"]];
@@ -458,7 +471,7 @@ function seg(id,key){$(id).querySelectorAll(".chip").forEach(b=>b.setAttribute("
 function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
-$("total").textContent=brl(r.total)+(r.outros?"+":"");$("mtotal").textContent=$("total").textContent;
+const nt=brl(r.total)+(r.outros?"+":"");if($("total").textContent!==nt){$("total").textContent=nt;$("mtotal").textContent=nt;for(const e of [$("total"),$("mtotal")]){e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}}
 const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · ${fmtH(r.hrs)}`:"Nenhum móvel";
 $("time").textContent=n?`Tempo estimado: cerca de ${fmtH(r.hrs)}`:"Escolha pelo menos um móvel";
 $("lines").innerHTML=r.lines.map(([a,v])=>`<li><span>${a}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
@@ -569,11 +582,18 @@ $("send").onclick=enviar;$("msend").onclick=enviar;
 $("sharePics").onclick=async()=>{try{if(!(await sharePics()))toast("Seu celular não deixa compartilhar daqui. Envie as fotos pela galeria na conversa.")}catch(e){}};
 $("closeSheet").onclick=()=>$("sheet").classList.remove("on");
 $("copy").onclick=()=>{const r=calc(),[err]=check(r);$("err").textContent=err;if(err)return;navigator.clipboard.writeText(msg(r)).then(()=>toast("Pedido copiado"),()=>toast("Não foi possível copiar"))};
-const gal=$("gal");const mv=d=>gal.scrollBy({left:d*gal.clientWidth*.8,behavior:"smooth"});$("gp").onclick=()=>mv(-1);$("gn").onclick=()=>mv(1);
+const gal=$("gal");const mv=d=>{const f=gal.querySelector("figure"),st=f?f.offsetWidth+14:gal.clientWidth*.8,max=gal.scrollWidth-gal.clientWidth;gal.scrollTo({left:Math.max(0,Math.min(max,Math.round(gal.scrollLeft/st+d)*st)),behavior:"smooth"})};const navU=()=>{const max=gal.scrollWidth-gal.clientWidth-4;$("gp").disabled=gal.scrollLeft<=4;$("gn").disabled=gal.scrollLeft>=max};gal.addEventListener("scroll",navU,{passive:true});addEventListener("resize",navU);addEventListener("load",navU);navU();$("gp").onclick=()=>mv(-1);$("gn").onclick=()=>mv(1);
 gal.tabIndex=0;gal.addEventListener("keydown",e=>{if(e.key==="ArrowRight")mv(1);if(e.key==="ArrowLeft")mv(-1)});
 window.__detect=detect;
 render();
 }
+
+/* entrada das seções ao rolar e altura da barra */
+(()=>{const els=document.querySelectorAll(".band h2,.band .how>*,.work,.band .cols>*,.areas,details");
+if(!("IntersectionObserver" in window)){return}
+els.forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(i%4)*70+"ms"});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting||x.boundingClientRect.top<0){x.target.classList.add("in");io.unobserve(x.target)}}),{rootMargin:"0px 0px -30px 0px"});els.forEach(e=>io.observe(e))})();
+(()=>{const m=document.querySelector(".mob");if(!m)return;const f=()=>document.body.style.setProperty("--mobh",m.offsetHeight+"px");f();addEventListener("resize",f);if(window.ResizeObserver)new ResizeObserver(f).observe(m)})();
 </script>
 </body>
 </html>
