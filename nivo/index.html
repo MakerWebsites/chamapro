@@ -44,6 +44,16 @@ button{font-family:inherit}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(12,15,40,.08)}
 .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1d3cff;color:#fff;font-weight:800;font-size:15px;margin-right:8px;vertical-align:2px}
 .link{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:14px;background:var(--kraft2);border-radius:12px;padding:12px}
+.link .fh,.link .found{grid-column:1/-1}
+.fh{margin:-2px 0 8px}
+.opt{font-weight:400;color:var(--soft)}
+.cepRow{display:flex;gap:12px;align-items:center}
+.cepRow input{max-width:170px}
+.addr{font-size:15px;margin-top:8px;line-height:1.45}
+.addr b{display:block}
+.addr.err2{color:var(--bad)}
+.found:empty{display:none}
+@media(max-width:520px){.link{grid-template-columns:minmax(0,1fr)}.link .btn{width:100%}}
 .link label{grid-column:1/-1;margin:0}
 .btn{min-height:44px;padding:0 16px;border-radius:10px;border:0;background:#1d3cff;color:#fff;font-weight:800;font-size:15px;cursor:pointer;white-space:nowrap}
 .found{grid-column:1/-1;font-size:15px;font-weight:600;color:var(--ok);overflow-wrap:anywhere}
@@ -81,8 +91,10 @@ button{font-family:inherit}
 .upload input{position:absolute;width:1px;height:1px;opacity:0}
 .form{display:grid;gap:14px;margin-top:12px}
 label{font-weight:600;font-size:15px;display:block;margin-bottom:6px}
-input,select,textarea{width:100%;font:16px Inter,sans-serif;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
+input,select,textarea{width:100%;max-width:100%;-webkit-appearance:none;appearance:none;font:16px Inter,sans-serif;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px}
 textarea{min-height:70px;resize:vertical}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--soft) 50%),linear-gradient(135deg,var(--soft) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:34px}
+input[type=date]{min-height:44px;display:block}
 :focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
 .seg{display:flex;flex-wrap:wrap;gap:8px}
@@ -156,39 +168,46 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 <section class="panel" id="s1">
 <h3><span class="num">1</span>O que vamos montar?</h3>
 <div class="link">
-<label for="url">Comprou pela internet? Cole o link da compra</label>
-<input id="url" inputmode="url" placeholder="Cole aqui o link do anúncio">
-<button type="button" class="btn" id="urlGo">Encontrar</button>
-<div class="found no" id="found">O site lê o nome do móvel no link e calcula o orçamento sozinho.</div>
-<div id="volBox" hidden style="grid-column:1/-1"><label for="vol">Quantas caixas (volumes) chegaram do <span id="volLbl"></span>? <span style="font-weight:400;color:var(--soft)">(opcional, deixa o valor mais preciso)</span></label><input id="vol" type="number" min="1" max="60" inputmode="numeric" placeholder="Ex.: 8"></div>
+<label for="url">Comprou pela internet? Cole o link do anúncio</label>
+<p class="hint fh">No app ou site da loja, toque em compartilhar, copie o link e cole aqui. O valor aparece na hora.</p>
+<input id="url" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="https://...">
+<button type="button" class="btn" id="urlGo">Adicionar</button>
+<div class="found no" id="found" role="status"></div>
+<div id="volBox" hidden style="grid-column:1/-1"><label for="vol">Quantas caixas chegaram do <span id="volLbl"></span>? <span class="opt">(opcional)</span></label><p class="hint fh">Está escrito na etiqueta da caixa, como "volume 1 de 6".</p><input id="vol" type="number" min="1" max="60" inputmode="numeric" placeholder="Ex.: 8"></div>
 </div>
-<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Ou busque: guarda-roupa, beliche, rack..." aria-label="Buscar móvel"></div>
+<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="Ou digite: guarda-roupa, beliche, rack..." aria-label="Buscar móvel"></div>
+<p class="hint">Digite o nome do móvel ou escolha por categoria. Toque em "Adicionar" em cada um.</p>
 <div class="chips" id="cats" role="group" aria-label="Categorias"></div>
 <div id="shelves"></div>
 </section>
 
 <section class="panel" id="s2">
 <h3><span class="num">2</span>Fotos ou print do móvel <span style="font-weight:400;color:var(--soft);font-size:15px">(opcional)</span></h3>
-<p class="hint">Pode ser print do anúncio, foto da caixa ou da etiqueta. Ajuda a confirmar o valor exato.</p>
+<p class="hint">Print do anúncio, foto da caixa ou do lugar onde o móvel vai ficar. As fotos vão junto com o pedido.</p>
 <label class="upload" for="pics"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-8 8"/></svg>Adicionar fotos da galeria<input id="pics" type="file" accept="image/*" multiple></label>
-<p class="found no" id="ocrMsg" role="status" style="margin-top:10px">Se a foto for um print do anúncio ou da etiqueta da caixa, o site lê o nome do móvel e calcula o valor sozinho.</p>
 <div class="photos" id="photos"></div>
 </section>
 
 <section class="panel" id="s3">
 <h3><span class="num">3</span>Onde e quando?</h3>
 <div class="form">
-<div><label for="bairro">Bairro</label><select id="bairro"></select></div>
-<div><label>Quando</label><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje (+ R$ 40)</button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
-<div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
-<div><label>Período</label><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
-<div class="line2"><div><strong>Fixar na parede</strong><p class="hint" style="margin:0">Por ponto: aéreo, painel, prateleira, nicho</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
-<div id="liftBox" hidden><label>Móvel grande: alguém da casa ajuda a levantar por 2 minutos?</label><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Sim, alguém ajuda</button><button type="button" class="chip" data-v="nao">Não (+ R$ 100 de ajudante)</button></div></div>
-<div class="two">
-<div><label for="andar">Acesso</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
-<div><label for="nome">Seu nome <span style="font-weight:400;color:var(--soft)">(opcional)</span></label><input id="nome" autocomplete="name"></div>
+<div><label for="cep">CEP do local da montagem</label><p class="hint fh">Com o CEP, preenchemos o endereço e calculamos o deslocamento.</p>
+<div class="cepRow"><input id="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000"><a class="hint" href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener">Não sei o CEP</a></div>
+<div class="addr" id="addr" role="status"></div></div>
+<div class="two" id="addrBox" hidden>
+<div><label for="num">Número</label><input id="num" inputmode="numeric" autocomplete="address-line2" placeholder="Ex.: 120"></div>
+<div><label for="comp">Complemento <span class="opt">(opcional)</span></label><input id="comp" autocomplete="off" placeholder="Apto, bloco, casa 2"></div>
 </div>
-<div><label for="obs">Observações <span style="font-weight:400;color:var(--soft)">(opcional)</span></label><textarea id="obs" placeholder="Ex.: parede de drywall, móvel já desmontado, horário da portaria"></textarea></div>
+<div><label>Quando</label><p class="hint fh">Atendimento no mesmo dia conforme a agenda, com acréscimo de R$ 40.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje (+ R$ 40)</button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
+<div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
+<div><label>Período</label><p class="hint fh">Manhã: das 8h às 12h. Tarde: das 13h às 18h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
+<div class="line2"><div><strong>Fixar na parede</strong><p class="hint" style="margin:0">Por ponto: aéreo, painel, prateleira, nicho</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
+<div id="liftBox" hidden><label>Móvel grande: alguém da casa ajuda a levantar por 2 minutos?</label><p class="hint fh">Guarda-roupas grandes precisam de duas pessoas só na hora de ficar em pé.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Sim, alguém ajuda</button><button type="button" class="chip" data-v="nao">Não (+ R$ 100 de ajudante)</button></div></div>
+<div class="two">
+<div><label for="andar">Acesso ao local</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
+<div><label for="nome">Seu nome</label><input id="nome" autocomplete="name" autocapitalize="words" placeholder="Como podemos te chamar"></div>
+</div>
+<div><label for="obs">Observações <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="Ex.: parede de drywall, móvel já desmontado, horário da portaria"></textarea></div>
 </div>
 </section>
 </div>
@@ -250,7 +269,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 <section class="band kr">
 <div class="wrap cols" style="margin-top:0">
 <div><h2>Antes do montador chegar</h2><ul class="list yes"><li>Deixe as caixas no cômodo onde o móvel vai ficar</li><li>Libere o espaço do chão e da parede</li><li>Confira se chegaram todas as caixas do pedido</li><li>Avise a portaria, se for prédio</li><li>Tenha uma tomada livre por perto</li></ul></div>
-<div><h2>Bairros atendidos</h2><div class="areas" id="areas"></div><p class="hint" style="margin-top:12px">Outro bairro? Escolha "Outro bairro" no pedido e confirmamos o deslocamento.</p></div>
+<div><h2>Bairros atendidos</h2><div class="areas" id="areas"></div><p class="hint" style="margin-top:12px">Atendemos também outras regiões. O deslocamento é calculado pelo CEP no pedido.</p></div>
 </div>
 </section>
 
@@ -274,7 +293,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 
 <script>
 {
-const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:110,combo:.1,fixacao:30,hoje:40,ajudante:100,longe:20,maxFotos:6};
+const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:110,combo:.1,fixacao:30,hoje:40,ajudante:100,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,kmMax:70,fator:1.35};
 const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["outro","Não achei"]];
 const R=[
 ["gr2","quarto","Guarda-roupa 2 portas",1.5,"gr",2],["gr3","quarto","Guarda-roupa 3 portas",2,"gr",3],["gr4","quarto","Guarda-roupa 4 portas",3,"gr",4],["gr5","quarto","Guarda-roupa 5 portas",3.5,"gr",5],["gr6","quarto","Guarda-roupa 6 portas",4,"gr",6,"g"],["gr8","quarto","Guarda-roupa 8 portas",5.5,"gr",8,"g"],["gr10","quarto","Guarda-roupa 10 portas ou mais",7,"gr",10,"g"],["grc2","quarto","Guarda-roupa 2 portas de correr",4,"grc",2,"g"],["grc3","quarto","Guarda-roupa 3 portas de correr",5,"grc",3,"g"],["closet","quarto","Closet modulado (por módulo)",2,"closet"],
@@ -372,7 +391,6 @@ for(const[re,v]of RULES)if(re.test(t))return typeof v==="function"?v(t):v;
 return null;
 }
 
-$("bairro").innerHTML='<option value="">Escolha o bairro</option><optgroup label="Zona Sul">'+PERTO.map(b=>`<option>${b}</option>`).join("")+'</optgroup><optgroup label="Zona Sul (+ R$ 20 de deslocamento)">'+LONGE.map(b=>`<option>${b}</option>`).join("")+'</optgroup><option value="outro">Outro bairro</option>';
 $("areas").innerHTML=PERTO.concat(LONGE).map(b=>`<span>${b}</span>`).join("");
 const t1=new Date();t1.setDate(t1.getDate()+1);$("data").min=t1.toISOString().slice(0,10);
 document.querySelectorAll(".brand").forEach(e=>e.textContent=CONFIG.nome);
@@ -402,30 +420,30 @@ const outros=units.filter(u=>u.tipo==="o").length;if(outros)lines.push([`Outro m
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
 if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante para levantar",CONFIG.ajudante])}
-const b=$("bairro").value;if(LONGE.includes(b)&&units.length){sub+=CONFIG.longe;lines.push(["Deslocamento",CONFIG.longe])}
+const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push([`Deslocamento (${Math.round(A.km)} km)`,f])}}
 if(st.quando==="hoje"&&units.length){sub+=CONFIG.hoje;lines.push(["Atendimento no mesmo dia",CONFIG.hoje])}
 let total=sub;const notes=[];
 if(big.length+units.filter(u=>u.tipo==="p").length&&sub<CONFIG.minimo){lines.push(["Ajuste para o serviço mínimo",CONFIG.minimo-sub]);total=CONFIG.minimo}
-if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hrs>8)notes.push("Serviço grande: pode levar 2 dias.");if(b==="outro")notes.push("Deslocamento confirmado no WhatsApp.");
+if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hrs>8)notes.push("Serviço grande: pode levar 2 dias.");if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
 return{units,lines,total,hrs,notes,outros,hasBig};
 }
 const fmtH=h=>{const m=Math.round(h*2)/2;return(m<1?"1":String(m).replace(".",","))+" h"};
 function msg(r){
 const g={};r.units.forEach(u=>g[u.nome]=(g[u.nome]||0)+1);
 const quando=st.quando==="hoje"?"Hoje":st.quando==="amanha"?"Amanhã":($("data").value?$("data").value.split("-").reverse().join("/"):"A combinar");
-const b=$("bairro").value==="outro"?"Outro bairro (informo aqui)":$("bairro").value;
+const A=st.addr||{};const end=A.ok?`${A.rua?A.rua+", ":""}${$("num").value.trim()}${$("comp").value.trim()?" – "+$("comp").value.trim():""} – ${A.bairro?A.bairro+", ":""}${A.cidade}/${A.uf} – CEP ${A.cep}`:"";
 const L=[`Olá! Quero agendar uma montagem. Pedido ${code}`,"",...Object.entries(g).map(([n,c])=>`• ${c}x ${n}`)];
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
 if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a levantar":"• Preciso de ajudante");
-L.push("",`Bairro: ${b}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
-if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);
+L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
+if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km)L.push(`Distância aprox.: ${Math.round(A.km)} km`);
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
 if(fotos.length)L.push(`Fotos: ${fotos.length} ${fotos.length>1?"imagens":"imagem"} em seguida`);
 if($("obs").value.trim())L.push(`Obs.: ${$("obs").value.trim()}`);
 L.push("",`Valor estimado: ${brl(r.total)}${r.outros?" + outro móvel pela foto":""} (cerca de ${fmtH(r.hrs)})`,"Estou ciente do que está e do que não está incluso no preço.");
 return L.join("\n");
 }
-function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!$("bairro").value)return["Escolha o bairro.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];return["",""]}
+function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!st.addr||!st.addr.ok)return["Digite o CEP do local da montagem.","s3"];if(!$("num").value.trim())return["Digite o número do endereço.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];return["",""]}
 function seg(id,key){$(id).querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st[key]))}
 function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;seg("quando","quando");seg("turno","turno");seg("lift","lift");
@@ -436,7 +454,7 @@ $("time").textContent=n?`Tempo estimado: cerca de ${fmtH(r.hrs)}`:"Escolha pelo 
 $("lines").innerHTML=r.lines.map(([a,v])=>`<li><span>${a}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
 $("notes").textContent=r.notes.join(" ");
 if($("err").textContent)$("err").textContent=check(r)[0];
-try{localStorage.setItem("nv1",JSON.stringify({qty,fx:st.fx,bairro:$("bairro").value,nome:$("nome").value}))}catch(e){}
+try{localStorage.setItem("nv1",JSON.stringify({qty,fx:st.fx,cep:$("cep").value,num:$("num").value,comp:$("comp").value,nome:$("nome").value}))}catch(e){}
 }
 function toast(s){const e=$("toast");e.textContent=s;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2600)}
 function openWa(text){const a=document.createElement("a");a.href=`https://wa.me/${phone}?text=${encodeURIComponent(text)}`;a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()}
@@ -457,7 +475,7 @@ c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
 const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.8));return{blob,url:URL.createObjectURL(blob)};
 }
 function drawPhotos(){$("photos").innerHTML=fotos.map((f,i)=>`<div class="ph"><img src="${f.url}" alt="Foto ${i+1} do móvel"><button type="button" data-x="${i}" aria-label="Remover foto ${i+1}">×</button></div>`).join("")}
-try{const s=JSON.parse(localStorage.getItem("nv1")||"null");if(s){Object.assign(qty,s.qty||{});st.fx=s.fx||0;$("bairro").value=s.bairro||"";$("nome").value=s.nome||""}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("nv1")||"null");if(s){Object.assign(qty,s.qty||{});st.fx=s.fx||0;$("nome").value=s.nome||"";$("num").value=s.num||"";$("comp").value=s.comp||"";if(s.cep){$("cep").value=s.cep;setTimeout(()=>buscaCep(s.cep),0)}}}catch(e){}
 function slugText(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}return norm(t).replace(/[-_/+.=&?%]+/g," ").replace(/\s+/g," ").trim()}
 function niceName(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}
 const w=t.replace(/\.(html?|aspx|php)$/i,"").split(/[\/\-_+]+/).filter(x=>x&&!/^(p|produto|product|dp|mlb\d*|jm|item|br|pt)$/i.test(x)&&!/^\d{4,}$/.test(x)&&!/^B0[A-Z0-9]{8}$/.test(x)&&!/^[a-z]{1,3}\d{4,}/i.test(x)&&x.length<30);
@@ -501,28 +519,40 @@ const seen=new Set();
 function addFromText(src,label,kind){const e=estimate(src);if(!e)return null;const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key))return{dup:true};seen.add(key);
 const name=label.charAt(0).toUpperCase()+label.slice(1);const id="lk"+(++linkN);
 ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),src:kind==="url"?src:"",via:kind});qty[id]=e.q;st.lastLink=id;return{id,name,e}}
-async function readPhoto(f){const m=$("ocrMsg");m.className="found no";m.textContent="Lendo a foto...";
-try{const w=await getWorker();const{data}=await w.recognize(f.blob);const title=pickTitle(data.text||"");
-if(!title){m.textContent="Não encontramos o nome do móvel nessa foto. Escolha na lista ou cole o link. Se preferir, o valor é confirmado pela foto.";return}
-const r=addFromText(title,title,"foto");if(!r){m.textContent=`Lemos "${title.slice(0,60)}", mas não reconhecemos o tipo de móvel. Escolha na lista acima.`;return}
-if(r.dup){m.className="found";m.textContent="Esse móvel já está no pedido.";return}
-m.className="found";m.textContent=`Encontramos na foto: ${r.name.slice(0,70)}${r.e.det.length?" ("+r.e.det.join(", ")+")":""}. Já está no pedido.`;render()}
-catch(err){m.textContent="Não foi possível ler a foto agora. Ela vai junto no pedido e o valor é confirmado por ela."}}
+async function readPhoto(f){try{const w=await getWorker();const{data}=await w.recognize(f.blob);const title=pickTitle(data.text||"");if(!title)return;const r=addFromText(title,title,"foto");if(!r||r.dup)return;render();toast(`Adicionado ao pedido: ${r.name.slice(0,40)}`)}catch(err){}}
+const deslo=km=>km<=CONFIG.kmLivre||km>CONFIG.kmMax?0:Math.ceil((km-CONFIG.kmLivre)*CONFIG.porKm/5)*5;
+function hav(a,b){const R=6371,t=x=>x*Math.PI/180,dl=t(b.lat-a.lat),dn=t(b.lon-a.lon);const h=Math.sin(dl/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+async function getJ(u){const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),8000);try{const r=await fetch(u,{signal:ctl.signal,headers:{Accept:"application/json"}});if(!r.ok)return null;return await r.json()}catch(e){return null}finally{clearTimeout(tm)}}
+async function geo(A){
+const b=await getJ(`https://brasilapi.com.br/api/cep/v2/${A.cep.replace("-","")}`);const c=b&&b.location&&b.location.coordinates;if(c&&c.latitude&&c.longitude)return{lat:+c.latitude,lon:+c.longitude};
+const q=[];if(A.rua)q.push(`street=${encodeURIComponent(A.rua)}`);q.push(`city=${encodeURIComponent(A.cidade)}`,`state=${encodeURIComponent(A.uf)}`,"country=Brasil");
+let n=await getJ(`https://nominatim.openstreetmap.org/search?format=json&limit=1&${q.join("&")}`);if(n&&n[0])return{lat:+n[0].lat,lon:+n[0].lon};
+n=await getJ(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent([A.bairro,A.cidade,A.uf,"Brasil"].filter(Boolean).join(", "))}`);if(n&&n[0])return{lat:+n[0].lat,lon:+n[0].lon};
+return null}
+let cepSeq=0;
+async function buscaCep(v){v=v.replace(/\D/g,"");if(v.length!==8)return;const my=++cepSeq;const box=$("addr");box.className="addr";box.textContent="Buscando endereço...";
+const d=await getJ(`https://viacep.com.br/ws/${v}/json/`);if(my!==cepSeq)return;
+if(!d||d.erro){st.addr=null;box.className="addr err2";box.textContent="CEP não encontrado. Confira os números.";$("addrBox").hidden=true;render();return}
+const A={ok:true,cep:v.slice(0,5)+"-"+v.slice(5),rua:d.logradouro||"",bairro:d.bairro||"",cidade:d.localidade||"",uf:d.uf||""};st.addr=A;$("addrBox").hidden=false;
+const show=()=>{const fee=A.km?deslo(A.km):0;box.innerHTML=`<b>${esc([A.rua,A.bairro].filter(Boolean).join(" – ")||A.cidade)}</b>${esc(A.cidade)}/${esc(A.uf)}${A.km?` · cerca de ${Math.round(A.km)} km · ${A.km>CONFIG.kmMax?"fora da área, confirmamos no WhatsApp":fee?"deslocamento "+brl(fee):"sem taxa de deslocamento"}`:""}`};
+show();render();if(!$("num").value)$("num").focus({preventScroll:true});
+const p=await geo(A);if(my!==cepSeq)return;if(p){A.km=hav(CONFIG.base,p)*CONFIG.fator}show();render()}
 function findUrl(){const v=$("url").value.trim();if(!v)return;$("vol").value="";const f=$("found");const e=estimate(v);const name=niceName(v)||"Móvel do link";
 const id="lk"+(++linkN);
 if(e){const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key)){f.className="found";f.textContent="Esse móvel já está no pedido.";$("url").value="";return}seen.add(key);ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),src:v,via:"url"});qty[id]=e.q;
-f.className="found";f.textContent=`Orçamento calculado: ${name.slice(0,70)}${e.det.length?" ("+e.det.join(", ")+")":""}. Já está no pedido.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50)}
+f.className="found";f.textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50);$("url").value=""}
 else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:v});qty[id]=1;
-f.className="found";f.textContent="Adicionamos o móvel do link. Como o endereço não traz detalhes, mande um print do anúncio no passo 2 e confirmamos o valor."}
+f.className="found";f.textContent="Adicionamos o móvel do link. Se puder, mande também um print do anúncio no passo 2."}
 st.lastLink=id;st.q="";$("q").value="";$("url").value="";render();$("shelves").scrollIntoView({block:"nearest"})}
-function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")return;const e=estimate(BY[id].src);if(!e)return;Object.assign(BY[id],{h:e.h,tipo:e.tipo,preco:e.preco,det:e.det.join(" · ")});$("found").textContent=`Orçamento recalculado: ${BY[id].nome.slice(0,70)} (${e.det.join(", ")}).`;render()}
+function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")return;const e=estimate(BY[id].src);if(!e)return;Object.assign(BY[id],{h:e.h,tipo:e.tipo,preco:e.preco,det:e.det.join(" · ")});$("found").textContent=`Valor atualizado: ${BY[id].nome.slice(0,60)}.`;render()}
 $("urlGo").onclick=findUrl;$("vol").addEventListener("input",reestimate);$("url").addEventListener("paste",()=>setTimeout(findUrl,50));$("url").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();findUrl()}});
 $("q").addEventListener("input",e=>{st.q=e.target.value;drawCats();drawShelves()});
 $("cats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){st.cat=b.dataset.c;st.q="";$("q").value="";render()}});
 $("shelves").addEventListener("click",e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m)render()});
 $("fxp").onclick=()=>{st.fx++;render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
 [["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){st[k]=b.dataset.v;render()}}));
-["bairro","andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs"].forEach(id=>$(id).addEventListener("input",render));
+["andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs","num","comp"].forEach(id=>$(id).addEventListener("input",render));
+$("cep").addEventListener("input",e=>{let v=e.target.value.replace(/\D/g,"").slice(0,8);e.target.value=v.length>5?v.slice(0,5)+"-"+v.slice(5):v;if(v.length===8)buscaCep(v);else if(st.addr){st.addr=null;$("addr").textContent="";$("addrBox").hidden=true;render()}});
 $("pics").addEventListener("change",async e=>{const fl=[...e.target.files].slice(0,CONFIG.maxFotos-fotos.length);const novas=[];for(const f of fl){try{const c=await compress(f);fotos.push(c);novas.push(c)}catch(err){toast("Não foi possível ler uma das imagens.")}}drawPhotos();for(const c of novas)await readPhoto(c);if(e.target.files.length>fl.length)toast(`Máximo de ${CONFIG.maxFotos} fotos.`);e.target.value="";drawPhotos();render()});
 $("photos").addEventListener("click",e=>{const x=e.target.closest("[data-x]");if(x){URL.revokeObjectURL(fotos[+x.dataset.x].url);fotos.splice(+x.dataset.x,1);drawPhotos();render()}});
 $("send").onclick=enviar;$("msend").onclick=enviar;
