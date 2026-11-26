@@ -198,6 +198,9 @@ section[id],#orcamento,.tag,#q{scroll-margin-top:72px}
 @media(max-width:350px){.mob .go{padding-inline:14px;font-size:15px}}
 .mobsum{all:unset;display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent}.mobsum strong{font-size:20px}.mobsum .ver{font-size:12px;color:#3fe0a0;font-weight:700}
 .row .empty{padding:12px 4px}
+.nameBox{margin-top:10px;padding:12px;border-radius:12px;background:#fff7d6;border:1px solid #f2d36b;color:#3a2f00}
+.nameBox label{display:block;font-weight:700;margin-bottom:8px}.nbtn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.ghost2{min-height:44px;border-radius:10px;border:1px solid #d8c06a;background:transparent;font:600 14px Inter,sans-serif;color:#3a2f00;cursor:pointer}
 /* ===== UX/UI v4 ===== */
 .top{position:relative;overflow:hidden;isolation:isolate}
 .top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
@@ -263,6 +266,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <input id="url" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="https://...">
 <button type="button" class="btn" id="urlGo">Adicionar</button>
 <div class="found no" id="found" role="status"></div>
+<div id="nameBox" class="nameBox" hidden style="grid-column:1/-1"><label for="lname">Esse link não mostra o nome do móvel. Escreva o nome que aparece no anúncio:</label><input id="lname" autocomplete="off" placeholder="Ex.: guarda-roupa casal 6 portas"><div class="nbtn"><button type="button" class="btn" id="lgo">Ver o preço</button><button type="button" class="ghost2" id="lskip">Prefiro mandar print</button></div></div>
 <div id="volBox" hidden style="grid-column:1/-1"><label for="vol">Quantas caixas tem o <span id="volLbl"></span>? <span class="opt">(se souber)</span></label><p class="hint fh">Olhe a etiqueta da caixa. "Volume 1 de 6" quer dizer 6 caixas.</p><input id="vol" type="number" min="1" max="60" inputmode="numeric" placeholder="Ex.: 8"></div>
 </div>
 <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="Procure: guarda-roupa, cama, rack..." aria-label="Procurar móvel"></div>
@@ -602,10 +606,15 @@ const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.8));return{blob,url
 }
 function drawPhotos(){$("photos").innerHTML=fotos.map((f,i)=>`<div class="ph"><img src="${f.url}" alt="Foto ${i+1} do móvel"><button type="button" data-x="${i}" aria-label="Remover foto ${i+1}">×</button></div>`).join("")}
 try{const s=JSON.parse(localStorage.getItem("nv1")||"null");if(s){Object.assign(qty,s.qty||{});st.fx=s.fx||0;st.vd=s.vd||0;$("nome").value=s.nome||"";$("num").value=s.num||"";$("comp").value=s.comp||"";if(s.cep){$("cep").value=s.cep;setTimeout(()=>buscaCep(s.cep),0)}}}catch(e){}
-function slugText(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}return norm(t).replace(/[-_/+.=&?%]+/g," ").replace(/\s+/g," ").trim()}
-function niceName(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}
-const w=t.replace(/\.(html?|aspx|php)$/i,"").split(/[\/\-_+]+/).filter(x=>x&&!/^(p|produto|product|dp|mlb\d*|jm|item|br|pt)$/i.test(x)&&!/^\d{4,}$/.test(x)&&!/^B0[A-Z0-9]{8}$/.test(x)&&!/^[a-z]{1,3}\d{4,}/i.test(x)&&x.length<30);
-const n=w.join(" ").replace(/\s+/g," ").trim();return n?n.charAt(0).toUpperCase()+n.slice(1,90):""}
+function parseLink(raw){raw=String(raw||"").trim();const m=raw.match(/https?:\/\/[^\s]+/i)||raw.match(/\b(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+\/[^\s]*/i);const url=m?m[0]:"";
+let out=(url?raw.replace(url,""):raw).replace(/(olha|olhe|veja|confira|d[aá] uma olhada)[^:]*:?/ig,"").replace(/\b(no|na|do|da)\s+(mercado\s*livre|shopee|amazon|magalu|magazine luiza|casas bahia|aliexpress|temu|shein)\b/ig,"").replace(/(encontrei|achei)( isso| este produto| esse produto)?/ig,"").replace(/[!:|]+/g," ").replace(/\s+/g," ").trim();
+if(!url)return{url:"",text:out};if(/[a-zà-ú]{3,}.*[a-zà-ú]{3,}/i.test(out))return{url,text:out};
+let path="";try{path=decodeURIComponent(new URL(/^https?:/i.test(url)?url:"https://"+url).pathname)}catch(e){path=url}
+const segs=path.split("/").map(x=>x.replace(/\.(html?|aspx|php)$/i,"").replace(/^MLB[UA]?-?\d+-?/i,"").replace(/-?_JM$/i,"").replace(/-i\.\d+\.\d+$/,"").replace(/-g-\d+$/,"").replace(/-\d{5,}$/,""));
+let best="",sc=0;segs.forEach(x=>{const w=x.split(/[-_+]+/).filter(y=>/^[a-zà-ú]{2,}$/i.test(y)||/^\d{1,3}[a-z]{0,2}$/i.test(y));const al=w.filter(y=>/[a-zà-ú]{3,}/i.test(y)).length;if(al>=2&&al>sc){sc=al;best=w.join(" ")}});
+return{url,text:best}}
+function slugText(raw){return norm(parseLink(raw).text).replace(/[-_/+.=&?%]+/g," ").replace(/\s+/g," ").trim()}
+function niceName(raw){const n=parseLink(raw).text.replace(/\s+/g," ").trim();return n?n.charAt(0).toUpperCase()+n.slice(1,90):""}
 const WARD=["gr2","gr3","gr4","gr5","gr6","gr8","gr10","grc2","grc3","grinf","closet","multi","armesc","lav","crist"];
 function estimate(raw){
 const t=" "+slugText(raw)+" ";const vol=+$("vol").value||0;
@@ -672,13 +681,20 @@ show();render();if(!$("num").value)$("num").focus({preventScroll:true});
 const p=await geo(A);if(my!==cepSeq)return;if(p){A.km=hav(CONFIG.base,p)*CONFIG.fator}show();render()}
 function findUrl(){const v=$("url").value.trim();if(!v)return;$("vol").value="";const f=$("found");const e=estimate(v);const name=niceName(v)||"Móvel do link";
 const id="lk"+(++linkN);
-if(e){const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key)){f.className="found";f.textContent="Esse móvel já está no pedido.";$("url").value="";return}seen.add(key);ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:v,via:"url"});qty[id]=e.q;
+if(e){const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key)){f.className="found";f.textContent="Esse móvel já está no pedido.";$("url").value="";return}seen.add(key);ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:parseLink(v).url||v,est:v,via:"url"});qty[id]=e.q;
 f.className="found";f.textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50);$("url").value=""}
-else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:v});qty[id]=1;
+else if(!niceName(v)){st.pendUrl=parseLink(v).url||v;$("nameBox").hidden=false;f.className="found no";f.textContent="";$("url").value="";setTimeout(()=>$("lname").focus(),50);return}
+else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:parseLink(v).url||v});qty[id]=1;
 f.className="found";f.textContent="Adicionamos o móvel do link. Se puder, mande também um print do anúncio no passo 2."}
 st.lastLink=id;st.q="";$("q").value="";$("url").value="";render();$("shelves").scrollIntoView({block:"nearest"})}
-function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")return;const e=estimate(BY[id].src);if(!e)return;Object.assign(BY[id],{h:e.h,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how});$("found").textContent=`Valor atualizado: ${BY[id].nome.slice(0,60)}.`;render()}
-$("urlGo").onclick=findUrl;$("vol").addEventListener("input",reestimate);$("url").addEventListener("paste",()=>setTimeout(findUrl,50));$("url").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();findUrl()}});
+function nameGo(skip){const u=st.pendUrl;if(!u)return;const nm=$("lname").value.trim();$("nameBox").hidden=true;$("lname").value="";st.pendUrl="";
+if(!skip&&nm){const e=estimate(nm);const id="lk"+(++linkN);const name=nm.charAt(0).toUpperCase()+nm.slice(1,90);
+if(e){ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:u,est:nm,via:"url"});qty[id]=e.q;$("found").className="found";$("found").textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50)}
+else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:u});qty[id]=1;$("found").className="found";$("found").textContent="Adicionado. Esse móvel a gente confirma o preço pela foto: mande um print do anúncio no passo 2."}
+st.lastLink=id}else{const id="lk"+(++linkN);ITEMS.push(BY[id]={id,cat:"link",nome:"Móvel do link",h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:u});qty[id]=1;$("found").className="found";$("found").textContent="Certo. Agora mande o print do anúncio no passo 2.";st.lastLink=id}
+render();$("shelves").scrollIntoView({block:"nearest"})}
+function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")return;const e=estimate(BY[id].est||BY[id].src);if(!e)return;Object.assign(BY[id],{h:e.h,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how});$("found").textContent=`Valor atualizado: ${BY[id].nome.slice(0,60)}.`;render()}
+$("urlGo").onclick=findUrl;$("lgo").onclick=()=>nameGo(false);$("lskip").onclick=()=>nameGo(true);$("lname").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();nameGo(false)}});$("vol").addEventListener("input",reestimate);$("url").addEventListener("paste",()=>setTimeout(findUrl,50));$("url").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();findUrl()}});
 $("q").addEventListener("input",e=>{st.q=e.target.value;drawCats();drawShelves()});
 $("cats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){st.cat=b.dataset.c;st.q="";$("q").value="";render()}});
 const onQty=e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;justAdded=p.dataset.p;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m){render();if(justAdded){const b=$("shelves").querySelector(`[data-m="${CSS.escape(justAdded)}"]`);const c=b&&b.closest(".card");if(c){c.classList.add("pop")}justAdded=null}}};$("shelves").addEventListener("click",onQty);$("lines").addEventListener("click",onQty);$("more").onclick=()=>{$("q").value="";st.q="";render();$("q").scrollIntoView({behavior:"smooth",block:"start"})};
