@@ -156,14 +156,51 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 @media(max-width:420px){.two{grid-template-columns:minmax(0,1fr)}}
 
 /* animações */
-.js .rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
-.js .rv.in{opacity:1;transform:none}
 .card{transition:transform .2s,box-shadow .2s,border-color .2s}
 @media(hover:hover){.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(12,15,40,.12)}.go:hover{transform:translateY(-2px)}.gal img{transition:transform .4s}.gal figure:hover img{transform:scale(1.03)}}
 .gal figure{overflow:hidden;border-radius:12px}
 .go:active,.add:active,.qty button:active{transform:scale(.96)}
 .bump{animation:bump .35s ease}@keyframes bump{40%{transform:scale(1.12)}}
 .toast{transform:translate(-50%,10px);transition:opacity .25s,transform .25s}
+
+/* ===== UX/UI v4 ===== */
+.top{position:relative;overflow:hidden;isolation:isolate}
+.top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
+.top::before{width:420px;height:420px;background:#5f7bff;top:-160px;right:-120px;animation:blob 14s ease-in-out infinite alternate}
+.top::after{width:320px;height:320px;background:#3fe0a0;opacity:.28;bottom:10%;left:-140px;animation:blob 18s ease-in-out infinite alternate-reverse}
+@keyframes blob{to{transform:translate(-60px,80px) scale(1.15)}}
+.js .hin{opacity:0;transform:translateY(26px);animation:hin .8s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes hin{to{opacity:1;transform:none}}
+.js .rv{opacity:0;transform:translateY(36px) scale(.98);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.band h2{position:relative;padding-bottom:12px}
+.band h2::after{content:"";position:absolute;left:0;bottom:0;height:4px;width:44px;border-radius:9px;background:var(--yellow);transform-origin:left;transition:transform .8s .25s cubic-bezier(.2,.7,.2,1)}
+.js .band h2.rv::after{transform:scaleX(0)}.js .band h2.rv.in::after{transform:scaleX(1)}
+footer h2::after{display:none}
+.num{transition:background .3s,transform .3s}
+.num.ok{background:var(--ok);color:#fff;animation:okpop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes okpop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+.card.pop{animation:pop .45s cubic-bezier(.2,1.6,.4,1)}@keyframes pop{0%{transform:scale(.94)}100%{transform:scale(1)}}
+.go.ready{animation:glow 2.2s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(63,224,160,.55)}50%{box-shadow:0 0 0 10px rgba(63,224,160,0)}}
+input,select,textarea{transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:#1d3cff;box-shadow:0 0 0 4px rgba(29,60,255,.15);outline:none}
+.chip{transition:background .2s,color .2s,border-color .2s,transform .15s}.chip:active{transform:scale(.96)}
+summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--kraft2);color:var(--acc);font:700 20px Inter,sans-serif;transition:transform .3s,background .3s}
+details[open] summary::after{transform:rotate(45deg);background:#1d3cff;color:#fff}
+details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:translateY(-6px)}}
+.dots{display:flex;gap:6px;align-items:center;margin-left:auto}
+.dots i{width:7px;height:7px;border-radius:9px;background:var(--line);transition:width .3s,background .3s}
+.dots i.on{width:22px;background:#1d3cff}
+.navg{align-items:center}
+.navg button{transition:opacity .2s,transform .15s}.navg button:active{transform:scale(.92)}
+.how div{transition:transform .25s,box-shadow .25s}
+@media(hover:hover){.how div:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(12,15,40,.1)}}
+.mob{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.mob.hide{transform:translateY(110%)}
+@media(prefers-reduced-motion:reduce){.top::before,.top::after,.go.ready{animation:none}.js .hin{opacity:1;transform:none;animation:none}.num.ok,.card.pop,details[open] p{animation:none}.mob{transition:none}}
 @media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.bump{animation:none}.card,.gal img{transition:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.go{transition:none}}
 </style>
@@ -171,14 +208,14 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 <body>
 <header class="band top">
 <div class="wrap">
-<div class="bar">
+<div class="bar hin" style="animation-delay:.05s">
 <div class="logo"><svg viewBox="0 0 44 26" aria-hidden="true"><rect x="1" y="3" width="42" height="20" rx="10" fill="#fff"/><rect x="6" y="8" width="32" height="10" rx="5" fill="#d8f9ea"/><rect x="16" y="9.5" width="12" height="7" rx="3.5" fill="#3fe0a0"/><path d="M15 6v14M29 6v14" stroke="#1d3cff" stroke-width="1.6"/></svg><span class="brand">Nivo Serviços</span></div>
 <a class="pill" id="phoneTop" href="#">WhatsApp</a>
 </div>
-<h1>Montagem de móveis no nível certo, hoje ou amanhã</h1>
-<p class="lead">Zona Sul de São Paulo. Cole o link da sua compra ou escolha o móvel, veja o preço fechado na hora e envie o pedido com as fotos. Leva menos de um minuto.</p>
+<h1 class="hin" style="animation-delay:.15s">Montagem de móveis no nível certo, hoje ou amanhã</h1>
+<p class="lead hin" style="animation-delay:.28s">Zona Sul de São Paulo. Cole o link da sua compra ou escolha o móvel, veja o preço fechado na hora e envie o pedido com as fotos. Leva menos de um minuto.</p>
 
-<div class="tool" id="orcamento">
+<div class="tool hin" id="orcamento" style="animation-delay:.42s">
 <div class="steps">
 <section class="panel" id="s1">
 <h3><span class="num">1</span>O que vamos montar?</h3>
@@ -274,7 +311,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 <figure><img src="img/pecas-caixa.jpg" alt="Peças do móvel conferidas antes da montagem" loading="lazy" width="1080" height="810"><figcaption>Peças conferidas antes de começar</figcaption></figure>
 </div>
 </div>
-<div class="navg"><button type="button" id="gp" aria-label="Foto anterior">‹</button><button type="button" id="gn" aria-label="Próxima foto">›</button></div>
+<div class="navg"><button type="button" id="gp" aria-label="Foto anterior">‹</button><button type="button" id="gn" aria-label="Próxima foto">›</button><div class="dots" id="dots" aria-hidden="true"></div></div>
 </div>
 </section>
 
@@ -468,10 +505,12 @@ return L.join("\n");
 }
 function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!st.addr||!st.addr.ok)return["Digite o CEP do local da montagem.","s3"];if(!$("num").value.trim())return["Digite o número do endereço.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];return["",""]}
 function seg(id,key){$(id).querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st[key]))}
+let shown=0;function countTo(to,suf){const from=shown;shown=to;const els=[$("total"),$("mtotal")];if(from===to){els.forEach(e=>e.textContent=brl(to)+suf);return}els.forEach(e=>{e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")});if(matchMedia("(prefers-reduced-motion: reduce)").matches){els.forEach(e=>e.textContent=brl(to)+suf);return}const t0=performance.now(),d=450;cancelAnimationFrame(countTo.a);const step=t=>{const p=Math.min(1,(t-t0)/d),v=from+(to-from)*(1-Math.pow(1-p,3));els.forEach(e=>e.textContent=brl(v)+suf);if(p<1)countTo.a=requestAnimationFrame(step)};countTo.a=requestAnimationFrame(step)}
+let justAdded=null;
 function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
-const nt=brl(r.total)+(r.outros?"+":"");if($("total").textContent!==nt){$("total").textContent=nt;$("mtotal").textContent=nt;for(const e of [$("total"),$("mtotal")]){e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}}
+countTo(r.total,r.outros?"+":"");const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
 const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · ${fmtH(r.hrs)}`:"Nenhum móvel";
 $("time").textContent=n?`Tempo estimado: cerca de ${fmtH(r.hrs)}`:"Escolha pelo menos um móvel";
 $("lines").innerHTML=r.lines.map(([a,v])=>`<li><span>${a}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
@@ -571,7 +610,7 @@ function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")re
 $("urlGo").onclick=findUrl;$("vol").addEventListener("input",reestimate);$("url").addEventListener("paste",()=>setTimeout(findUrl,50));$("url").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();findUrl()}});
 $("q").addEventListener("input",e=>{st.q=e.target.value;drawCats();drawShelves()});
 $("cats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){st.cat=b.dataset.c;st.q="";$("q").value="";render()}});
-$("shelves").addEventListener("click",e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m)render()});
+$("shelves").addEventListener("click",e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;justAdded=p.dataset.p;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m){render();if(justAdded){const b=$("shelves").querySelector(`[data-m="${CSS.escape(justAdded)}"]`);const c=b&&b.closest(".card");if(c){c.classList.add("pop")}justAdded=null}}});
 $("fxp").onclick=()=>{st.fx++;render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
 [["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){st[k]=b.dataset.v;render()}}));
 ["andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs","num","comp"].forEach(id=>$(id).addEventListener("input",render));
@@ -582,17 +621,21 @@ $("send").onclick=enviar;$("msend").onclick=enviar;
 $("sharePics").onclick=async()=>{try{if(!(await sharePics()))toast("Seu celular não deixa compartilhar daqui. Envie as fotos pela galeria na conversa.")}catch(e){}};
 $("closeSheet").onclick=()=>$("sheet").classList.remove("on");
 $("copy").onclick=()=>{const r=calc(),[err]=check(r);$("err").textContent=err;if(err)return;navigator.clipboard.writeText(msg(r)).then(()=>toast("Pedido copiado"),()=>toast("Não foi possível copiar"))};
-const gal=$("gal");const mv=d=>{const f=gal.querySelector("figure"),st=f?f.offsetWidth+14:gal.clientWidth*.8,max=gal.scrollWidth-gal.clientWidth;gal.scrollTo({left:Math.max(0,Math.min(max,Math.round(gal.scrollLeft/st+d)*st)),behavior:"smooth"})};const navU=()=>{const max=gal.scrollWidth-gal.clientWidth-4;$("gp").disabled=gal.scrollLeft<=4;$("gn").disabled=gal.scrollLeft>=max};gal.addEventListener("scroll",navU,{passive:true});addEventListener("resize",navU);addEventListener("load",navU);navU();$("gp").onclick=()=>mv(-1);$("gn").onclick=()=>mv(1);
+const gal=$("gal");const mv=d=>{const f=gal.querySelector("figure"),st=f?f.offsetWidth+14:gal.clientWidth*.8,max=gal.scrollWidth-gal.clientWidth;gal.scrollTo({left:Math.max(0,Math.min(max,Math.round(gal.scrollLeft/st+d)*st)),behavior:"smooth"})};const figs=[...gal.querySelectorAll("figure")];$("dots").innerHTML=figs.map(()=>"<i></i>").join("");const navU=()=>{const max=gal.scrollWidth-gal.clientWidth-4;const f0=figs[0],stp=f0?f0.offsetWidth+14:1,ix=gal.scrollLeft>=max?figs.length-1:Math.round(gal.scrollLeft/stp);[...$("dots").children].forEach((d,k)=>d.classList.toggle("on",k===ix));$("gp").disabled=gal.scrollLeft<=4;$("gn").disabled=gal.scrollLeft>=max};gal.addEventListener("scroll",navU,{passive:true});addEventListener("resize",navU);addEventListener("load",navU);navU();$("gp").onclick=()=>mv(-1);$("gn").onclick=()=>mv(1);
 gal.tabIndex=0;gal.addEventListener("keydown",e=>{if(e.key==="ArrowRight")mv(1);if(e.key==="ArrowLeft")mv(-1)});
 window.__detect=detect;
 render();
 }
 
 /* entrada das seções ao rolar e altura da barra */
-(()=>{const els=document.querySelectorAll(".band h2,.band .how>*,.work,.band .cols>*,.areas,details");
+(()=>{const els=document.querySelectorAll("main .band h2,.band:not(.top):not(footer) h2,.band .how>*,.work,.band .cols>*,.areas,details,.list li");
 if(!("IntersectionObserver" in window)){return}
-els.forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(i%4)*70+"ms"});
+els.forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(e.matches("li,details")?(i%6)*60:(i%3)*110)+"ms"});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting||x.boundingClientRect.top<0){x.target.classList.add("in");io.unobserve(x.target)}}),{rootMargin:"0px 0px -30px 0px"});els.forEach(e=>io.observe(e))})();
+(()=>{const m=document.querySelector(".mob"),tag=document.querySelector(".tag");if(!m)return;let items=document.getElementById("mcount").textContent!=="Nenhum móvel"?1:0,tagVis=false;
+const upd=()=>{const past=scrollY>260;m.classList.toggle("hide",tagVis||!(items>0||past))};
+document.addEventListener("nv:render",e=>{items=e.detail;upd()});addEventListener("scroll",upd,{passive:true});
+if(tag&&window.IntersectionObserver)new IntersectionObserver(es=>{tagVis=es[0].isIntersecting;upd()},{threshold:.25}).observe(tag);upd()})();
 (()=>{const m=document.querySelector(".mob");if(!m)return;const f=()=>document.body.style.setProperty("--mobh",m.offsetHeight+"px");f();addEventListener("resize",f);if(window.ResizeObserver)new ResizeObserver(f).observe(m)})();
 </script>
 </body>
