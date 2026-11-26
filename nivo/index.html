@@ -254,7 +254,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <p class="hint">Digite o nome do móvel ou escolha por categoria. Toque em "Adicionar" em cada um.</p>
 <div class="chips" id="cats" role="group" aria-label="Categorias"></div>
 <div id="shelves"></div>
-<div class="ups" id="ups" hidden><b id="upsT"></b><p>Aproveite a visita: adicione mais serviços sem aumentar o valor, até completar o mínimo.</p><div class="upsb"><button type="button" class="chip" data-u="regpg">+ Regular portas e gavetas</button><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
+<div class="ups" id="ups" hidden><b id="upsT"></b><p>Aproveite a visita: adicione mais serviços sem aumentar o valor, até completar o mínimo.</p><div class="upsb"><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
 </section>
 
 <section class="panel" id="s2">
@@ -378,7 +378,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <details><summary>O valor do site é o valor final?</summary><p>É um valor estimado pelos móveis marcados, já com 10% de desconto a partir de 3 móveis. Com o link ou a foto, confirmamos o valor pelo WhatsApp antes de agendar. Sem surpresa no dia.</p></details>
 <details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Marque "Outro móvel" e mande a foto ou o print. Respondemos com o valor.</p></details>
 <details><summary>Como é o pagamento?</summary><p>Pix ou dinheiro, ao final do serviço.</p></details>
-<details><summary>Tem valor mínimo?</summary><p>Sim. Até 20 km, o mínimo da visita é R$ 120. De 20 a 40 km, R$ 160. Acima de 40 km, R$ 200. Assim vale a pena ir até você mesmo para um móvel pequeno.</p></details>
+<details><summary>Tem valor mínimo?</summary><p>Sim. O mínimo da visita começa em R$ 120 e pode ser um pouco maior em regiões mais distantes. O valor certo já aparece no orçamento quando você coloca o CEP.</p></details>
 <details><summary>Quanto custa uma nova visita?</summary><p>Para ajustes depois do serviço entregue, a visita é R$ 60. Se faltar peça, a volta para terminar é combinada pelo WhatsApp.</p></details>
 <details><summary>E se faltar peça no móvel?</summary><p>Conferimos as peças antes de começar. Se faltar algo, montamos o que for possível e você aciona a loja. A volta pra terminar é cobrada à parte.</p></details>
 </div>
@@ -394,7 +394,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 document.documentElement.classList.add("js");
 {
 const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:120,combo:.1,fixacao:30,hoje:40,ajudante:180,ajudanteExtra:90,vidro:50,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,porModulo:70,kmMax:70,fator:1.35};
-const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["extras","Serviços extras"],["outro","Não achei"]];
+const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["outro","Não achei"]];
 const R=[
 ["gr2","quarto","Guarda-roupa 2 portas",1.5,"gr",2],["gr3","quarto","Guarda-roupa 3 portas",2,"gr",3],["gr4","quarto","Guarda-roupa 4 portas",3,"gr",4],["gr5","quarto","Guarda-roupa 5 portas",3.5,"gr",5],["gr6","quarto","Guarda-roupa 6 portas",4,"gr",6,"g"],["gr8","quarto","Guarda-roupa 8 portas",5.5,"gr",8,"g"],["gr10","quarto","Guarda-roupa 10 portas ou mais",7,"gr",10,"g"],["grc2","quarto","Guarda-roupa 2 portas de correr",4,"grc",2,"g"],["grc3","quarto","Guarda-roupa 3 portas de correr",5,"grc",3,"g"],["closet","quarto","Closet modulado (por módulo)",2,"closet"],
 ["cama","quarto","Cama de casal ou solteiro",1.5,"cama"],["camabox","quarto","Cama box com cabeceira",1,"cama",1],["camabau","quarto","Cama com baú",2,"bau"],["camagav","quarto","Cama com gavetas",2,"camag"],["cab","quarto","Cabeceira de parede",1,"cab"],["painelcab","quarto","Painel de cabeceira com criados",2,"cab",2],["com4","quarto","Cômoda até 5 gavetas",1.5,"comoda",4],["com6","quarto","Cômoda 6 gavetas ou mais",2,"comoda",6],["criado","quarto","Criado-mudo",.5,"criado",0,"p",30],["sapat","quarto","Sapateira",1,"sapat"],["pent","quarto","Penteadeira com espelho",1.5,"pent"],["espelho","quarto","Espelho de parede ou chão",.5,"espelho"],["bau","quarto","Baú",1,"bau",1],["arara","quarto","Arara ou cabideiro",.5,"arara",0,"p",40],
@@ -406,7 +406,6 @@ const R=[
 ["lav","lavanderia","Armário de lavanderia",1.5,"multi"],["tanque","lavanderia","Gabinete de tanque",1,"gabban",1],["lavaereo","lavanderia","Aéreo de lavanderia",1,"aereo"],
 ["mext","externa","Mesa de área externa",1,"mesa"],["cext","externa","Cadeira de área externa",.25,"cadeira",1,"p",20],["armext","externa","Armário de resina",1,"multi"],["bjard","externa","Banco de jardim",1,"sofa",1],
 ["dgr4","desmontar","Desmontar guarda-roupa até 4 portas",1,"desm",0,"n",110],["dgr6","desmontar","Desmontar guarda-roupa 6 portas ou mais",1.5,"desm",0,"n",150],["dcama","desmontar","Desmontar cama",.5,"desm",0,"n",60],["dout","desmontar","Desmontar outro móvel",.5,"desm",0,"n",60],
-["regpg","extras","Regular portas e gavetas (por móvel)",.5,"comoda",3,"p",40],["corred","extras","Trocar corrediça de gaveta",.5,"comoda",2,"p",40],["puxa","extras","Trocar puxadores (por móvel)",.5,"comoda",4,"p",30],
 ["outro","outro","Outro móvel (vou mandar foto)",0,"outro",0,"o",0]
 ];
 const ITEMS=R.map(([id,cat,nome,h,k,n,tipo,p])=>({id,cat,nome,h,k,n:n||0,tipo:tipo||"n",preco:p!==undefined?p:Math.round((50*h+60)/10)*10}));
@@ -524,7 +523,7 @@ if(st.vd){sub+=st.vd*CONFIG.vidro;lines.push([`Espelho ou vidro (${st.vd} ${st.v
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
 if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante (1 diária)",CONFIG.ajudante])}
-const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push([`Deslocamento (${Math.round(A.km)} km)`,f])}}
+const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push(["Deslocamento",f])}}
 if(st.quando==="hoje"&&units.length){sub+=CONFIG.hoje;lines.push(["Atendimento no mesmo dia",CONFIG.hoje])}
 let total=sub;const notes=[];
 let falta=0;const minV=minimo(A&&A.km);if(big.length+units.filter(u=>u.tipo==="p").length&&sub<minV){falta=minV-sub;lines.push([`Valor mínimo da visita${A&&A.km>20?" para a sua região":""}`,minV-sub]);total=minV}
@@ -542,7 +541,7 @@ if(st.vd)L.push(`• Móveis com espelho ou vidro: ${st.vd}`);
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
 if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} a diária; se passar de 1 dia, ${brl(CONFIG.ajudanteExtra)} por dia a mais)`);
 L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
-if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km)L.push(`Distância aprox.: ${Math.round(A.km)} km`);
+if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km){const f=deslo(A.km);L.push(`Distância aprox.: ${Math.round(A.km)} km${f?` (deslocamento ${brl(f)})`:" (sem deslocamento)"}`)}
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
 if(fotos.length)L.push(`Fotos: ${fotos.length} ${fotos.length>1?"imagens":"imagem"} em seguida`);
 if($("obs").value.trim())L.push(`Obs.: ${$("obs").value.trim()}`);
@@ -649,7 +648,7 @@ async function buscaCep(v){v=v.replace(/\D/g,"");if(v.length!==8)return;const my
 const d=await getJ(`https://viacep.com.br/ws/${v}/json/`);if(my!==cepSeq)return;
 if(!d||d.erro){st.addr=null;box.className="addr err2";box.textContent="CEP não encontrado. Confira os números.";$("addrBox").hidden=true;render();return}
 const A={ok:true,cep:v.slice(0,5)+"-"+v.slice(5),rua:d.logradouro||"",bairro:d.bairro||"",cidade:d.localidade||"",uf:d.uf||""};st.addr=A;$("addrBox").hidden=false;
-const show=()=>{const fee=A.km?deslo(A.km):0;box.innerHTML=`<b>${esc([A.rua,A.bairro].filter(Boolean).join(" – ")||A.cidade)}</b>${esc(A.cidade)}/${esc(A.uf)}${A.km?` · cerca de ${Math.round(A.km)} km · ${A.km>CONFIG.kmMax?"fora da área, confirmamos no WhatsApp":fee?"deslocamento "+brl(fee):"sem taxa de deslocamento"}`:""}`};
+const show=()=>{const fee=A.km?deslo(A.km):0;box.innerHTML=`<b>${esc([A.rua,A.bairro].filter(Boolean).join(" – ")||A.cidade)}</b>${esc(A.cidade)}/${esc(A.uf)}${A.km>CONFIG.kmMax?" · fora da área, confirmamos no WhatsApp":""}`};
 show();render();if(!$("num").value)$("num").focus({preventScroll:true});
 const p=await geo(A);if(my!==cepSeq)return;if(p){A.km=hav(CONFIG.base,p)*CONFIG.fator}show();render()}
 function findUrl(){const v=$("url").value.trim();if(!v)return;$("vol").value="";const f=$("found");const e=estimate(v);const name=niceName(v)||"Móvel do link";
