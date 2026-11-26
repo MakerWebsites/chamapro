@@ -181,7 +181,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 .list.sep li::before{content:"•";color:var(--soft)}
 @media(max-width:700px){.who{grid-template-columns:minmax(0,1fr)}.who img{max-width:260px}}
 .ups{margin-top:14px;border:2px dashed #3fe0a0;background:rgba(63,224,160,.1);border-radius:14px;padding:14px}
-.ups b{display:block;font-size:16px}.ups p{margin:4px 0 10px;font-size:14px;color:var(--soft)}
+.ups b{display:block;font-size:16px;color:#3fe0a0}.ups p{margin:4px 0 10px;font-size:14px;opacity:.85}
 .upsb{display:flex;flex-wrap:wrap;gap:8px}.upsb .chip{font-size:14px;min-height:40px;padding:6px 12px}
 .upst{margin:8px 0 0;font-size:14px;color:#3fe0a0}.upst a{color:#3fe0a0;font-weight:700}
 /* ===== UX/UI v4 ===== */
@@ -254,7 +254,6 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <p class="hint">Digite o nome do móvel ou escolha por categoria. Toque em "Adicionar" em cada um.</p>
 <div class="chips" id="cats" role="group" aria-label="Categorias"></div>
 <div id="shelves"></div>
-<div class="ups" id="ups" hidden><b id="upsT"></b><p>Aproveite a visita: adicione mais serviços sem aumentar o valor, até completar o mínimo.</p><div class="upsb"><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
 </section>
 
 <section class="panel" id="s2">
@@ -295,7 +294,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <div class="total" id="total">R$ 0</div>
 <div class="time" id="time">Escolha pelo menos um móvel</div>
 <ul class="lines" id="lines"></ul>
-<p class="upst" id="upst" hidden></p>
+<div class="ups" id="ups" hidden><b id="upsT"></b><p>Pedido pequeno para a sua região. Aproveite a visita: adicione mais móveis ou serviços e o valor não muda até esse limite.</p><div class="upsb"><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
 <p class="note" id="notes"></p>
 <button type="button" class="go" id="send"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.7 15l-1.3 5 5.1-1.3A10 10 0 1 0 12 2zm5.2 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.6-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>Enviar pedido no WhatsApp</button>
 <p class="err" id="err" role="alert"></p>
@@ -378,7 +377,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <details><summary>O valor do site é o valor final?</summary><p>É um valor estimado pelos móveis marcados, já com 10% de desconto a partir de 3 móveis. Com o link ou a foto, confirmamos o valor pelo WhatsApp antes de agendar. Sem surpresa no dia.</p></details>
 <details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Marque "Outro móvel" e mande a foto ou o print. Respondemos com o valor.</p></details>
 <details><summary>Como é o pagamento?</summary><p>Pix ou dinheiro, ao final do serviço.</p></details>
-<details><summary>Tem valor mínimo?</summary><p>Sim. O mínimo da visita começa em R$ 120 e pode ser um pouco maior em regiões mais distantes. O valor certo já aparece no orçamento quando você coloca o CEP.</p></details>
+<details><summary>Tem valor mínimo?</summary><p>Só para pedidos pequenos em regiões mais distantes. Nesse caso aparece uma taxa de visita no orçamento, e você pode adicionar mais móveis sem pagar a mais até completar o valor.</p></details>
 <details><summary>Quanto custa uma nova visita?</summary><p>Para ajustes depois do serviço entregue, a visita é R$ 60. Se faltar peça, a volta para terminar é combinada pelo WhatsApp.</p></details>
 <details><summary>E se faltar peça no móvel?</summary><p>Conferimos as peças antes de começar. Se faltar algo, montamos o que for possível e você aciona a loja. A volta pra terminar é cobrada à parte.</p></details>
 </div>
@@ -416,7 +415,7 @@ esc:110,esc2:170,escl:180,mpc:110,mgamer:130,gav:100,armesc:150,estesc:140,cesc:
 berco:150,bercom:230,troc:140,grinf:180,caminf:120,bel:180,tre:250,bicama:160,escinf:110,
 gabban:110,espelh:150,armban:100,torban:100,lav:150,tanque:110,lavaereo:110,mext:110,cext:40,armext:110,bjard:110,dgr4:110,dgr6:160,dcama:80,dout:80,outro:0};
 ITEMS.forEach(i=>{if(i.id in MKT)i.preco=MKT[i.id]});
-const minimo=km=>!km||km<=20?120:km<=40?160:200;
+const minimo=km=>!km||km<=20?0:km<=40?160:200;
 const wardPrice=n=>n<=3?160:n===4?200:n===5?240:n===6?290:n===7?340:n<=12?400+50*(n-8):600+50*(n-12);
 const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));let linkN=0;
 const PERTO=["Parelheiros","Grajaú","Cidade Dutra","Socorro","Interlagos","Jardim Ângela","Jardim São Luís","Capão Redondo","Campo Limpo","Vila Andrade","Cidade Ademar","Pedreira","Itapecerica da Serra","Embu das Artes","Taboão da Serra"];
@@ -502,7 +501,7 @@ const porte=i=>i.h<=1.5?"Montagem simples":i.h<=3.5?"Montagem média":"Montagem 
 function card(i){const q=qty[i.id]||0;const pt=porte(i)+(i.tipo==="g"?" · precisa de 2 pessoas para levantar":"");
 let p1,p2;
 if(i.tipo==="o"){p1="Valor pela foto";p2="Mande o print no passo 2"}
-else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2=`Se for o único item: mínimo a partir de ${brl(CONFIG.minimo)}`}
+else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2="Pode juntar com outros móveis"}
 else{p1=brl(i.preco);p2=i.cat==="link"&&i.det?esc(i.det)+(i.how?`<br>${esc(i.how)}`:""):pt}
 return `<div class="card${q?" sel":""}">${ico(i.k,i.n)}<strong>${esc(i.nome.length>60?i.nome.slice(0,58)+"…":i.nome)}</strong><div class="pr"><b>${p1}</b><small>${p2}</small></div>${q?`<div class="qty"><button type="button" data-m="${i.id}" aria-label="Remover ${esc(i.nome)}">−</button><span>${q}</span><button type="button" data-p="${i.id}" aria-label="Adicionar mais ${esc(i.nome)}">+</button></div>`:`<button type="button" class="add" data-p="${i.id}">Adicionar</button>`}</div>`}
 function drawCats(){$("cats").innerHTML=CATS.map(([id,n])=>{const c=ITEMS.filter(i=>i.cat===id).reduce((s,i)=>s+(qty[i.id]||0),0);return `<button type="button" class="chip" data-c="${id}" aria-pressed="${!st.q&&id===st.cat}">${n}${c?`<b>${c}</b>`:""}</button>`}).join("")}
@@ -523,13 +522,14 @@ if(st.vd){sub+=st.vd*CONFIG.vidro;lines.push([`Espelho ou vidro (${st.vd} ${st.v
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
 if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante (1 diária)",CONFIG.ajudante])}
-const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push(["Deslocamento",f])}}
+const A=st.addr;let desl=0;if(A&&A.km&&units.length){desl=deslo(A.km);sub+=desl}
 if(st.quando==="hoje"&&units.length){sub+=CONFIG.hoje;lines.push(["Atendimento no mesmo dia",CONFIG.hoje])}
 let total=sub;const notes=[];
-let falta=0;const minV=minimo(A&&A.km);if(big.length+units.filter(u=>u.tipo==="p").length&&sub<minV){falta=minV-sub;lines.push([`Valor mínimo da visita${A&&A.km>20?" para a sua região":""}`,minV-sub]);total=minV}
+let falta=0;const minV=minimo(A&&A.km);if(big.length+units.filter(u=>u.tipo==="p").length&&sub<minV){falta=minV-sub;total=minV}
+if(desl+falta>0)lines.push(["Taxa de visita",desl+falta]);
 if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hasBig&&st.lift==="nao")notes.push(`Ajudante: se o serviço passar de 1 dia, cada dia a mais custa ${brl(CONFIG.ajudanteExtra)}.`);if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
 const lvl=hasBig||hrs>6?"grande":hrs>3?"médio":"simples";
-return{units,lines,total,hrs,notes,outros,hasBig,lvl,falta};
+return{units,lines,total,hrs,notes,outros,hasBig,lvl,falta,desl};
 }
 const fmtH=h=>{const m=Math.round(h*2)/2;return(m<1?"1":String(m).replace(".",","))+" h"};
 function msg(r){
@@ -541,7 +541,7 @@ if(st.vd)L.push(`• Móveis com espelho ou vidro: ${st.vd}`);
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
 if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} a diária; se passar de 1 dia, ${brl(CONFIG.ajudanteExtra)} por dia a mais)`);
 L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
-if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km){const f=deslo(A.km);L.push(`Distância aprox.: ${Math.round(A.km)} km${f?` (deslocamento ${brl(f)})`:" (sem deslocamento)"}`)}
+if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km){const r2=calc();L.push(`Distância aprox.: ${Math.round(A.km)} km`+(r2.desl||r2.falta?` (taxa de visita: deslocamento ${brl(r2.desl)}${r2.falta?` + complemento do mínimo ${brl(r2.falta)}`:""})`:" (sem taxa de visita)"))}
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
 if(fotos.length)L.push(`Fotos: ${fotos.length} ${fotos.length>1?"imagens":"imagem"} em seguida`);
 if($("obs").value.trim())L.push(`Obs.: ${$("obs").value.trim()}`);
@@ -555,7 +555,7 @@ let justAdded=null;
 function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;$("vd").textContent=st.vd;$("vdm").disabled=!st.vd;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
-countTo(r.total,r.outros?"+":"");$("ups").hidden=!r.falta;$("upst").hidden=!r.falta;if(r.falta){$("upsT").textContent=`Ainda cabem ${brl(r.falta)} no valor mínimo da visita`;$("upst").innerHTML=`Ainda cabem ${brl(r.falta)} em serviços sem pagar a mais. <a href="#ups">Ver sugestões</a>`}const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
+countTo(r.total,r.outros?"+":"");$("ups").hidden=!r.falta;if(r.falta){$("upsT").textContent=`Ainda cabem ${brl(r.falta)} sem pagar a mais`}const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
 const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · serviço ${r.lvl}`:"Nenhum móvel";
 $("time").textContent=n?`Serviço ${r.lvl}. O tempo depende da complexidade${r.lvl==="grande"?" e pode passar de um dia":""}.`:"Escolha pelo menos um móvel";
 $("lines").innerHTML=r.lines.map(([a,v,hw])=>`<li><span>${esc(a)}${hw?`<small class="how">Como calculamos: ${esc(hw)}</small>`:""}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
