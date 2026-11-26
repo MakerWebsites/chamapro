@@ -413,7 +413,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <script>
 document.documentElement.classList.add("js");
 {
-const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:120,combo:.1,fixacao:30,hoje:40,ajudante:180,ajudanteExtra:90,vidro:50,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,porModulo:70,kmMax:70,fator:1.35};
+const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:120,combo:.1,fixacao:30,hoje:40,ajudante:180,ajudanteExtra:90,vidro:50,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,porModulo:70,linkApi:"",kmMax:70,fator:1.35};
 const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["outro","Não achei"]];
 const R=[
 ["gr2","quarto","Guarda-roupa 2 portas",1.5,"gr",2],["gr3","quarto","Guarda-roupa 3 portas",2,"gr",3],["gr4","quarto","Guarda-roupa 4 portas",3,"gr",4],["gr5","quarto","Guarda-roupa 5 portas",3.5,"gr",5],["gr6","quarto","Guarda-roupa 6 portas",4,"gr",6,"g"],["gr8","quarto","Guarda-roupa 8 portas",5.5,"gr",8,"g"],["gr10","quarto","Guarda-roupa 10 portas ou mais",7,"gr",10,"g"],["grc2","quarto","Guarda-roupa 2 portas de correr",4,"grc",2,"g"],["grc3","quarto","Guarda-roupa 3 portas de correr",5,"grc",3,"g"],["closet","quarto","Closet modulado (por módulo)",2,"closet"],
@@ -683,6 +683,7 @@ function findUrl(){const v=$("url").value.trim();if(!v)return;$("vol").value="";
 const id="lk"+(++linkN);
 if(e){const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key)){f.className="found";f.textContent="Esse móvel já está no pedido.";$("url").value="";return}seen.add(key);ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:parseLink(v).url||v,est:v,via:"url"});qty[id]=e.q;
 f.className="found";f.textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50);$("url").value=""}
+else if(!niceName(v)&&CONFIG.linkApi&&!st.resolving){st.resolving=1;const b=$("urlGo");b.disabled=true;b.textContent="...";const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),7000);fetch(CONFIG.linkApi+"?u="+encodeURIComponent(parseLink(v).url||v),{signal:ctl.signal}).then(r=>r.json()).then(j=>{const t=((j.titulo||"")+" "+(j.final||"")).trim();return t&&niceName(j.titulo||j.final)?(j.titulo?j.titulo+" "+(parseLink(v).url||v):j.final):""}).catch(()=>"").then(t=>{clearTimeout(tm);st.resolving=0;b.disabled=false;b.textContent="Adicionar";if(t){$("url").value=t;findUrl()}else{st.pendUrl=parseLink(v).url||v;$("nameBox").hidden=false;$("url").value="";setTimeout(()=>$("lname").focus(),50)}});return}
 else if(!niceName(v)){st.pendUrl=parseLink(v).url||v;$("nameBox").hidden=false;f.className="found no";f.textContent="";$("url").value="";setTimeout(()=>$("lname").focus(),50);return}
 else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:parseLink(v).url||v});qty[id]=1;
 f.className="found";f.textContent="Adicionamos o móvel do link. Se puder, mande também um print do anúncio no passo 2."}
@@ -726,8 +727,8 @@ if(!("IntersectionObserver" in window)){return}
 els.forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(e.matches("li,details")?(i%6)*60:(i%3)*110)+"ms"});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting||x.boundingClientRect.top<0){x.target.classList.add("in");io.unobserve(x.target)}}),{rootMargin:"0px 0px -30px 0px"});els.forEach(e=>io.observe(e))})();
 (()=>{const m=document.querySelector(".mob"),tag=document.querySelector(".tag");if(!m)return;let items=document.getElementById("mcount").textContent!=="Nenhum móvel"?1:0,tagVis=false;
-const upd=()=>{const past=scrollY>260;m.classList.toggle("hide",tagVis||!(items>0||past))};
-document.addEventListener("nv:render",e=>{items=e.detail;upd()});addEventListener("scroll",upd,{passive:true});
+const upd=()=>{if(typing)return;const past=scrollY>260;m.classList.toggle("hide",tagVis||!(items>0||past))};
+document.addEventListener("nv:render",e=>{items=e.detail;upd()});let typing=false;document.addEventListener("focusin",e=>{if(e.target.matches("input:not([type=file]),textarea,select")){typing=true;m.classList.add("hide")}});document.addEventListener("focusout",()=>{typing=false;setTimeout(upd,150)});addEventListener("scroll",upd,{passive:true});
 if(tag&&window.IntersectionObserver)new IntersectionObserver(es=>{tagVis=es[0].isIntersecting;upd()},{threshold:.25}).observe(tag);upd()})();
 (()=>{const m=document.querySelector(".mob");if(!m)return;const f=()=>document.body.style.setProperty("--mobh",m.offsetHeight+"px");f();addEventListener("resize",f);if(window.ResizeObserver)new ResizeObserver(f).observe(m)})();
 </script>
