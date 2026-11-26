@@ -201,6 +201,9 @@ section[id],#orcamento,.tag,#q{scroll-margin-top:72px}
 .nameBox{margin-top:10px;padding:12px;border-radius:12px;background:#fff7d6;border:1px solid #f2d36b;color:#3a2f00}
 .nameBox label{display:block;font-weight:700;margin-bottom:8px}.nbtn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
 .ghost2{min-height:44px;border-radius:10px;border:1px solid #d8c06a;background:transparent;font:600 14px Inter,sans-serif;color:#3a2f00;cursor:pointer}
+.upload.shot{display:flex;align-items:center;gap:12px;text-align:left;justify-content:flex-start}
+.upload.shot svg{flex:none;width:28px;height:28px}.upload.shot span{display:flex;flex-direction:column;gap:3px}.upload.shot small{font-weight:500;font-size:14px;opacity:.85}
+[hidden]{display:none!important}
 /* ===== UX/UI v4 ===== */
 .top{position:relative;overflow:hidden;isolation:isolate}
 .top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
@@ -260,7 +263,8 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <div class="steps">
 <section class="panel" id="s1">
 <h3><span class="num">1</span>Qual móvel vamos montar?</h3>
-<div class="link">
+<label class="upload shot" for="pics"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M10 18h4"/></svg><span><b>Comprou pela internet? Mande o print do anúncio</b><small>Tire um print da tela do anúncio e escolha aqui. O móvel entra no pedido sozinho.</small></span></label>
+<div class="link" hidden>
 <label for="url">Comprou pela internet? Cole aqui o link do móvel</label>
 <p class="hint fh">Abra o móvel no app ou site da loja, toque em "Compartilhar" e depois em "Copiar". Volte aqui e cole.</p>
 <input id="url" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="https://...">
@@ -532,7 +536,7 @@ function drawShelves(){const keep={};$("shelves").querySelectorAll(".row").forEa
 function drawShelves0(){
 if(st.q){const q=norm(st.q).split(/\s+/).filter(Boolean);const res=filt(ITEMS.filter(i=>i.cat!=="link"&&q.every(w=>{const al=SYN[w]||[w];return al.some(x=>norm(i.nome+" "+i.cat).includes(x))})));$("shelves").innerHTML=`<div class="shelf"><h4>Resultado da busca <span>${res.length} ${res.length===1?"móvel":"móveis"}</span></h4>${res.length?`<div class="grid">${res.map(card).join("")}</div>`:`<p class="empty">Não encontramos "${esc(st.q)}". Adicione "Outro móvel" e mande a foto.</p><div class="grid">${card(BY.outro)}</div>`}</div>`;return}
 const list=ITEMS.filter(i=>i.cat===st.cat);const fl=filt(list);const sel=ITEMS.filter(i=>qty[i.id]&&i.cat!==st.cat&&i.cat!=="link");
-const lk=ITEMS.filter(i=>i.cat==="link"&&qty[i.id]);$("shelves").innerHTML=(lk.length?`<div class="shelf"><h4>Do seu link ou foto <span>orçamento automático</span></h4><div class="row" data-k="lk">${lk.map(card).join("")}</div></div>`:"")+`<div class="shelf"><h4>${CATS.find(c=>c[0]===st.cat)[1]} <span>deslize para ver todos</span></h4><div class="row" data-k="c-${st.cat}">${fl.length?fl.map(card).join(""):`<p class="empty">Nenhum móvel nessa faixa de preço.</p>`}</div></div>`+(sel.length?`<div class="shelf"><h4>Já escolhidos em outras categorias</h4><div class="row" data-k="sel">${sel.map(card).join("")}</div></div>`:"");
+const lk=ITEMS.filter(i=>i.cat==="link"&&qty[i.id]);$("shelves").innerHTML=(lk.length?`<div class="shelf"><h4>Do seu print <span>orçamento automático</span></h4><div class="row" data-k="lk">${lk.map(card).join("")}</div></div>`:"")+`<div class="shelf"><h4>${CATS.find(c=>c[0]===st.cat)[1]} <span>deslize para ver todos</span></h4><div class="row" data-k="c-${st.cat}">${fl.length?fl.map(card).join(""):`<p class="empty">Nenhum móvel nessa faixa de preço.</p>`}</div></div>`+(sel.length?`<div class="shelf"><h4>Já escolhidos em outras categorias</h4><div class="row" data-k="sel">${sel.map(card).join("")}</div></div>`:"");
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function calc(){
