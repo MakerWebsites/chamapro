@@ -271,7 +271,8 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
 <div><label>Período</label><p class="hint fh">Horário de chegada do montador. Manhã: a partir das 8h. Tarde: a partir das 13h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
 <div class="line2"><div><strong>Fixar na parede</strong><p class="hint" style="margin:0">Por ponto: aéreo, painel, prateleira, nicho</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
-<div id="liftBox" hidden><label>Móvel grande: quem ajuda a segurar as peças?</label><p class="hint fh">Peças grandes precisam de duas pessoas para levantar e segurar. Se preferir um ajudante, ele é pago por diária. Se o serviço passar de um dia (horário comercial), cada dia a mais é mais uma diária. O ajudante depende de disponibilidade na data.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Eu ou alguém da casa</button><button type="button" class="chip" data-v="nao">Ajudante (+ R$ 240 por dia)</button></div></div>
+<div class="line2"><div><strong>Espelho ou vidro</strong><p class="hint" style="margin:0">Quantos móveis têm espelho ou vidro (fora cristaleira, penteadeira e espelheira, que já incluem). + R$ 50 cada, pelo cuidado e risco.</p></div><div class="mini"><button type="button" id="vdm" aria-label="Menos móveis com vidro">−</button><span id="vd">0</span><button type="button" id="vdp" aria-label="Mais móveis com vidro">+</button></div></div>
+<div id="liftBox" hidden><label>Móvel grande: quem ajuda a segurar as peças?</label><p class="hint fh">Peças grandes precisam de duas pessoas para levantar e segurar. Se preferir um ajudante, ele é pago por diária de R$ 180. Se o serviço passar de um dia (horário comercial), cada dia a mais custa R$ 90. O ajudante depende de disponibilidade na data.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Eu ou alguém da casa</button><button type="button" class="chip" data-v="nao">Ajudante (+ R$ 180)</button></div></div>
 <div class="two">
 <div><label for="andar">Acesso ao local</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
 <div><label for="nome">Seu nome</label><input id="nome" autocomplete="name" autocapitalize="words" placeholder="Como podemos te chamar"></div>
@@ -369,6 +370,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <details><summary>O valor do site é o valor final?</summary><p>É um valor estimado pelos móveis marcados, já com 10% de desconto a partir de 3 móveis. Com o link ou a foto, confirmamos o valor pelo WhatsApp antes de agendar. Sem surpresa no dia.</p></details>
 <details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Marque "Outro móvel" e mande a foto ou o print. Respondemos com o valor.</p></details>
 <details><summary>Como é o pagamento?</summary><p>Pix ou dinheiro, ao final do serviço.</p></details>
+<details><summary>Tem valor mínimo?</summary><p>Sim. Até 20 km, o mínimo da visita é R$ 120. De 20 a 40 km, R$ 160. Acima de 40 km, R$ 200. Assim vale a pena ir até você mesmo para um móvel pequeno.</p></details>
 <details><summary>Quanto custa uma nova visita?</summary><p>Para ajustes depois do serviço entregue, a visita é R$ 60. Se faltar peça, a volta para terminar é combinada pelo WhatsApp.</p></details>
 <details><summary>E se faltar peça no móvel?</summary><p>Conferimos as peças antes de começar. Se faltar algo, montamos o que for possível e você aciona a loja. A volta pra terminar é cobrada à parte.</p></details>
 </div>
@@ -383,29 +385,30 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <script>
 document.documentElement.classList.add("js");
 {
-const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:110,combo:.1,fixacao:30,hoje:40,ajudante:240,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,porModulo:70,kmMax:70,fator:1.35};
+const CONFIG={nome:"Nivo Serviços",whatsapp:"5511937457836",minimo:120,combo:.1,fixacao:30,hoje:40,ajudante:180,ajudanteExtra:90,vidro:50,longe:20,maxFotos:6,base:{lat:-23.8318,lon:-46.8114},kmLivre:20,porKm:1.5,porModulo:70,kmMax:70,fator:1.35};
 const CATS=[["quarto","Quarto"],["sala","Sala"],["cozinha","Cozinha"],["escritorio","Escritório"],["infantil","Infantil"],["banheiro","Banheiro"],["lavanderia","Lavanderia"],["externa","Área externa"],["desmontar","Desmontagem"],["outro","Não achei"]];
 const R=[
 ["gr2","quarto","Guarda-roupa 2 portas",1.5,"gr",2],["gr3","quarto","Guarda-roupa 3 portas",2,"gr",3],["gr4","quarto","Guarda-roupa 4 portas",3,"gr",4],["gr5","quarto","Guarda-roupa 5 portas",3.5,"gr",5],["gr6","quarto","Guarda-roupa 6 portas",4,"gr",6,"g"],["gr8","quarto","Guarda-roupa 8 portas",5.5,"gr",8,"g"],["gr10","quarto","Guarda-roupa 10 portas ou mais",7,"gr",10,"g"],["grc2","quarto","Guarda-roupa 2 portas de correr",4,"grc",2,"g"],["grc3","quarto","Guarda-roupa 3 portas de correr",5,"grc",3,"g"],["closet","quarto","Closet modulado (por módulo)",2,"closet"],
-["cama","quarto","Cama de casal ou solteiro",1.5,"cama"],["camabox","quarto","Cama box com cabeceira",1,"cama",1],["camabau","quarto","Cama com baú",2,"bau"],["camagav","quarto","Cama com gavetas",2,"camag"],["cab","quarto","Cabeceira de parede",1,"cab"],["painelcab","quarto","Painel de cabeceira com criados",2,"cab",2],["com4","quarto","Cômoda até 5 gavetas",1.5,"comoda",4],["com6","quarto","Cômoda 6 gavetas ou mais",2,"comoda",6],["criado","quarto","Criado-mudo",.5,"criado",0,"p",30],["sapat","quarto","Sapateira",1,"sapat"],["pent","quarto","Penteadeira",1.5,"pent"],["espelho","quarto","Espelho de parede ou chão",.5,"espelho"],["bau","quarto","Baú",1,"bau",1],["arara","quarto","Arara ou cabideiro",.5,"arara",0,"p",40],
-["rack","sala","Rack até 1,40 m",1,"rack"],["rackg","sala","Rack acima de 1,40 m",1.5,"rack",1],["painel","sala","Painel de TV até 1,80 m",2,"painel"],["painelg","sala","Painel de TV acima de 1,80 m",3,"painel",1],["home","sala","Home (rack com painel)",3.5,"painel",2],["estante","sala","Estante",1,"estante"],["estliv","sala","Estante de livros grande",2,"estante",1],["mcentro","sala","Mesa de centro",.5,"mcentro"],["mlat","sala","Mesa lateral",.5,"mcentro",1,"p",30],["apar","sala","Aparador",1,"rack",2],["buffet","sala","Buffet",2,"comoda",3],["crist","sala","Cristaleira",2,"multi",1],["mj4","sala","Mesa de jantar 4 lugares",1,"mesa"],["mj6","sala","Mesa de jantar 6 lugares ou mais",1.5,"mesa",1],["cad","sala","Cadeira",.25,"cadeira",0,"p",20],["sofa","sala","Sofá-cama ou sofá retrátil",1,"sofa"],["nicho","sala","Nicho de parede",.5,"nicho"],["prat","sala","Prateleira de parede",.5,"prat",0,"p",30],
-["aereo","cozinha","Armário aéreo (por módulo)",1,"aereo"],["balcao","cozinha","Balcão ou gabinete de pia",1,"balcao"],["cooktop","cozinha","Balcão de cooktop",1.5,"balcao",1],["multi","cozinha","Armário multiuso",1.5,"multi"],["panel","cozinha","Paneleiro",2,"panel"],["torre","cozinha","Torre quente (forno)",2,"panel",1],["cozmod","cozinha","Cozinha modulada (por módulo)",1.5,"aereo",1],["cozkit","cozinha","Cozinha compacta completa",6,"coz",0,"g"],["cafe","cozinha","Cantinho do café ou fruteira",1,"estante",2],["mcoz","cozinha","Mesa de cozinha",1,"mesa"],["banq","cozinha","Banqueta",.25,"cadeira",1,"p",20],
+["cama","quarto","Cama de casal ou solteiro",1.5,"cama"],["camabox","quarto","Cama box com cabeceira",1,"cama",1],["camabau","quarto","Cama com baú",2,"bau"],["camagav","quarto","Cama com gavetas",2,"camag"],["cab","quarto","Cabeceira de parede",1,"cab"],["painelcab","quarto","Painel de cabeceira com criados",2,"cab",2],["com4","quarto","Cômoda até 5 gavetas",1.5,"comoda",4],["com6","quarto","Cômoda 6 gavetas ou mais",2,"comoda",6],["criado","quarto","Criado-mudo",.5,"criado",0,"p",30],["sapat","quarto","Sapateira",1,"sapat"],["pent","quarto","Penteadeira com espelho",1.5,"pent"],["espelho","quarto","Espelho de parede ou chão",.5,"espelho"],["bau","quarto","Baú",1,"bau",1],["arara","quarto","Arara ou cabideiro",.5,"arara",0,"p",40],
+["rack","sala","Rack até 1,40 m",1,"rack"],["rackg","sala","Rack acima de 1,40 m",1.5,"rack",1],["painel","sala","Painel de TV até 1,80 m",2,"painel"],["painelg","sala","Painel de TV acima de 1,80 m",3,"painel",1],["home","sala","Home (rack com painel)",3.5,"painel",2],["estante","sala","Estante até 1,20 m",1,"estante"],["estliv","sala","Estante de livros grande",2,"estante",1],["mcentro","sala","Mesa de centro",.5,"mcentro"],["mlat","sala","Mesa lateral",.5,"mcentro",1,"p",30],["apar","sala","Aparador",1,"rack",2],["buffet","sala","Buffet até 1,60 m",2,"comoda",3],["buffetg","sala","Buffet acima de 1,60 m",2.5,"comoda",3],["crist","sala","Cristaleira (com vidro)",2,"multi",1],["mj4","sala","Mesa de jantar 4 lugares",1,"mesa"],["mj6","sala","Mesa de jantar 6 lugares ou mais",1.5,"mesa",1],["cad","sala","Cadeira",.25,"cadeira",0,"p",20],["sofa","sala","Sofá-cama ou sofá retrátil",1,"sofa"],["nicho","sala","Nicho de parede",.5,"nicho"],["prat","sala","Prateleira de parede",.5,"prat",0,"p",30],
+["aereo","cozinha","Armário aéreo (por módulo)",1,"aereo"],["balcao","cozinha","Balcão ou gabinete de pia até 1,20 m",1,"balcao"],["balcaom","cozinha","Balcão ou gabinete de pia de 1,20 a 1,80 m",1.5,"balcao"],["balcaog","cozinha","Balcão ou gabinete de pia acima de 1,80 m",2,"balcao",1],["cooktop","cozinha","Balcão de cooktop",1.5,"balcao",1],["multi","cozinha","Armário multiuso até 2 portas",1.5,"multi"],["multig","cozinha","Armário multiuso 3 portas ou mais",2,"multi",1],["panel","cozinha","Paneleiro",2,"panel"],["torre","cozinha","Torre quente (forno)",2,"panel",1],["cozmod","cozinha","Cozinha modulada (por módulo)",1.5,"aereo",1],["cozkit","cozinha","Cozinha compacta completa",6,"coz",0,"g"],["cafe","cozinha","Cantinho do café ou fruteira",1,"estante",2],["mcoz","cozinha","Mesa de cozinha",1,"mesa"],["banq","cozinha","Banqueta",.25,"cadeira",1,"p",20],
 ["esc","escritorio","Escrivaninha simples",1,"esc"],["esc2","escritorio","Escrivaninha com estante",2,"esc",1],["escl","escritorio","Escrivaninha em L",2,"esc",2],["mpc","escritorio","Mesa para computador",1,"esc"],["mgamer","escritorio","Mesa gamer",1,"esc",3],["gav","escritorio","Gaveteiro",1,"comoda",3],["armesc","escritorio","Armário de escritório",1.5,"multi"],["estesc","escritorio","Estante de escritório",1.5,"estante"],["cesc","escritorio","Cadeira de escritório",.5,"cadeira",2,"p",30],["cgamer","escritorio","Cadeira gamer",.75,"cadeira",2,"p",40],
 ["berco","infantil","Berço",1.5,"berco"],["bercom","infantil","Berço com cômoda acoplada",2.5,"berco",1],["troc","infantil","Cômoda com trocador",1.5,"comoda",4],["grinf","infantil","Guarda-roupa infantil",2,"gr",3],["caminf","infantil","Cama infantil ou montessoriana",1,"cama"],["bel","infantil","Beliche",2,"bel"],["tre","infantil","Treliche",3,"bel",1],["bicama","infantil","Bicama",1.5,"camag"],["escinf","infantil","Escrivaninha infantil",1,"esc"],
-["gabban","banheiro","Gabinete de banheiro",1,"gabban"],["espelh","banheiro","Espelheira",1,"espelho",1],["armban","banheiro","Armário sobre o vaso",1,"multi",2],["torban","banheiro","Torre de banheiro",1,"panel"],
+["gabban","banheiro","Gabinete de banheiro até 80 cm",1,"gabban"],["gabbang","banheiro","Gabinete de banheiro acima de 80 cm",1.5,"gabban",1],["espelh","banheiro","Espelheira",1,"espelho",1],["armban","banheiro","Armário sobre o vaso",1,"multi",2],["torban","banheiro","Torre de banheiro",1,"panel"],
 ["lav","lavanderia","Armário de lavanderia",1.5,"multi"],["tanque","lavanderia","Gabinete de tanque",1,"gabban",1],["lavaereo","lavanderia","Aéreo de lavanderia",1,"aereo"],
 ["mext","externa","Mesa de área externa",1,"mesa"],["cext","externa","Cadeira de área externa",.25,"cadeira",1,"p",20],["armext","externa","Armário de resina",1,"multi"],["bjard","externa","Banco de jardim",1,"sofa",1],
 ["dgr4","desmontar","Desmontar guarda-roupa até 4 portas",1,"desm",0,"n",110],["dgr6","desmontar","Desmontar guarda-roupa 6 portas ou mais",1.5,"desm",0,"n",150],["dcama","desmontar","Desmontar cama",.5,"desm",0,"n",60],["dout","desmontar","Desmontar outro móvel",.5,"desm",0,"n",60],
 ["outro","outro","Outro móvel (vou mandar foto)",0,"outro",0,"o",0]
 ];
 const ITEMS=R.map(([id,cat,nome,h,k,n,tipo,p])=>({id,cat,nome,h,k,n:n||0,tipo:tipo||"n",preco:p!==undefined?p:Math.round((50*h+60)/10)*10}));
-const MKT={gr2:160,gr3:160,gr4:200,gr5:240,gr6:290,gr8:400,gr10:500,grc2:260,grc3:320,closet:150,cama:130,camabox:130,camabau:200,camagav:200,cab:100,painelcab:180,com4:120,com6:150,criado:50,sapat:90,pent:130,espelho:80,bau:100,arara:40,
-rack:120,rackg:150,painel:170,painelg:230,home:300,estante:120,estliv:180,mcentro:80,mlat:40,apar:120,buffet:170,crist:180,mj4:130,mj6:170,cad:35,sofa:120,nicho:70,prat:40,
-aereo:110,balcao:120,cooktop:150,multi:150,panel:170,torre:180,cozmod:140,cozkit:550,cafe:110,mcoz:110,banq:30,
-esc:110,esc2:170,escl:180,mpc:110,mgamer:130,gav:90,armesc:150,estesc:140,cesc:40,cgamer:50,
+const MKT={gr2:160,gr3:160,gr4:200,gr5:240,gr6:290,gr8:400,gr10:500,grc2:260,grc3:320,closet:150,cama:130,camabox:130,camabau:200,camagav:200,cab:100,painelcab:180,com4:120,com6:150,criado:70,sapat:110,pent:180,espelho:130,bau:100,arara:60,
+rack:120,rackg:150,painel:170,painelg:230,home:300,estante:120,estliv:180,mcentro:90,mlat:60,apar:120,buffet:170,crist:230,mj4:130,mj6:170,cad:40,sofa:120,nicho:80,prat:50,
+aereo:110,balcao:120,balcaom:170,balcaog:230,multig:210,buffetg:220,gabbang:150,cooktop:150,multi:150,panel:170,torre:180,cozmod:140,cozkit:550,cafe:110,mcoz:110,banq:40,
+esc:110,esc2:170,escl:180,mpc:110,mgamer:130,gav:100,armesc:150,estesc:140,cesc:50,cgamer:70,
 berco:150,bercom:230,troc:140,grinf:180,caminf:120,bel:180,tre:250,bicama:160,escinf:110,
-gabban:110,espelh:100,armban:100,torban:100,lav:150,tanque:110,lavaereo:110,mext:110,cext:30,armext:110,bjard:110,dgr4:110,dgr6:160,dcama:70,dout:70,outro:0};
+gabban:110,espelh:150,armban:100,torban:100,lav:150,tanque:110,lavaereo:110,mext:110,cext:40,armext:110,bjard:110,dgr4:110,dgr6:160,dcama:80,dout:80,outro:0};
 ITEMS.forEach(i=>{if(i.id in MKT)i.preco=MKT[i.id]});
+const minimo=km=>!km||km<=20?120:km<=40?160:200;
 const wardPrice=n=>n<=3?160:n===4?200:n===5?240:n===6?290:n===7?340:n<=12?400+50*(n-8):600+50*(n-12);
 const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));let linkN=0;
 const PERTO=["Parelheiros","Grajaú","Cidade Dutra","Socorro","Interlagos","Jardim Ângela","Jardim São Luís","Capão Redondo","Campo Limpo","Vila Andrade","Cidade Ademar","Pedreira","Itapecerica da Serra","Embu das Artes","Taboão da Serra"];
@@ -413,7 +416,7 @@ const LONGE=["Santo Amaro","Campo Grande","Campo Belo","Jabaquara","Saúde","Cur
 const $=id=>document.getElementById(id);
 const brl=v=>(v<0?"− ":"")+"R$ "+Math.abs(Math.round(v)).toLocaleString("pt-BR");
 const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
-const qty={},st={cat:"quarto",q:"",fx:0,quando:"amanha",turno:"Manhã",lift:"sim"};let fotos=[];
+const qty={},st={cat:"quarto",q:"",fx:0,quando:"amanha",turno:"Manhã",lift:"sim",vd:0};let fotos=[];
 const code="NV-"+Math.floor(1000+Math.random()*9000);
 
 const W="var(--ic1)",K="var(--ic2)";
@@ -491,7 +494,7 @@ const porte=i=>i.h<=1.5?"Montagem simples":i.h<=3.5?"Montagem média":"Montagem 
 function card(i){const q=qty[i.id]||0;const pt=porte(i)+(i.tipo==="g"?" · precisa de 2 pessoas para levantar":"");
 let p1,p2;
 if(i.tipo==="o"){p1="Valor pela foto";p2="Mande o print no passo 2"}
-else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2=`Se for o único item: mínimo ${brl(CONFIG.minimo)}`}
+else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2=`Se for o único item: mínimo a partir de ${brl(CONFIG.minimo)}`}
 else{p1=brl(i.preco);p2=i.cat==="link"&&i.det?esc(i.det)+(i.how?`<br>${esc(i.how)}`:""):pt}
 return `<div class="card${q?" sel":""}">${ico(i.k,i.n)}<strong>${esc(i.nome.length>60?i.nome.slice(0,58)+"…":i.nome)}</strong><div class="pr"><b>${p1}</b><small>${p2}</small></div>${q?`<div class="qty"><button type="button" data-m="${i.id}" aria-label="Remover ${esc(i.nome)}">−</button><span>${q}</span><button type="button" data-p="${i.id}" aria-label="Adicionar mais ${esc(i.nome)}">+</button></div>`:`<button type="button" class="add" data-p="${i.id}">Adicionar</button>`}</div>`}
 function drawCats(){$("cats").innerHTML=CATS.map(([id,n])=>{const c=ITEMS.filter(i=>i.cat===id).reduce((s,i)=>s+(qty[i.id]||0),0);return `<button type="button" class="chip" data-c="${id}" aria-pressed="${!st.q&&id===st.cat}">${n}${c?`<b>${c}</b>`:""}</button>`}).join("")}
@@ -508,14 +511,15 @@ big.forEach(u=>{sub+=u.preco;hrs+=u.h;lines.push([u.nome,u.preco,u.how])});
 units.filter(u=>u.tipo==="p").forEach(u=>{sub+=u.preco;hrs+=u.h;lines.push([u.nome,u.preco,u.how])});
 const nPriced=units.filter(u=>u.tipo!=="o").length;if(nPriced>=3){const d=Math.round(sub*CONFIG.combo/10)*10;sub-=d;lines.push([`Desconto ${nPriced} móveis (10%)`,-d])}
 const outros=units.filter(u=>u.tipo==="o").length;if(outros)lines.push([`Outro móvel${outros>1?` (${outros})`:""}`,null]);
+if(st.vd){sub+=st.vd*CONFIG.vidro;lines.push([`Espelho ou vidro (${st.vd} ${st.vd>1?"móveis":"móvel"})`,st.vd*CONFIG.vidro])}
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
 if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante (1 diária)",CONFIG.ajudante])}
 const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push([`Deslocamento (${Math.round(A.km)} km)`,f])}}
 if(st.quando==="hoje"&&units.length){sub+=CONFIG.hoje;lines.push(["Atendimento no mesmo dia",CONFIG.hoje])}
 let total=sub;const notes=[];
-if(big.length+units.filter(u=>u.tipo==="p").length&&sub<CONFIG.minimo){lines.push(["Ajuste para o serviço mínimo",CONFIG.minimo-sub]);total=CONFIG.minimo}
-if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hasBig&&st.lift==="nao")notes.push(`Ajudante: se o serviço passar de 1 dia, cada dia a mais é mais uma diária de ${brl(CONFIG.ajudante)}.`);if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
+const minV=minimo(A&&A.km);if(big.length+units.filter(u=>u.tipo==="p").length&&sub<minV){lines.push([`Valor mínimo da visita${A&&A.km>20?" para a sua região":""}`,minV-sub]);total=minV}
+if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hasBig&&st.lift==="nao")notes.push(`Ajudante: se o serviço passar de 1 dia, cada dia a mais custa ${brl(CONFIG.ajudanteExtra)}.`);if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
 const lvl=hasBig||hrs>6?"grande":hrs>3?"médio":"simples";
 return{units,lines,total,hrs,notes,outros,hasBig,lvl};
 }
@@ -525,8 +529,9 @@ const g={};r.units.forEach(u=>g[u.nome]=(g[u.nome]||0)+1);
 const quando=st.quando==="hoje"?"Hoje":st.quando==="amanha"?"Amanhã":($("data").value?$("data").value.split("-").reverse().join("/"):"A combinar");
 const A=st.addr||{};const end=A.ok?`${A.rua?A.rua+", ":""}${$("num").value.trim()}${$("comp").value.trim()?" – "+$("comp").value.trim():""} – ${A.bairro?A.bairro+", ":""}${A.cidade}/${A.uf} – CEP ${A.cep}`:"";
 const L=[`Olá! Quero agendar uma montagem. Pedido ${code}`,"",...Object.entries(g).map(([n,c])=>{const it=r.units.find(u=>u.nome===n);return`• ${c}x ${n}${it&&it.how?` (${it.how})`:""}`})];
+if(st.vd)L.push(`• Móveis com espelho ou vidro: ${st.vd}`);
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
-if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} por diária; se passar de 1 dia, mais uma diária por dia)`);
+if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} a diária; se passar de 1 dia, ${brl(CONFIG.ajudanteExtra)} por dia a mais)`);
 L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
 if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km)L.push(`Distância aprox.: ${Math.round(A.km)} km`);
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
@@ -540,7 +545,7 @@ function seg(id,key){$(id).querySelectorAll(".chip").forEach(b=>b.setAttribute("
 let shown=0;function countTo(to,suf){const from=shown;shown=to;const els=[$("total"),$("mtotal")];if(from===to){els.forEach(e=>e.textContent=brl(to)+suf);return}els.forEach(e=>{e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")});if(matchMedia("(prefers-reduced-motion: reduce)").matches){els.forEach(e=>e.textContent=brl(to)+suf);return}const t0=performance.now(),d=450;cancelAnimationFrame(countTo.a);const step=t=>{const p=Math.min(1,(t-t0)/d),v=from+(to-from)*(1-Math.pow(1-p,3));els.forEach(e=>e.textContent=brl(v)+suf);if(p<1)countTo.a=requestAnimationFrame(step)};countTo.a=requestAnimationFrame(step)}
 let justAdded=null;
 function render(){
-drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;seg("quando","quando");seg("turno","turno");seg("lift","lift");
+drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;$("vd").textContent=st.vd;$("vdm").disabled=!st.vd;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
 countTo(r.total,r.outros?"+":"");const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
 const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · serviço ${r.lvl}`:"Nenhum móvel";
@@ -548,7 +553,7 @@ $("time").textContent=n?`Serviço ${r.lvl}. O tempo depende da complexidade${r.l
 $("lines").innerHTML=r.lines.map(([a,v,hw])=>`<li><span>${esc(a)}${hw?`<small class="how">Como calculamos: ${esc(hw)}</small>`:""}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
 $("notes").textContent=r.notes.join(" ");
 if($("err").textContent)$("err").textContent=check(r)[0];
-try{localStorage.setItem("nv1",JSON.stringify({qty,fx:st.fx,cep:$("cep").value,num:$("num").value,comp:$("comp").value,nome:$("nome").value}))}catch(e){}
+try{localStorage.setItem("nv1",JSON.stringify({qty,fx:st.fx,vd:st.vd,cep:$("cep").value,num:$("num").value,comp:$("comp").value,nome:$("nome").value}))}catch(e){}
 }
 function toast(s){const e=$("toast");e.textContent=s;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2600)}
 function openWa(text){const a=document.createElement("a");a.href=`https://wa.me/${phone}?text=${encodeURIComponent(text)}`;a.target="_blank";a.rel="noopener";document.body.appendChild(a);a.click();a.remove()}
@@ -569,7 +574,7 @@ c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
 const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.8));return{blob,url:URL.createObjectURL(blob)};
 }
 function drawPhotos(){$("photos").innerHTML=fotos.map((f,i)=>`<div class="ph"><img src="${f.url}" alt="Foto ${i+1} do móvel"><button type="button" data-x="${i}" aria-label="Remover foto ${i+1}">×</button></div>`).join("")}
-try{const s=JSON.parse(localStorage.getItem("nv1")||"null");if(s){Object.assign(qty,s.qty||{});st.fx=s.fx||0;$("nome").value=s.nome||"";$("num").value=s.num||"";$("comp").value=s.comp||"";if(s.cep){$("cep").value=s.cep;setTimeout(()=>buscaCep(s.cep),0)}}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("nv1")||"null");if(s){Object.assign(qty,s.qty||{});st.fx=s.fx||0;st.vd=s.vd||0;$("nome").value=s.nome||"";$("num").value=s.num||"";$("comp").value=s.comp||"";if(s.cep){$("cep").value=s.cep;setTimeout(()=>buscaCep(s.cep),0)}}}catch(e){}
 function slugText(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}return norm(t).replace(/[-_/+.=&?%]+/g," ").replace(/\s+/g," ").trim()}
 function niceName(raw){let t=raw;try{const u=new URL(raw.trim());t=decodeURIComponent(u.pathname)}catch(e){}
 const w=t.replace(/\.(html?|aspx|php)$/i,"").split(/[\/\-_+]+/).filter(x=>x&&!/^(p|produto|product|dp|mlb\d*|jm|item|br|pt)$/i.test(x)&&!/^\d{4,}$/.test(x)&&!/^B0[A-Z0-9]{8}$/.test(x)&&!/^[a-z]{1,3}\d{4,}/i.test(x)&&x.length<30);
@@ -580,7 +585,7 @@ const t=" "+slugText(raw)+" ";const vol=+$("vol").value||0;
 const num=re=>{const m=t.match(re);return m?+m[1]:0};
 const portas=num(/(\d{1,2}) portas?\b/),gav=num(/(\d{1,2}) gavetas?\b/),kit=num(/\b(?:kit|conjunto|jogo) (?:c |com |de )?(\d{1,2})\b/)||num(/\b(\d{1,2}) (?:pecas|unidades|un|modulos)\b/);
 let larg=0;const cm=t.match(/\b(\d{2,3}) ?cm\b/);const mt=t.match(/\b(\d)[ ,.]?(\d{2}) ?m\b/);if(cm)larg=+cm[1];else if(mt)larg=+(mt[1]+mt[2]);
-const mod=/modulad|planejad|quarto completo|dormitorio completo|quarto casal completo/.test(t),correr=/correr|deslizante/.test(t),esp=/espelh/.test(t);
+const mod=/modulad|planejad|quarto completo|dormitorio completo|quarto casal completo/.test(t),correr=/correr|deslizante/.test(t),esp=/espelh|vidro|cristal/.test(t);
 let base=detect(raw);const wardLike=/quarto modulad|dormitorio|roupeiro|guarda roupa|closet/.test(t)||(portas&&/armario|quarto/.test(t)&&!/aereo|banheiro/.test(t));
 if(!base&&wardLike)base="gr4";if(base==="multi"&&portas>=5)base="gr4";
 const item=base?BY[base]:null;
@@ -605,7 +610,7 @@ if(larg>300){p0*=1.1;how.push("+ 10% por ter mais de 3 m de largura")}
 if(correr){p0+=50;how.push("+ R$ 50 portas de correr")}
 preco=Math.round(p0/10)*10}
 else{const isWard=wardLike||/^(gr|closet)/.test(base||"");let p0;
-if(isWard){const np=portas||(item&&item.n)||4;p0=wardPrice(np);how.push(`guarda-roupa de ${np} portas: ${f(p0)}`);if(correr){const a=p0;p0=Math.max(p0+50,250);how.push(`+ ${f(p0-a)} portas de correr`)}if(gav>2){p0+=10*(gav-2);how.push(`+ ${f(10*(gav-2))} gavetas extras`)}if(esp){p0+=20;how.push("+ R$ 20 espelho")}}
+if(isWard){const np=portas||(item&&item.n)||4;p0=wardPrice(np);how.push(`guarda-roupa de ${np} portas: ${f(p0)}`);if(correr){const a=p0;p0=Math.max(p0+50,250);how.push(`+ ${f(p0-a)} portas de correr`)}if(gav>2){p0+=10*(gav-2);how.push(`+ ${f(10*(gav-2))} gavetas extras`)}if(esp){p0+=CONFIG.vidro;how.push(`+ ${brl(CONFIG.vidro)} espelho ou vidro`)}}
 else{p0=item?item.preco:150;how.push(`${item?item.nome.toLowerCase():"móvel"}: ${f(p0)}`);const bn=item&&item.k==="coz"?8:2;if(portas>bn){p0+=20*(portas-bn);how.push(`+ ${f(20*(portas-bn))} portas extras`)}if(gav>2){p0+=10*(gav-2);how.push(`+ ${f(10*(gav-2))} gavetas extras`)}if(correr&&!/^grc/.test(base||"")){p0+=50;how.push("+ R$ 50 portas de correr")}}
 if(mod){p0*=1.15;how.push("+ 15% por ser modulado")}if(larg>300){p0*=1.1;how.push("+ 10% por ter mais de 3 m de largura")}if(vol){const pv=40*vol+60;if(pv>p0){p0=(p0+pv)/2;how.push(`ajuste pelas ${vol} caixas`)}}preco=Math.round(p0/10)*10}
 return{h,tipo,preco,q,det,how:how.join(" "),k:item?item.k:"gr",n:item?item.n:Math.min(portas||4,10),base:item?item.nome:"Móvel"};
@@ -650,7 +655,7 @@ $("urlGo").onclick=findUrl;$("vol").addEventListener("input",reestimate);$("url"
 $("q").addEventListener("input",e=>{st.q=e.target.value;drawCats();drawShelves()});
 $("cats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){st.cat=b.dataset.c;st.q="";$("q").value="";render()}});
 $("shelves").addEventListener("click",e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;justAdded=p.dataset.p;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m){render();if(justAdded){const b=$("shelves").querySelector(`[data-m="${CSS.escape(justAdded)}"]`);const c=b&&b.closest(".card");if(c){c.classList.add("pop")}justAdded=null}}});
-$("fxp").onclick=()=>{st.fx++;render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
+$("fxp").onclick=()=>{st.fx++;render()};$("vdp").onclick=()=>{st.vd++;render()};$("vdm").onclick=()=>{st.vd=Math.max(0,st.vd-1);render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
 [["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){st[k]=b.dataset.v;render()}}));
 ["andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs","num","comp"].forEach(id=>$(id).addEventListener("input",render));
 $("cep").addEventListener("input",e=>{let v=e.target.value.replace(/\D/g,"").slice(0,8);e.target.value=v.length>5?v.slice(0,5)+"-"+v.slice(5):v;if(v.length===8)buscaCep(v);else if(st.addr){st.addr=null;$("addr").textContent="";$("addrBox").hidden=true;render()}});
