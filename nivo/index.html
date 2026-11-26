@@ -107,7 +107,7 @@ input[type=date]{min-height:44px;display:block}
 .mini button{flex:none;width:44px;height:44px;padding:0;border-radius:10px;border:1px solid var(--line);background:var(--kraft2);color:var(--ink);font:800 20px Inter,sans-serif;cursor:pointer}
 .mini button:disabled{opacity:.35}
 .mini span{width:24px;flex:none;text-align:center;font-weight:800}
-.tag{position:sticky;top:16px;background:#0c0f1a;color:#fff;border-radius:20px;padding:22px;box-shadow:0 14px 40px rgba(12,15,40,.25)}
+.tag{position:sticky;top:70px;max-height:calc(100vh - 86px);overflow:auto;background:#0c0f1a;color:#fff;border-radius:20px;padding:22px;box-shadow:0 14px 40px rgba(12,15,40,.25)}
 :root[data-theme=dark] .tag{border:1px solid var(--line)}
 .tag .hole{width:46px;height:14px;border-radius:99px;background:rgba(255,255,255,.18);margin-bottom:12px;position:relative}.tag .hole::after{content:"";position:absolute;left:16px;top:3px;width:14px;height:8px;border-radius:99px;background:var(--yellow)}
 .total{font-family:Sora,Inter,sans-serif;font-size:clamp(44px,6vw,62px);font-weight:700;line-height:1;letter-spacing:-.03em;white-space:nowrap}
@@ -184,6 +184,20 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 .ups b{display:block;font-size:16px;color:#3fe0a0}.ups p{margin:4px 0 10px;font-size:14px;opacity:.85}
 .upsb{display:flex;flex-wrap:wrap;gap:8px}.upsb .chip{font-size:14px;min-height:40px;padding:6px 12px}
 .upst{margin:8px 0 0;font-size:14px;color:#3fe0a0}.upst a{color:#3fe0a0;font-weight:700}
+.snav{position:fixed;top:0;left:0;right:0;z-index:6;background:rgba(12,15,40,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transform:translateY(-110%);transition:transform .3s}
+.snav.on{transform:none}
+.snavi{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;max-width:1100px;margin:0 auto;scrollbar-width:none}.snavi::-webkit-scrollbar{display:none}
+.snav a{flex:none;color:#fff;text-decoration:none;font:600 14px Inter,sans-serif;padding:9px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.2)}
+.snav a.on{background:#3fe0a0;color:#0c0f28;border-color:#3fe0a0}
+section[id],#orcamento,.tag,#q{scroll-margin-top:72px}
+.filt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.filt select{min-height:40px;padding:8px 30px 8px 10px;font-size:16px}
+.lines li.it>span:first-child{display:flex;flex-direction:column;gap:6px}
+.qc{display:inline-flex;align-items:center;gap:8px}.qc button{width:36px;height:36px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:inherit;font:800 18px Inter,sans-serif;padding:0;cursor:pointer}.qc b{min-width:16px;text-align:center}
+.more{width:100%;margin-top:10px;min-height:44px;border-radius:12px;border:1px dashed rgba(255,255,255,.45);background:transparent;color:inherit;font:700 15px Inter,sans-serif;cursor:pointer}
+.mob .go{white-space:nowrap}
+@media(max-width:350px){.mob .go{padding-inline:14px;font-size:15px}}
+.mobsum{all:unset;display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent}.mobsum strong{font-size:20px}.mobsum .ver{font-size:12px;color:#3fe0a0;font-weight:700}
+.row .empty{padding:12px 4px}
 /* ===== UX/UI v4 ===== */
 .top{position:relative;overflow:hidden;isolation:isolate}
 .top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
@@ -227,6 +241,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </style>
 </head>
 <body>
+<nav class="snav" id="snav" aria-label="Seções do site"><div class="snavi"><a href="#orcamento" class="on">Orçamento</a><a href="#como">Como funciona</a><a href="#trabalhos">Trabalhos</a><a href="#quem">Quem monta</a><a href="#combinados">Combinados</a><a href="#duvidas">Dúvidas</a></div></nav>
 <header class="band top">
 <div class="wrap">
 <div class="bar hin" style="animation-delay:.05s">
@@ -234,31 +249,32 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <a class="pill" id="phoneTop" href="#">WhatsApp</a>
 </div>
 <h1 class="hin" style="animation-delay:.15s">Montagem de móveis com o valor na hora</h1>
-<p class="lead hin" style="animation-delay:.28s">Zona Sul de São Paulo. Cole o link da sua compra ou escolha o móvel, veja o valor estimado na hora e envie o pedido com as fotos. A gente confirma pelo WhatsApp antes de agendar.</p>
+<p class="lead hin" style="animation-delay:.28s">Atendemos a Zona Sul de São Paulo. Escolha o móvel aqui embaixo e o preço aparece na hora. Depois é só mandar o pedido pelo WhatsApp.</p>
 <div class="trust hin" style="animation-delay:.36s"><img src="img/antolin.jpg" alt="Antolin, montador da Nivo Serviços" width="48" height="48"><div><b>Antolin, seu montador</b><span>Mais de 3 anos montando móveis · ★ 5,0 no GetNinjas</span></div></div>
-<ul class="perks hin" style="animation-delay:.4s"><li>Pagamento só no final</li><li>Sem cadastro</li><li>Deslocamento calculado pelo CEP, sem surpresa</li></ul>
+<ul class="perks hin" style="animation-delay:.4s"><li>Paga só no final</li><li>Não precisa criar conta</li><li>Sem taxa escondida</li></ul>
 
 <div class="tool hin" id="orcamento" style="animation-delay:.42s">
 <div class="steps">
 <section class="panel" id="s1">
-<h3><span class="num">1</span>O que vamos montar?</h3>
+<h3><span class="num">1</span>Qual móvel vamos montar?</h3>
 <div class="link">
-<label for="url">Comprou pela internet? Cole o link do anúncio</label>
-<p class="hint fh">No app ou site da loja, toque em compartilhar, copie o link e cole aqui. O valor aparece na hora.</p>
+<label for="url">Comprou pela internet? Cole aqui o link do móvel</label>
+<p class="hint fh">Abra o móvel no app ou site da loja, toque em "Compartilhar" e depois em "Copiar". Volte aqui e cole.</p>
 <input id="url" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="https://...">
 <button type="button" class="btn" id="urlGo">Adicionar</button>
 <div class="found no" id="found" role="status"></div>
-<div id="volBox" hidden style="grid-column:1/-1"><label for="vol">Quantas caixas chegaram do <span id="volLbl"></span>? <span class="opt">(opcional)</span></label><p class="hint fh">Está escrito na etiqueta da caixa, como "volume 1 de 6".</p><input id="vol" type="number" min="1" max="60" inputmode="numeric" placeholder="Ex.: 8"></div>
+<div id="volBox" hidden style="grid-column:1/-1"><label for="vol">Quantas caixas tem o <span id="volLbl"></span>? <span class="opt">(se souber)</span></label><p class="hint fh">Olhe a etiqueta da caixa. "Volume 1 de 6" quer dizer 6 caixas.</p><input id="vol" type="number" min="1" max="60" inputmode="numeric" placeholder="Ex.: 8"></div>
 </div>
-<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="Ou digite: guarda-roupa, beliche, rack..." aria-label="Buscar móvel"></div>
-<p class="hint">Digite o nome do móvel ou escolha por categoria. Toque em "Adicionar" em cada um.</p>
+<div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="Procure: guarda-roupa, cama, rack..." aria-label="Procurar móvel"></div>
+<div class="filt"><select id="fp" aria-label="Filtrar por preço"><option value="">Qualquer preço</option><option value="0-100">Até R$ 100</option><option value="101-200">R$ 100 a R$ 200</option><option value="201-9999">Mais de R$ 200</option></select><select id="fo" aria-label="Ordenar"><option value="">Ordem normal</option><option value="asc">Mais barato primeiro</option><option value="desc">Mais caro primeiro</option></select></div>
+<p class="hint">Escreva o nome do móvel ou toque em um cômodo. Depois toque em "Adicionar".</p>
 <div class="chips" id="cats" role="group" aria-label="Categorias"></div>
 <div id="shelves"></div>
 </section>
 
 <section class="panel" id="s2">
-<h3><span class="num">2</span>Fotos do móvel <span style="font-weight:400;color:var(--soft);font-size:15px">(opcional)</span></h3>
-<p class="hint">Print do anúncio, foto da caixa ou do lugar onde o móvel vai ficar. As fotos vão junto com o pedido.</p>
+<h3><span class="num">2</span>Fotos <span style="font-weight:400;color:var(--soft);font-size:15px">(se quiser)</span></h3>
+<p class="hint">Pode mandar foto da caixa, do anúncio ou do lugar onde o móvel vai ficar. Elas vão junto com o pedido.</p>
 <label class="upload" for="pics"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-5-8 8"/></svg>Adicionar fotos da galeria<input id="pics" type="file" accept="image/*" multiple></label>
 <div class="photos" id="photos"></div>
 </section>
@@ -266,35 +282,36 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <section class="panel" id="s3">
 <h3><span class="num">3</span>Onde e quando?</h3>
 <div class="form">
-<div><label for="cep">CEP do local da montagem</label><p class="hint fh">Com o CEP, preenchemos o endereço e calculamos o deslocamento.</p>
+<div><label for="cep">CEP de onde vai ser a montagem</label><p class="hint fh">Digite o CEP e o endereço aparece sozinho.</p>
 <div class="cepRow"><input id="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000"><a class="hint" href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener">Não sei o CEP</a></div>
 <div class="addr" id="addr" role="status"></div></div>
 <div class="two" id="addrBox" hidden>
-<div><label for="num">Número</label><input id="num" inputmode="numeric" autocomplete="address-line2" placeholder="Ex.: 120"></div>
+<div><label for="num">Número da casa ou prédio</label><input id="num" inputmode="numeric" autocomplete="address-line2" placeholder="Ex.: 120"></div>
 <div><label for="comp">Complemento <span class="opt">(opcional)</span></label><input id="comp" autocomplete="off" placeholder="Apto, bloco, casa 2"></div>
 </div>
-<div><label>Quando</label><p class="hint fh">Atendimento no mesmo dia conforme a agenda, com acréscimo de R$ 40.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje<small>+ R$ 40</small></button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
+<div><label>Quando</label><p class="hint fh">Para hoje, só se tiver horário livre, e custa R$ 40 a mais.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje<small>+ R$ 40</small></button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
 <div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
-<div><label>Período</label><p class="hint fh">Horário de chegada do montador. Manhã: a partir das 8h. Tarde: a partir das 13h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
-<div class="line2"><div><strong>Fixar na parede</strong><p class="hint" style="margin:0">Por ponto: aéreo, painel, prateleira, nicho</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
-<div class="line2"><div><strong>Espelho ou vidro</strong><p class="hint" style="margin:0">Móveis com espelho ou vidro: + R$ 50 cada, pelo risco. Cristaleira e penteadeira já incluem.</p></div><div class="mini"><button type="button" id="vdm" aria-label="Menos móveis com vidro">−</button><span id="vd">0</span><button type="button" id="vdp" aria-label="Mais móveis com vidro">+</button></div></div>
-<div id="liftBox" hidden><label>Móvel grande: quem ajuda a segurar as peças?</label><p class="hint fh">Peças grandes precisam de duas pessoas para levantar. Ajudante: R$ 180 a diária e R$ 90 por dia a mais, conforme disponibilidade.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Alguém da casa<small>sem custo</small></button><button type="button" class="chip" data-v="nao">Ajudante<small>+ R$ 180</small></button></div></div>
+<div><label>Período</label><p class="hint fh">Que horas o montador chega. Manhã: a partir das 8h. Tarde: a partir das 13h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
+<div class="line2"><div><strong>Prender na parede</strong><p class="hint" style="margin:0">Quantas coisas vão ser presas na parede? Ex.: armário de cima da cozinha, painel de TV, prateleira. R$ 30 cada.</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
+<div class="line2"><div><strong>Tem espelho ou vidro?</strong><p class="hint" style="margin:0">Quantos móveis têm espelho ou vidro? R$ 50 cada, porque quebra fácil.</p></div><div class="mini"><button type="button" id="vdm" aria-label="Menos móveis com vidro">−</button><span id="vd">0</span><button type="button" id="vdp" aria-label="Mais móveis com vidro">+</button></div></div>
+<div id="liftBox" hidden><label>Tem alguém para ajudar a levantar?</label><p class="hint fh">Móvel grande precisa de 2 pessoas para ficar em pé. Pode ser alguém da casa. Se não tiver, levamos um ajudante: R$ 180 no primeiro dia e R$ 90 em cada dia a mais.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Alguém da casa<small>sem custo</small></button><button type="button" class="chip" data-v="nao">Ajudante<small>+ R$ 180</small></button></div></div>
 <div class="two">
-<div><label for="andar">Acesso ao local</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
+<div><label for="andar">Como é o lugar?</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
 <div><label for="nome">Seu nome</label><input id="nome" autocomplete="name" autocapitalize="words" placeholder="Como podemos te chamar"></div>
 </div>
-<div><label for="obs">Observações <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="Ex.: parede de drywall, móvel já desmontado, horário da portaria"></textarea></div>
+<div><label for="obs">Quer avisar alguma coisa? <span class="opt">(se quiser)</span></label><textarea id="obs" placeholder="Ex.: a parede é de gesso, o móvel já está aberto, a portaria fecha às 18h"></textarea></div>
 </div>
 </section>
 </div>
 
 <aside class="tag" aria-live="polite">
 <div class="hole"></div>
-<div>Valor estimado</div>
+<div>Quanto vai custar (estimado)</div>
 <div class="total" id="total">R$ 0</div>
 <div class="time" id="time">Escolha pelo menos um móvel</div>
 <ul class="lines" id="lines"></ul>
-<div class="ups" id="ups" hidden><b id="upsT"></b><p>Pedido pequeno para a sua região. Aproveite a visita: adicione mais móveis ou serviços e o valor não muda até esse limite.</p><div class="upsb"><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
+<div id="moreBox" hidden><button type="button" class="more" id="more">+ Colocar outro móvel</button></div>
+<div class="ups" id="ups" hidden><b id="upsT"></b><p>Seu pedido é pequeno para a sua região. Você pode colocar mais coisas e o preço não muda até esse valor.</p><div class="upsb"><button type="button" class="chip" data-u="fx">+ Fixar na parede</button><button type="button" class="chip" data-u="dout">+ Desmontar um móvel</button><button type="button" class="chip" data-u="mais">+ Montar outro móvel</button></div></div>
 <p class="note" id="notes"></p>
 <button type="button" class="go" id="send"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.7 15l-1.3 5 5.1-1.3A10 10 0 1 0 12 2zm5.2 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.6-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>Enviar pedido no WhatsApp</button>
 <p class="err" id="err" role="alert"></p>
@@ -305,22 +322,22 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </div>
 </header>
 
-<div class="mob"><div><small id="mcount">Nenhum móvel</small><br><strong id="mtotal">R$ 0</strong></div><button type="button" class="go" id="msend">Enviar pedido</button></div>
+<div class="mob"><button type="button" class="mobsum" id="mobsum" aria-label="Ver resumo do pedido"><small id="mcount">Nenhum móvel</small><strong id="mtotal">R$ 0</strong><span class="ver">Ver resumo ›</span></button><button type="button" class="go" id="msend">Enviar pedido</button></div>
 
 <div class="sheet" id="sheet" role="dialog" aria-label="Enviar fotos"><div class="wrap"><strong style="font-size:18px">Agora envie as fotos</strong><p>A mensagem foi aberta no WhatsApp. Pra mandar as fotos na mesma conversa, toque abaixo e escolha <b class="brand">Nivo Serviços</b>.</p><button type="button" class="go" id="sharePics">Enviar as fotos</button><button type="button" class="btn" id="closeSheet" style="background:transparent;color:var(--ink);border:1px solid var(--line)">Já enviei</button></div></div>
 
-<section class="band">
+<section id="como" class="band">
 <div class="wrap">
 <h2>Como funciona</h2>
 <div class="how">
-<div><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="8" width="28" height="26" rx="3" fill="#1d3cff"/><path d="M12 18h16M12 24h10" stroke="#0c0f1a" stroke-width="3" stroke-linecap="round"/></svg><h3>Monte o pedido</h3><p>Cole o link da compra ou escolha o móvel. O preço fechado aparece na hora.</p></div>
-<div><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" fill="#3fe0a0"/><path d="M13 20l5 5 9-10" stroke="#0c0f1a" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg><h3>Envie com as fotos</h3><p>O pedido chega pronto no WhatsApp. Você só recebe a confirmação do horário.</p></div>
-<div><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="16" width="20" height="8" rx="2" fill="#0c0f1a"/><rect x="26" y="18" width="8" height="4" fill="#1d3cff"/><rect x="12" y="24" width="7" height="10" rx="2" fill="#3fe0a0"/></svg><h3>Móvel montado</h3><p>O montador vai no dia combinado, monta e deixa o espaço limpo.</p></div>
+<div><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="8" width="28" height="26" rx="3" fill="#1d3cff"/><path d="M12 18h16M12 24h10" stroke="#0c0f1a" stroke-width="3" stroke-linecap="round"/></svg><h3>1. Escolha o móvel</h3><p>Toque no móvel ou cole o link da loja. O preço aparece na hora.</p></div>
+<div><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" fill="#3fe0a0"/><path d="M13 20l5 5 9-10" stroke="#0c0f1a" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg><h3>2. Mande pelo WhatsApp</h3><p>O pedido chega pronto para a gente. Respondemos confirmando o dia e a hora.</p></div>
+<div><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="16" width="20" height="8" rx="2" fill="#0c0f1a"/><rect x="26" y="18" width="8" height="4" fill="#1d3cff"/><rect x="12" y="24" width="7" height="10" rx="2" fill="#3fe0a0"/></svg><h3>3. Móvel montado</h3><p>O montador vai no dia marcado, monta e deixa tudo organizado.</p></div>
 </div>
 </div>
 </section>
 
-<section class="band kr">
+<section id="trabalhos" class="band kr">
 <div class="wrap">
 <h2>Serviços feitos por nós</h2>
 <div class="work">
@@ -340,7 +357,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </div>
 </section>
 
-<section class="band">
+<section id="quem" class="band">
 <div class="wrap who">
 <img src="img/antolin.jpg" alt="Antolin, montador da Nivo Serviços" loading="lazy" width="720" height="720">
 <div>
@@ -352,7 +369,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </div>
 </section>
 
-<section class="band">
+<section id="combinados" class="band">
 <div class="wrap">
 <h2>Combinados</h2>
 <div class="cols">
@@ -369,17 +386,17 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </div>
 </section>
 
-<section class="band">
+<section id="duvidas" class="band">
 <div class="wrap">
 <h2>Perguntas frequentes</h2>
 <div style="margin-top:14px">
-<details><summary>Dá pra montar no mesmo dia?</summary><p>Sim, quando a agenda permite. O atendimento no mesmo dia tem acréscimo de R$ 40.</p></details>
-<details><summary>O valor do site é o valor final?</summary><p>É um valor estimado pelos móveis marcados, já com 10% de desconto a partir de 3 móveis. Com o link ou a foto, confirmamos o valor pelo WhatsApp antes de agendar. Sem surpresa no dia.</p></details>
-<details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Marque "Outro móvel" e mande a foto ou o print. Respondemos com o valor.</p></details>
+<details><summary>Dá pra montar no mesmo dia?</summary><p>Se tiver horário livre, sim. Para o mesmo dia, custa R$ 40 a mais.</p></details>
+<details><summary>O valor do site é o valor final?</summary><p>É uma estimativa. Antes de marcar o dia, a gente confirma o valor certo pelo WhatsApp. Com 3 móveis ou mais, você ganha 10% de desconto.</p></details>
+<details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Toque em "Não achei", adicione "Outro móvel" e mande uma foto. A gente responde com o preço.</p></details>
 <details><summary>Como é o pagamento?</summary><p>Pix ou dinheiro, ao final do serviço.</p></details>
-<details><summary>Tem valor mínimo?</summary><p>Só para pedidos pequenos em regiões mais distantes. Nesse caso aparece uma taxa de visita no orçamento, e você pode adicionar mais móveis sem pagar a mais até completar o valor.</p></details>
+<details><summary>Tem valor mínimo?</summary><p>Só quando o pedido é pequeno. Aí aparece uma "taxa de visita". Se você colocar mais móveis, essa taxa diminui ou some.</p></details>
 <details><summary>Quanto custa uma nova visita?</summary><p>Para ajustes depois do serviço entregue, a visita é R$ 60. Se faltar peça, a volta para terminar é combinada pelo WhatsApp.</p></details>
-<details><summary>E se faltar peça no móvel?</summary><p>Conferimos as peças antes de começar. Se faltar algo, montamos o que for possível e você aciona a loja. A volta pra terminar é cobrada à parte.</p></details>
+<details><summary>E se faltar peça no móvel?</summary><p>A gente confere as peças antes de começar. Se faltar alguma, montamos o que der e você pede a peça para a loja. A volta para terminar é cobrada à parte.</p></details>
 </div>
 </div>
 </section>
@@ -415,7 +432,7 @@ esc:110,esc2:170,escl:180,mpc:110,mgamer:130,gav:100,armesc:150,estesc:140,cesc:
 berco:150,bercom:230,troc:140,grinf:180,caminf:120,bel:180,tre:250,bicama:160,escinf:110,
 gabban:110,espelh:150,armban:100,torban:100,lav:150,tanque:110,lavaereo:110,mext:110,cext:40,armext:110,bjard:110,dgr4:110,dgr6:160,dcama:80,dout:80,outro:0};
 ITEMS.forEach(i=>{if(i.id in MKT)i.preco=MKT[i.id]});
-const minimo=km=>!km||km<=20?0:km<=40?160:200;
+const minimo=km=>!km?0:km<=20?80:km<=40?160:200;
 const wardPrice=n=>n<=3?160:n===4?200:n===5?240:n===6?290:n===7?340:n<=12?400+50*(n-8):600+50*(n-12);
 const BY=Object.fromEntries(ITEMS.map(i=>[i.id,i]));let linkN=0;
 const PERTO=["Parelheiros","Grajaú","Cidade Dutra","Socorro","Interlagos","Jardim Ângela","Jardim São Luís","Capão Redondo","Campo Limpo","Vila Andrade","Cidade Ademar","Pedreira","Itapecerica da Serra","Embu das Artes","Taboão da Serra"];
@@ -423,7 +440,7 @@ const LONGE=["Santo Amaro","Campo Grande","Campo Belo","Jabaquara","Saúde","Cur
 const $=id=>document.getElementById(id);
 const brl=v=>(v<0?"− ":"")+"R$ "+Math.abs(Math.round(v)).toLocaleString("pt-BR");
 const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
-const qty={},st={cat:"quarto",q:"",fx:0,quando:"amanha",turno:"Manhã",lift:"sim",vd:0};let fotos=[];
+const qty={},st={cat:"quarto",q:"",fx:0,quando:"amanha",turno:"Manhã",lift:"sim",vd:0,fp:"",fo:""};let fotos=[];
 const code="NV-"+Math.floor(1000+Math.random()*9000);
 
 const W="var(--ic1)",K="var(--ic2)";
@@ -504,20 +521,22 @@ if(i.tipo==="o"){p1="Valor pela foto";p2="Mande o print no passo 2"}
 else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2="Pode juntar com outros móveis"}
 else{p1=brl(i.preco);p2=i.cat==="link"&&i.det?esc(i.det)+(i.how?`<br>${esc(i.how)}`:""):pt}
 return `<div class="card${q?" sel":""}">${ico(i.k,i.n)}<strong>${esc(i.nome.length>60?i.nome.slice(0,58)+"…":i.nome)}</strong><div class="pr"><b>${p1}</b><small>${p2}</small></div>${q?`<div class="qty"><button type="button" data-m="${i.id}" aria-label="Remover ${esc(i.nome)}">−</button><span>${q}</span><button type="button" data-p="${i.id}" aria-label="Adicionar mais ${esc(i.nome)}">+</button></div>`:`<button type="button" class="add" data-p="${i.id}">Adicionar</button>`}</div>`}
+const SYN={armario:["guarda","armario","aereo","multiuso","paneleiro"],tv:["rack","painel","home"],televisao:["rack","painel","home"],pia:["balcao","gabinete"],cozinha:["cozinha","balcao","aereo","paneleiro"],quarto:["quarto"],bebe:["berco","trocador"],crianca:["infantil","beliche","berco","bicama"],computador:["escrivaninha","computador","gamer"],escritorio:["escritorio","escrivaninha"],sapato:["sapateira"],roupa:["guarda","arara","comoda"],espelho:["espelh","penteadeira"],cama:["cama","beliche","treliche","bicama","berco"],mesa:["mesa","escrivaninha"]};
+function filt(a){let r=a;if(st.fp){const[lo,hi]=st.fp.split("-").map(Number);r=r.filter(i=>i.tipo==="o"||(i.preco>=lo&&i.preco<=hi))}if(st.fo)r=[...r].sort((x,y)=>(st.fo==="asc"?1:-1)*((x.preco||0)-(y.preco||0)));return r}
 function drawCats(){$("cats").innerHTML=CATS.map(([id,n])=>{const c=ITEMS.filter(i=>i.cat===id).reduce((s,i)=>s+(qty[i.id]||0),0);return `<button type="button" class="chip" data-c="${id}" aria-pressed="${!st.q&&id===st.cat}">${n}${c?`<b>${c}</b>`:""}</button>`}).join("")}
-function drawShelves(){
-if(st.q){const q=norm(st.q).split(/\s+/).filter(Boolean);const res=ITEMS.filter(i=>q.every(w=>norm(i.nome+" "+i.cat).includes(w)));$("shelves").innerHTML=`<div class="shelf"><h4>Resultado da busca <span>${res.length} ${res.length===1?"móvel":"móveis"}</span></h4>${res.length?`<div class="grid">${res.map(card).join("")}</div>`:`<p class="empty">Não encontramos "${esc(st.q)}". Adicione "Outro móvel" e mande a foto.</p><div class="grid">${card(BY.outro)}</div>`}</div>`;return}
-const list=ITEMS.filter(i=>i.cat===st.cat);const sel=ITEMS.filter(i=>qty[i.id]&&i.cat!==st.cat&&i.cat!=="link");
-const lk=ITEMS.filter(i=>i.cat==="link"&&qty[i.id]);$("shelves").innerHTML=(lk.length?`<div class="shelf"><h4>Do seu link ou foto <span>orçamento automático</span></h4><div class="row">${lk.map(card).join("")}</div></div>`:"")+`<div class="shelf"><h4>${CATS.find(c=>c[0]===st.cat)[1]} <span>deslize para ver todos</span></h4><div class="row">${list.map(card).join("")}</div></div>`+(sel.length?`<div class="shelf"><h4>Já escolhidos em outras categorias</h4><div class="row">${sel.map(card).join("")}</div></div>`:"");
+function drawShelves(){const keep={};$("shelves").querySelectorAll(".row").forEach(r=>keep[r.dataset.k]=r.scrollLeft);drawShelves0();$("shelves").querySelectorAll(".row").forEach(r=>{if(keep[r.dataset.k])r.scrollLeft=keep[r.dataset.k]})}
+function drawShelves0(){
+if(st.q){const q=norm(st.q).split(/\s+/).filter(Boolean);const res=filt(ITEMS.filter(i=>i.cat!=="link"&&q.every(w=>{const al=SYN[w]||[w];return al.some(x=>norm(i.nome+" "+i.cat).includes(x))})));$("shelves").innerHTML=`<div class="shelf"><h4>Resultado da busca <span>${res.length} ${res.length===1?"móvel":"móveis"}</span></h4>${res.length?`<div class="grid">${res.map(card).join("")}</div>`:`<p class="empty">Não encontramos "${esc(st.q)}". Adicione "Outro móvel" e mande a foto.</p><div class="grid">${card(BY.outro)}</div>`}</div>`;return}
+const list=ITEMS.filter(i=>i.cat===st.cat);const fl=filt(list);const sel=ITEMS.filter(i=>qty[i.id]&&i.cat!==st.cat&&i.cat!=="link");
+const lk=ITEMS.filter(i=>i.cat==="link"&&qty[i.id]);$("shelves").innerHTML=(lk.length?`<div class="shelf"><h4>Do seu link ou foto <span>orçamento automático</span></h4><div class="row" data-k="lk">${lk.map(card).join("")}</div></div>`:"")+`<div class="shelf"><h4>${CATS.find(c=>c[0]===st.cat)[1]} <span>deslize para ver todos</span></h4><div class="row" data-k="c-${st.cat}">${fl.length?fl.map(card).join(""):`<p class="empty">Nenhum móvel nessa faixa de preço.</p>`}</div></div>`+(sel.length?`<div class="shelf"><h4>Já escolhidos em outras categorias</h4><div class="row" data-k="sel">${sel.map(card).join("")}</div></div>`:"");
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function calc(){
 const units=[];ITEMS.forEach(i=>{for(let k=0;k<(qty[i.id]||0);k++)units.push(i)});
 const big=units.filter(u=>u.tipo==="n"||u.tipo==="g").sort((a,b)=>b.preco-a.preco);const lines=[];let sub=0,hrs=0;
-big.forEach(u=>{sub+=u.preco;hrs+=u.h;lines.push([u.nome,u.preco,u.how])});
-units.filter(u=>u.tipo==="p").forEach(u=>{sub+=u.preco;hrs+=u.h;lines.push([u.nome,u.preco,u.how])});
+const grp=[];[...big,...units.filter(u=>u.tipo==="p")].forEach(u=>{sub+=u.preco;hrs+=u.h;const g=grp.find(x=>x.id===u.id);if(g){g.q++;g.v+=u.preco}else grp.push({id:u.id,n:u.nome,v:u.preco,how:u.how,q:1})});grp.forEach(g=>lines.push([g.n,g.v,g.how,g.id,g.q]));
 const nPriced=units.filter(u=>u.tipo!=="o").length;if(nPriced>=3){const d=Math.round(sub*CONFIG.combo/10)*10;sub-=d;lines.push([`Desconto ${nPriced} móveis (10%)`,-d])}
-const outros=units.filter(u=>u.tipo==="o").length;if(outros)lines.push([`Outro móvel${outros>1?` (${outros})`:""}`,null]);
+const outros=units.filter(u=>u.tipo==="o").length;if(outros){const oi=units.find(u=>u.tipo==="o");lines.push([oi.nome,null,"",oi.id,outros])}
 if(st.vd){sub+=st.vd*CONFIG.vidro;lines.push([`Espelho ou vidro (${st.vd} ${st.vd>1?"móveis":"móvel"})`,st.vd*CONFIG.vidro])}
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
@@ -556,9 +575,9 @@ function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;$("vd").textContent=st.vd;$("vdm").disabled=!st.vd;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
 countTo(r.total,r.outros?"+":"");$("ups").hidden=!r.falta;if(r.falta){$("upsT").textContent=`Ainda cabem ${brl(r.falta)} sem pagar a mais`}const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
-const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · serviço ${r.lvl}`:"Nenhum móvel";
+const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"}`:"Nenhum móvel";
 $("time").textContent=n?`Serviço ${r.lvl}. O tempo depende da complexidade${r.lvl==="grande"?" e pode passar de um dia":""}.`:"Escolha pelo menos um móvel";
-$("lines").innerHTML=r.lines.map(([a,v,hw])=>`<li><span>${esc(a)}${hw?`<small class="how">Como calculamos: ${esc(hw)}</small>`:""}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
+$("lines").innerHTML=r.lines.map(([a,v,hw,id,q])=>`<li${id?' class="it"':""}><span>${esc(a)}${hw?`<small class="how">Como calculamos: ${esc(hw)}</small>`:""}${id?`<span class="qc"><button type="button" data-m="${esc(id)}" aria-label="Tirar um">−</button><b>${q}</b><button type="button" data-p="${esc(id)}" aria-label="Colocar mais um">+</button></span>`:""}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");$("moreBox").hidden=!r.units.length;
 $("notes").textContent=r.notes.join(" ");
 if($("err").textContent)$("err").textContent=check(r)[0];
 try{localStorage.setItem("nv1",JSON.stringify({qty,fx:st.fx,vd:st.vd,cep:$("cep").value,num:$("num").value,comp:$("comp").value,nome:$("nome").value}))}catch(e){}
@@ -662,8 +681,10 @@ function reestimate(){const id=st.lastLink;if(!id||!BY[id]||BY[id].tipo==="o")re
 $("urlGo").onclick=findUrl;$("vol").addEventListener("input",reestimate);$("url").addEventListener("paste",()=>setTimeout(findUrl,50));$("url").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();findUrl()}});
 $("q").addEventListener("input",e=>{st.q=e.target.value;drawCats();drawShelves()});
 $("cats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){st.cat=b.dataset.c;st.q="";$("q").value="";render()}});
-$("shelves").addEventListener("click",e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;justAdded=p.dataset.p;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m){render();if(justAdded){const b=$("shelves").querySelector(`[data-m="${CSS.escape(justAdded)}"]`);const c=b&&b.closest(".card");if(c){c.classList.add("pop")}justAdded=null}}});
-$("fxp").onclick=()=>{st.fx++;render()};$("ups").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b)return;const u=b.dataset.u;if(u==="fx"){st.fx++;toast("Fixação na parede adicionada")}else if(u==="mais"){st.cat="quarto";st.q="";$("q").value="";drawCats();drawShelves();$("shelves").scrollIntoView({behavior:"smooth",block:"start"});return}else{qty[u]=(qty[u]||0)+1;toast("Adicionado ao pedido: "+BY[u].nome)}render()});$("vdp").onclick=()=>{st.vd++;render()};$("vdm").onclick=()=>{st.vd=Math.max(0,st.vd-1);render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
+const onQty=e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m]");if(p){qty[p.dataset.p]=(qty[p.dataset.p]||0)+1;justAdded=p.dataset.p;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}if(BY[p.dataset.p].tipo==="o")toast("Agora adicione a foto no passo 2.")}if(m)qty[m.dataset.m]=Math.max(0,(qty[m.dataset.m]||0)-1);if(p||m){render();if(justAdded){const b=$("shelves").querySelector(`[data-m="${CSS.escape(justAdded)}"]`);const c=b&&b.closest(".card");if(c){c.classList.add("pop")}justAdded=null}}};$("shelves").addEventListener("click",onQty);$("lines").addEventListener("click",onQty);$("more").onclick=()=>{$("q").value="";st.q="";render();$("q").scrollIntoView({behavior:"smooth",block:"start"})};
+$("mobsum").onclick=()=>document.querySelector(".tag").scrollIntoView({behavior:"smooth",block:"start"});
+$("fp").onchange=e=>{st.fp=e.target.value;drawShelves()};$("fo").onchange=e=>{st.fo=e.target.value;drawShelves()};
+$("fxp").onclick=()=>{st.fx++;render()};$("ups").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b)return;const u=b.dataset.u;if(u==="fx"){st.fx++;toast("Fixação na parede adicionada")}else if(u==="mais"){st.cat="quarto";st.q="";$("q").value="";drawCats();drawShelves();$("q").scrollIntoView({behavior:"smooth",block:"start"});return}else{qty[u]=(qty[u]||0)+1;toast("Adicionado ao pedido: "+BY[u].nome)}render()});$("vdp").onclick=()=>{st.vd++;render()};$("vdm").onclick=()=>{st.vd=Math.max(0,st.vd-1);render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
 [["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){st[k]=b.dataset.v;render()}}));
 ["andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs","num","comp"].forEach(id=>$(id).addEventListener("input",render));
 $("cep").addEventListener("input",e=>{let v=e.target.value.replace(/\D/g,"").slice(0,8);e.target.value=v.length>5?v.slice(0,5)+"-"+v.slice(5):v;if(v.length===8)buscaCep(v);else if(st.addr){st.addr=null;$("addr").textContent="";$("addrBox").hidden=true;render()}});
@@ -679,6 +700,10 @@ window.__detect=detect;
 render();
 }
 
+/* navegação por seções */
+(()=>{const nav=document.getElementById("snav"),links=[...nav.querySelectorAll("a")],ids=links.map(a=>a.getAttribute("href").slice(1));
+const upd=()=>{nav.classList.toggle("on",scrollY>420);let cur=ids[0];ids.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<120)cur=id});if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)cur=ids[ids.length-1];links.forEach(a=>{const on=a.getAttribute("href")==="#"+cur;if(on!==a.classList.contains("on")){a.classList.toggle("on",on);if(on){const w=nav.firstElementChild;w.scrollLeft=Math.max(0,a.offsetLeft-w.clientWidth/2+a.offsetWidth/2)}}})};
+addEventListener("scroll",upd,{passive:true});upd()})();
 /* entrada das seções ao rolar e altura da barra */
 (()=>{const els=document.querySelectorAll("main .band h2,.band:not(.top):not(footer) h2,.band .how>*,.work,.who>*,.band .cols>*,.areas,details,.list li");
 if(!("IntersectionObserver" in window)){return}
