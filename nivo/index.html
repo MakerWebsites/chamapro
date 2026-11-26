@@ -683,11 +683,27 @@ function findUrl(){const v=$("url").value.trim();if(!v)return;$("vol").value="";
 const id="lk"+(++linkN);
 if(e){const key=e.base+"|"+e.det.filter(d=>!/volumes/.test(d)).join(",");if(seen.has(key)){f.className="found";f.textContent="Esse móvel já está no pedido.";$("url").value="";return}seen.add(key);ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:parseLink(v).url||v,est:v,via:"url"});qty[id]=e.q;
 f.className="found";f.textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50);$("url").value=""}
-else if(!niceName(v)&&CONFIG.linkApi&&!st.resolving){st.resolving=1;const b=$("urlGo");b.disabled=true;b.textContent="...";const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),7000);fetch(CONFIG.linkApi+"?u="+encodeURIComponent(parseLink(v).url||v),{signal:ctl.signal}).then(r=>r.json()).then(j=>{const t=((j.titulo||"")+" "+(j.final||"")).trim();return t&&niceName(j.titulo||j.final)?(j.titulo?j.titulo+" "+(parseLink(v).url||v):j.final):""}).catch(()=>"").then(t=>{clearTimeout(tm);st.resolving=0;b.disabled=false;b.textContent="Adicionar";if(t){$("url").value=t;findUrl()}else{st.pendUrl=parseLink(v).url||v;$("nameBox").hidden=false;$("url").value="";setTimeout(()=>$("lname").focus(),50)}});return}
+else if(!niceName(v)&&!st.resolving){st.resolving=1;const b=$("urlGo");b.disabled=true;b.textContent="...";const lu=parseLink(v).url||v;resolveLink(lu).then(t=>{st.resolving=0;b.disabled=false;b.textContent="Adicionar";if(t){$("url").value=t+" "+lu;findUrl()}else{st.pendUrl=lu;$("nameBox").hidden=false;$("url").value="";setTimeout(()=>$("lname").focus(),50)}});return}
 else if(!niceName(v)){st.pendUrl=parseLink(v).url||v;$("nameBox").hidden=false;f.className="found no";f.textContent="";$("url").value="";setTimeout(()=>$("lname").focus(),50);return}
 else{ITEMS.push(BY[id]={id,cat:"link",nome:name,h:0,k:"outro",n:0,tipo:"o",preco:0,det:"valor pelo print",src:parseLink(v).url||v});qty[id]=1;
 f.className="found";f.textContent="Adicionamos o móvel do link. Se puder, mande também um print do anúncio no passo 2."}
 st.lastLink=id;st.q="";$("q").value="";$("url").value="";render();$("shelves").scrollIntoView({block:"nearest"})}
+const BAD=/^(mercado ?livre|mercado libre|shopee( brasil)?|amazon(\.com\.br)?|magazine luiza|magalu|casas bahia|aliexpress|temu|just a moment|access denied|attention required|verifica|captcha|login|entrar|p[aá]gina n[aã]o encontrada|404|erro|error)\b/i;
+function cleanTitle(t){t=String(t||"").replace(/&amp;/g,"&").replace(/&#39;|&apos;/g,"'").replace(/&quot;/g,'"').replace(/\s*[|\-–]\s*(Mercado Livre|MercadoLivre|Shopee Brasil|Shopee|Amazon\.com\.br|Amazon|Magazine Luiza|Magalu|Casas Bahia|AliExpress|Temu|MadeiraMadeira|Mobly)\b.*$/i,"").replace(/^(Compre|Comprar)\s+/i,"").trim();return t.length>=6&&!BAD.test(t)&&/[a-zà-ú]{3,}/i.test(t)?t:""}
+function pickFrom(txt){if(!txt)return "";txt=String(txt);
+const og=txt.match(/<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']+)/i)||txt.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:title/i);if(og&&cleanTitle(og[1]))return cleanTitle(og[1]);
+const jt=txt.match(/^Title:\s*(.+)$/m);if(jt&&cleanTitle(jt[1]))return cleanTitle(jt[1]);
+const can=txt.match(/<link[^>]+rel=["']canonical["'][^>]*href=["']([^"']+)/i)||txt.match(/^URL Source:\s*(\S+)/m);if(can&&niceName(can[1]))return niceName(can[1]);
+const tt=txt.match(/<title[^>]*>([^<]{6,})</i);if(tt&&cleanTitle(tt[1]))return cleanTitle(tt[1]);
+const any=txt.match(/https?:\/\/(?:www\.|produto\.)?(?:mercadolivre\.com\.br|shopee\.com\.br|amazon\.com\.br|magazineluiza\.com\.br|casasbahia\.com\.br|madeiramadeira\.com\.br)\/[^\s"'<>]{12,}/i);if(any&&niceName(any[0]))return niceName(any[0]);return ""}
+function withTimeout(p,ms){return Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(0),ms))])}
+const PROXIES=[u=>fetch("https://r.jina.ai/"+u,{headers:{"Accept":"text/plain"}}).then(r=>r.text()),
+u=>fetch("https://api.allorigins.win/get?url="+encodeURIComponent(u)).then(r=>r.json()).then(j=>(j.status&&j.status.url?"URL Source: "+j.status.url+"\n":"")+(j.contents||"")),
+u=>fetch("https://corsproxy.io/?url="+encodeURIComponent(u)).then(r=>r.text()),
+u=>fetch("https://api.codetabs.com/v1/proxy/?quest="+encodeURIComponent(u)).then(r=>r.text())];
+function resolveLink(u){const tries=PROXIES.map(f=>withTimeout(f(u).then(t=>{const n=pickFrom(t);if(!n)throw 0;return n}),6000));
+if(CONFIG.linkApi)tries.push(withTimeout(fetch(CONFIG.linkApi+"?u="+encodeURIComponent(u)).then(r=>r.json()).then(j=>{const n=cleanTitle(j.titulo)||niceName(j.final||"");if(!n)throw 0;return n}),6000));
+return (Promise.any?Promise.any(tries):new Promise((ok,no)=>{let f=0;tries.forEach(t=>t.then(ok,()=>{if(++f===tries.length)no()}))})).catch(()=>"")}
 function nameGo(skip){const u=st.pendUrl;if(!u)return;const nm=$("lname").value.trim();$("nameBox").hidden=true;$("lname").value="";st.pendUrl="";
 if(!skip&&nm){const e=estimate(nm);const id="lk"+(++linkN);const name=nm.charAt(0).toUpperCase()+nm.slice(1,90);
 if(e){ITEMS.push(BY[id]={id,cat:"link",nome:name,h:e.h,k:e.k,n:e.n,tipo:e.tipo,preco:e.preco,det:e.det.join(" · "),how:e.how,src:u,est:nm,via:"url"});qty[id]=e.q;$("found").className="found";$("found").textContent=`Adicionado: ${name.slice(0,70)}. Confira o valor no resumo.`;$("volBox").hidden=false;$("volLbl").textContent=name.slice(0,50)}
