@@ -252,9 +252,9 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </div>
 <div><label>Quando</label><p class="hint fh">Atendimento no mesmo dia conforme a agenda, com acréscimo de R$ 40.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje (+ R$ 40)</button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
 <div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
-<div><label>Período</label><p class="hint fh">Manhã: das 8h às 12h. Tarde: das 13h às 18h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
+<div><label>Período</label><p class="hint fh">Horário de chegada do montador. Manhã: a partir das 8h. Tarde: a partir das 13h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
 <div class="line2"><div><strong>Fixar na parede</strong><p class="hint" style="margin:0">Por ponto: aéreo, painel, prateleira, nicho</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
-<div id="liftBox" hidden><label>Móvel grande: alguém da casa ajuda a levantar por 2 minutos?</label><p class="hint fh">Guarda-roupas grandes precisam de duas pessoas só na hora de ficar em pé.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Sim, alguém ajuda</button><button type="button" class="chip" data-v="nao">Não (+ R$ 100 de ajudante)</button></div></div>
+<div id="liftBox" hidden><label>Móvel grande: quem ajuda a segurar as peças?</label><p class="hint fh">Peças grandes precisam de duas pessoas para levantar e segurar. Se preferir um ajudante, ele é pago por diária. Se o serviço passar de um dia (horário comercial), cada dia a mais é mais uma diária.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Eu ou alguém da casa</button><button type="button" class="chip" data-v="nao">Ajudante (+ R$ 100 por dia)</button></div></div>
 <div class="two">
 <div><label for="andar">Acesso ao local</label><select id="andar"><option>Casa ou térreo</option><option>Prédio com elevador</option><option>Prédio só com escada</option></select></div>
 <div><label for="nome">Seu nome</label><input id="nome" autocomplete="name" autocapitalize="words" placeholder="Como podemos te chamar"></div>
@@ -457,11 +457,12 @@ document.querySelectorAll(".brand").forEach(e=>e.textContent=CONFIG.nome);
 const phone=CONFIG.whatsapp.replace(/\D/g,"");const phoneFmt=phone?phone.replace(/^55(\d{2})(\d{5})(\d{4})$/,"($1) $2-$3"):"(11) 90000-0000";
 $("phoneTxt").textContent=phoneFmt;$("phoneTop").textContent="WhatsApp "+phoneFmt;$("phoneTop").href=`https://wa.me/${phone}`;
 
-function card(i){const q=qty[i.id]||0;const hh=String(i.h).replace(".",",");
+const porte=i=>i.h<=1.5?"Montagem simples":i.h<=3.5?"Montagem média":"Montagem grande";
+function card(i){const q=qty[i.id]||0;const pt=porte(i)+(i.tipo==="g"?" · precisa de 2 pessoas para levantar":"");
 let p1,p2;
 if(i.tipo==="o"){p1="Valor pela foto";p2="Mande o print no passo 2"}
 else if(i.tipo==="p"){p1=`${brl(i.preco)} cada`;p2=`Se for o único item: mínimo ${brl(CONFIG.minimo)}`}
-else{p1=brl(i.preco);p2=i.cat==="link"&&i.det?esc(i.det):`Cerca de ${hh} h de montagem`}
+else{p1=brl(i.preco);p2=i.cat==="link"&&i.det?esc(i.det):pt}
 return `<div class="card${q?" sel":""}">${ico(i.k,i.n)}<strong>${esc(i.nome.length>60?i.nome.slice(0,58)+"…":i.nome)}</strong><div class="pr"><b>${p1}</b><small>${p2}</small></div>${q?`<div class="qty"><button type="button" data-m="${i.id}" aria-label="Remover ${esc(i.nome)}">−</button><span>${q}</span><button type="button" data-p="${i.id}" aria-label="Adicionar mais ${esc(i.nome)}">+</button></div>`:`<button type="button" class="add" data-p="${i.id}">Adicionar</button>`}</div>`}
 function drawCats(){$("cats").innerHTML=CATS.map(([id,n])=>{const c=ITEMS.filter(i=>i.cat===id).reduce((s,i)=>s+(qty[i.id]||0),0);return `<button type="button" class="chip" data-c="${id}" aria-pressed="${!st.q&&id===st.cat}">${n}${c?`<b>${c}</b>`:""}</button>`}).join("")}
 function drawShelves(){
@@ -479,13 +480,14 @@ const nPriced=units.filter(u=>u.tipo!=="o").length;if(nPriced>=3){const d=Math.r
 const outros=units.filter(u=>u.tipo==="o").length;if(outros)lines.push([`Outro móvel${outros>1?` (${outros})`:""}`,null]);
 if(st.fx){sub+=st.fx*CONFIG.fixacao;hrs+=st.fx*.25;lines.push([`Fixação na parede (${st.fx})`,st.fx*CONFIG.fixacao])}
 const hasBig=units.some(u=>u.tipo==="g");
-if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante para levantar",CONFIG.ajudante])}
+if(hasBig&&st.lift==="nao"){sub+=CONFIG.ajudante;lines.push(["Ajudante (1 diária)",CONFIG.ajudante])}
 const A=st.addr;if(A&&A.km&&units.length){const f=deslo(A.km);if(f>0){sub+=f;lines.push([`Deslocamento (${Math.round(A.km)} km)`,f])}}
 if(st.quando==="hoje"&&units.length){sub+=CONFIG.hoje;lines.push(["Atendimento no mesmo dia",CONFIG.hoje])}
 let total=sub;const notes=[];
 if(big.length+units.filter(u=>u.tipo==="p").length&&sub<CONFIG.minimo){lines.push(["Ajuste para o serviço mínimo",CONFIG.minimo-sub]);total=CONFIG.minimo}
-if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hrs>8)notes.push("Serviço grande: pode levar 2 dias.");if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
-return{units,lines,total,hrs,notes,outros,hasBig};
+if(outros)notes.push("Outro móvel: valor confirmado pela foto.");if(hasBig&&st.lift==="nao")notes.push(`Ajudante: se o serviço passar de 1 dia, cada dia a mais é mais uma diária de ${brl(CONFIG.ajudante)}.`);if(hasBig||hrs>6)notes.push("Serviço grande: o tempo depende da complexidade e pode passar de um dia.");if(A&&A.ok&&!A.km)notes.push("Deslocamento confirmado no WhatsApp.");if(A&&A.km>CONFIG.kmMax)notes.push("Endereço fora da área: confirmamos no WhatsApp.");
+const lvl=hasBig||hrs>6?"grande":hrs>3?"médio":"simples";
+return{units,lines,total,hrs,notes,outros,hasBig,lvl};
 }
 const fmtH=h=>{const m=Math.round(h*2)/2;return(m<1?"1":String(m).replace(".",","))+" h"};
 function msg(r){
@@ -494,13 +496,13 @@ const quando=st.quando==="hoje"?"Hoje":st.quando==="amanha"?"Amanhã":($("data")
 const A=st.addr||{};const end=A.ok?`${A.rua?A.rua+", ":""}${$("num").value.trim()}${$("comp").value.trim()?" – "+$("comp").value.trim():""} – ${A.bairro?A.bairro+", ":""}${A.cidade}/${A.uf} – CEP ${A.cep}`:"";
 const L=[`Olá! Quero agendar uma montagem. Pedido ${code}`,"",...Object.entries(g).map(([n,c])=>`• ${c}x ${n}`)];
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
-if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a levantar":"• Preciso de ajudante");
+if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} por diária; se passar de 1 dia, mais uma diária por dia)`);
 L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
 if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km)L.push(`Distância aprox.: ${Math.round(A.km)} km`);
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
 if(fotos.length)L.push(`Fotos: ${fotos.length} ${fotos.length>1?"imagens":"imagem"} em seguida`);
 if($("obs").value.trim())L.push(`Obs.: ${$("obs").value.trim()}`);
-L.push("",`Valor estimado: ${brl(r.total)}${r.outros?" + outro móvel pela foto":""} (cerca de ${fmtH(r.hrs)})`,"Estou ciente do que está e do que não está incluso no preço.");
+L.push("",`Valor estimado: ${brl(r.total)}${r.outros?" + outro móvel pela foto":""} (serviço ${r.lvl})`,"Estou ciente do que está e do que não está incluso no preço.");
 return L.join("\n");
 }
 function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!st.addr||!st.addr.ok)return["Digite o CEP do local da montagem.","s3"];if(!$("num").value.trim())return["Digite o número do endereço.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];return["",""]}
@@ -511,8 +513,8 @@ function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;seg("quando","quando");seg("turno","turno");seg("lift","lift");
 const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
 countTo(r.total,r.outros?"+":"");const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
-const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · ${fmtH(r.hrs)}`:"Nenhum móvel";
-$("time").textContent=n?`Tempo estimado: cerca de ${fmtH(r.hrs)}`:"Escolha pelo menos um móvel";
+const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"} · serviço ${r.lvl}`:"Nenhum móvel";
+$("time").textContent=n?`Serviço ${r.lvl}. O tempo depende da complexidade de cada móvel.`:"Escolha pelo menos um móvel";
 $("lines").innerHTML=r.lines.map(([a,v])=>`<li><span>${a}</span><span>${v===null?"pela foto":brl(v)}</span></li>`).join("");
 $("notes").textContent=r.notes.join(" ");
 if($("err").textContent)$("err").textContent=check(r)[0];
