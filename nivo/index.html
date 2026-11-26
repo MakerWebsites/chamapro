@@ -164,6 +164,20 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
 .bump{animation:bump .35s ease}@keyframes bump{40%{transform:scale(1.12)}}
 .toast{transform:translate(-50%,10px);transition:opacity .25s,transform .25s}
 
+
+.trust{display:flex;align-items:center;gap:12px;margin-top:18px}
+.trust img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #fff}
+.trust b{display:block;font-size:15px}.trust span{font-size:14px;opacity:.9}
+.perks{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.perks li{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:6px 12px;font-size:14px;font-weight:600}
+.perks li::before{content:"✓ ";color:#3fe0a0}
+.who{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:28px;align-items:center}
+.who img{width:100%;height:auto;border-radius:18px;aspect-ratio:1/1;object-fit:cover}
+.lead2{font-size:17px;margin-top:6px;max-width:58ch}
+.rev{margin-top:16px;background:var(--kraft2);border-radius:14px;padding:16px;max-width:420px}
+.rev .stars{color:#f5b301;font-size:18px;letter-spacing:2px}.rev p{font-weight:700;font-size:18px;margin-top:4px}.rev small{color:var(--soft)}
+.list.sep li::before{content:"•";color:var(--soft)}
+@media(max-width:700px){.who{grid-template-columns:minmax(0,1fr)}.who img{max-width:260px}}
 /* ===== UX/UI v4 ===== */
 .top{position:relative;overflow:hidden;isolation:isolate}
 .top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
@@ -213,8 +227,10 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <div class="logo"><svg viewBox="0 0 44 26" aria-hidden="true"><rect x="1" y="3" width="42" height="20" rx="10" fill="#fff"/><rect x="6" y="8" width="32" height="10" rx="5" fill="#d8f9ea"/><rect x="16" y="9.5" width="12" height="7" rx="3.5" fill="#3fe0a0"/><path d="M15 6v14M29 6v14" stroke="#1d3cff" stroke-width="1.6"/></svg><span class="brand">Nivo Serviços</span></div>
 <a class="pill" id="phoneTop" href="#">WhatsApp</a>
 </div>
-<h1 class="hin" style="animation-delay:.15s">Montagem de móveis no nível certo, hoje ou amanhã</h1>
-<p class="lead hin" style="animation-delay:.28s">Zona Sul de São Paulo. Cole o link da sua compra ou escolha o móvel, veja o preço fechado na hora e envie o pedido com as fotos. Leva menos de um minuto.</p>
+<h1 class="hin" style="animation-delay:.15s">Montagem de móveis com o valor na hora</h1>
+<p class="lead hin" style="animation-delay:.28s">Zona Sul de São Paulo. Cole o link da sua compra ou escolha o móvel, veja o valor estimado na hora e envie o pedido com as fotos. A gente confirma pelo WhatsApp antes de agendar.</p>
+<div class="trust hin" style="animation-delay:.36s"><img src="img/antolin.jpg" alt="Antolin, montador da Nivo Serviços" width="48" height="48"><div><b>Antolin, seu montador</b><span>Mais de 3 anos montando móveis · ★ 5,0 no GetNinjas</span></div></div>
+<ul class="perks hin" style="animation-delay:.4s"><li>Pagamento só no final</li><li>Sem cadastro</li><li>Deslocamento calculado pelo CEP, sem surpresa</li></ul>
 
 <div class="tool hin" id="orcamento" style="animation-delay:.42s">
 <div class="steps">
@@ -317,11 +333,23 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </section>
 
 <section class="band">
+<div class="wrap who">
+<img src="img/antolin.jpg" alt="Antolin chegando para uma montagem" loading="lazy" width="720" height="720">
+<div>
+<h2>Quem vai montar</h2>
+<p class="lead2">Sou o Antolin. Monto móveis há mais de 3 anos em São Paulo. Eu mesmo vou até a sua casa, confiro as peças antes de começar e deixo tudo organizado no final.</p>
+<div class="rev"><div class="stars" aria-label="5 estrelas">★★★★★</div><p>“Ótimo profissional”</p><small>Alexandre, cliente · avaliação no GetNinjas</small></div>
+<p class="hint">Nota 5,0 nas avaliações do GetNinjas.</p>
+</div>
+</div>
+</section>
+
+<section class="band">
 <div class="wrap">
-<h2>O que está no preço</h2>
+<h2>Combinados</h2>
 <div class="cols">
-<div><h3>Incluso</h3><ul class="list yes"><li>Montagem completa do móvel, conforme o manual do fabricante</li><li>Ferramentas, buchas e parafusos de fixação</li><li>Piso protegido com papelão durante o serviço</li><li>Regulagem das portas no dia da montagem</li><li>Embalagens juntadas num canto no final</li></ul></div>
-<div><h3>Não incluso</h3><ul class="list no"><li>Peças faltando ou com defeito de fábrica (nova visita é cobrada)</li><li>Regulagem depois do serviço entregue (visita de R$ 60)</li><li>Alinhamento perfeito em piso desnivelado ou peça empenada de fábrica</li><li>Mudar o móvel de lugar depois de montado</li><li>Descarte das embalagens fora do imóvel</li></ul></div>
+<div><h3>Já está no valor</h3><ul class="list yes"><li>Montagem completa, seguindo o manual do fabricante</li><li>Ferramentas, buchas e parafusos de fixação</li><li>Piso protegido com papelão durante o serviço</li><li>Regulagem das portas no dia da montagem</li><li>Embalagens juntadas num canto no final</li></ul></div>
+<div><h3>Combinado à parte</h3><ul class="list sep"><li>Peças faltando ou com defeito vêm da loja; a volta para terminar é uma nova visita</li><li>Ajustes depois do serviço entregue são uma nova visita</li><li>Piso desnivelado ou peça empenada podem limitar o acabamento</li><li>Mudar o móvel de lugar depois de montado</li><li>Descarte das embalagens fora do imóvel</li></ul></div>
 </div>
 </div>
 </section>
@@ -338,16 +366,17 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <h2>Perguntas frequentes</h2>
 <div style="margin-top:14px">
 <details><summary>Dá pra montar no mesmo dia?</summary><p>Sim, quando a agenda permite. O atendimento no mesmo dia tem acréscimo de R$ 40.</p></details>
-<details><summary>O valor do site é o valor final?</summary><p>É o valor pelos móveis marcados, com 10% de desconto a partir de 3 móveis. Com o link ou a foto do móvel, confirmamos o valor exato antes de sair.</p></details>
+<details><summary>O valor do site é o valor final?</summary><p>É um valor estimado pelos móveis marcados, já com 10% de desconto a partir de 3 móveis. Com o link ou a foto, confirmamos o valor pelo WhatsApp antes de agendar. Sem surpresa no dia.</p></details>
 <details><summary>Não achei o meu móvel na lista. E agora?</summary><p>Marque "Outro móvel" e mande a foto ou o print. Respondemos com o valor.</p></details>
 <details><summary>Como é o pagamento?</summary><p>Pix ou dinheiro, ao final do serviço.</p></details>
+<details><summary>Quanto custa uma nova visita?</summary><p>Para ajustes depois do serviço entregue, a visita é R$ 60. Se faltar peça, a volta para terminar é combinada pelo WhatsApp.</p></details>
 <details><summary>E se faltar peça no móvel?</summary><p>Conferimos as peças antes de começar. Se faltar algo, montamos o que for possível e você aciona a loja. A volta pra terminar é cobrada à parte.</p></details>
 </div>
 </div>
 </section>
 
 <footer class="band">
-<div class="wrap"><strong class="brand">Nivo Serviços</strong><span>Montagem de móveis no nível certo · Zona Sul de São Paulo · Seg a sáb, 8h às 18h · WhatsApp (11) 93745-7836</span><a class="pill" href="#orcamento">Fazer orçamento</a></div>
+<div class="wrap"><strong class="brand">Nivo Serviços</strong><span>Montagem de móveis · Zona Sul de São Paulo · Seg a sáb, 8h às 18h · WhatsApp (11) 93745-7836</span><a class="pill" href="#orcamento">Fazer orçamento</a></div>
 </footer>
 <div class="toast" id="toast"></div>
 
@@ -638,7 +667,7 @@ render();
 }
 
 /* entrada das seções ao rolar e altura da barra */
-(()=>{const els=document.querySelectorAll("main .band h2,.band:not(.top):not(footer) h2,.band .how>*,.work,.band .cols>*,.areas,details,.list li");
+(()=>{const els=document.querySelectorAll("main .band h2,.band:not(.top):not(footer) h2,.band .how>*,.work,.who>*,.band .cols>*,.areas,details,.list li");
 if(!("IntersectionObserver" in window)){return}
 els.forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(e.matches("li,details")?(i%6)*60:(i%3)*110)+"ms"});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting||x.boundingClientRect.top<0){x.target.classList.add("in");io.unobserve(x.target)}}),{rootMargin:"0px 0px -30px 0px"});els.forEach(e=>io.observe(e))})();
