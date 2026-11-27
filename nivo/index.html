@@ -212,6 +212,9 @@ section[id],#orcamento,.tag,#q{scroll-margin-top:72px}
 .upload.shot{display:flex;align-items:center;gap:12px;text-align:left;justify-content:flex-start}
 .upload.shot svg{flex:none;width:28px;height:28px}.upload.shot span{display:flex;flex-direction:column;gap:3px}.upload.shot small{font-weight:500;font-size:14px;opacity:.85}
 [hidden]{display:none!important}
+.qwarn{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:#fff1f0;border:1px solid #f3b8b3;color:#8a1c12;font-size:14px;font-weight:600}
+.dia{margin:6px 0 0;padding:12px;border-radius:12px;background:rgba(29,60,255,.08);border:1px solid rgba(29,60,255,.25);font-weight:600}
+.seg .chip:disabled{opacity:.4;cursor:not-allowed}
 /* ===== UX/UI v4 ===== */
 .top{position:relative;overflow:hidden;isolation:isolate}
 .top::before,.top::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
@@ -304,9 +307,10 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 <div><label for="num">Número da casa ou prédio</label><input id="num" inputmode="numeric" autocomplete="address-line2" placeholder="Ex.: 120"></div>
 <div><label for="comp">Complemento <span class="opt">(opcional)</span></label><input id="comp" autocomplete="off" placeholder="Apto, bloco, casa 2"></div>
 </div>
-<div><label>Quando</label><p class="hint fh">Para hoje, só se tiver horário livre, e custa R$ 40 a mais.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje<small>+ R$ 40</small></button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
+<div><label>Quando</label><p class="hint fh">Segunda a sexta, das 8h às 18h. Sábado, das 8h às 14h. Domingo fechado. Para hoje, só se tiver horário livre, e custa R$ 40 a mais.</p><div class="seg" id="quando"><button type="button" class="chip" data-v="hoje">Hoje<small>+ R$ 40</small></button><button type="button" class="chip" data-v="amanha" aria-pressed="true">Amanhã</button><button type="button" class="chip" data-v="data">Outro dia</button></div></div>
 <div id="dataBox" hidden><label for="data">Data</label><input type="date" id="data"></div>
-<div><label>Período</label><p class="hint fh">Que horas o montador chega. Manhã: a partir das 8h. Tarde: a partir das 13h.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã</button><button type="button" class="chip" data-v="Tarde">Tarde</button></div></div>
+<p class="qwarn" id="qWarn" hidden></p>
+<div><label>Período</label><p class="hint fh" id="turnoHint">É a sua preferência. O horário certo a gente confirma pelo WhatsApp, conforme a agenda.</p><div class="seg" id="turno"><button type="button" class="chip" data-v="Manhã" aria-pressed="true">Manhã<small>a partir das 8h</small></button><button type="button" class="chip" data-v="Tarde">Tarde<small>a partir das 13h</small></button><button type="button" class="chip" data-v="Tanto faz">Tanto faz<small>vocês escolhem</small></button></div><p class="dia" id="diaTodo" hidden>Dia todo: começamos às 8h. Serviço grande ocupa o dia inteiro do montador.</p></div>
 <div class="line2"><div><strong>Prender na parede</strong><p class="hint" style="margin:0">Quantas coisas vão ser presas na parede? Ex.: armário de cima da cozinha, painel de TV, prateleira. R$ 30 cada.</p></div><div class="mini"><button type="button" id="fxm" aria-label="Menos pontos">−</button><span id="fx">0</span><button type="button" id="fxp" aria-label="Mais pontos">+</button></div></div>
 <div class="line2"><div><strong>Tem espelho ou vidro?</strong><p class="hint" style="margin:0">Quantos móveis têm espelho ou vidro? R$ 50 cada, porque quebra fácil.</p></div><div class="mini"><button type="button" id="vdm" aria-label="Menos móveis com vidro">−</button><span id="vd">0</span><button type="button" id="vdp" aria-label="Mais móveis com vidro">+</button></div></div>
 <div id="liftBox" hidden><label>Tem alguém para ajudar a levantar?</label><p class="hint fh">Móvel grande precisa de 2 pessoas para ficar em pé. Pode ser alguém da casa. Se não tiver, levamos um ajudante: R$ 180 no primeiro dia e R$ 90 em cada dia a mais.</p><div class="seg" id="lift"><button type="button" class="chip" data-v="sim" aria-pressed="true">Alguém da casa<small>sem custo</small></button><button type="button" class="chip" data-v="nao">Ajudante<small>+ R$ 180</small></button></div></div>
@@ -417,7 +421,7 @@ details[open] p{animation:faq .35s ease}@keyframes faq{from{opacity:0;transform:
 </section>
 
 <footer class="band">
-<div class="wrap"><strong class="brand">Nivo Serviços</strong><span>Montagem de móveis · Zona Sul de São Paulo · Seg a sáb, 8h às 18h · WhatsApp (11) 93745-7836</span><a class="pill" href="#orcamento">Fazer orçamento</a></div>
+<div class="wrap"><strong class="brand">Nivo Serviços</strong><span>Montagem de móveis · Zona Sul de São Paulo · Seg a sex, 8h às 18h · Sáb, 8h às 14h · WhatsApp (11) 93745-7836</span><a class="pill" href="#orcamento">Fazer orçamento</a></div>
 </footer>
 <div class="toast" id="toast"></div>
 
@@ -569,13 +573,13 @@ return{units,lines,total,hrs,notes,outros,hasBig,lvl,falta,desl};
 const fmtH=h=>{const m=Math.round(h*2)/2;return(m<1?"1":String(m).replace(".",","))+" h"};
 function msg(r){
 const g={};r.units.forEach(u=>g[u.nome]=(g[u.nome]||0)+1);
-const quando=st.quando==="hoje"?"Hoje":st.quando==="amanha"?"Amanhã":($("data").value?$("data").value.split("-").reverse().join("/"):"A combinar");
+const dq=diaEscolhido();const quando=dq?`${st.quando==="hoje"?"Hoje, ":st.quando==="amanha"?"Amanhã, ":""}${DIAS[dq.getDay()]} ${String(dq.getDate()).padStart(2,"0")}/${String(dq.getMonth()+1).padStart(2,"0")}`:"A combinar";
 const A=st.addr||{};const end=A.ok?`${A.rua?A.rua+", ":""}${$("num").value.trim()}${$("comp").value.trim()?" – "+$("comp").value.trim():""} – ${A.bairro?A.bairro+", ":""}${A.cidade}/${A.uf} – CEP ${A.cep}`:"";
 const L=[`Olá! Quero agendar uma montagem. Pedido ${code}`,"",...Object.entries(g).map(([n,c])=>{const it=r.units.find(u=>u.nome===n);return`• ${c}x ${n}${it&&it.how?` (${it.how})`:""}`})];
 if(st.vd)L.push(`• Móveis com espelho ou vidro: ${st.vd}`);
 if(st.fx)L.push(`• Fixação na parede: ${st.fx} ${st.fx>1?"pontos":"ponto"}`);
 if(r.hasBig)L.push(st.lift==="sim"?"• Alguém da casa ajuda a segurar as peças":`• Quero ajudante (${brl(CONFIG.ajudante)} a diária; se passar de 1 dia, ${brl(CONFIG.ajudanteExtra)} por dia a mais)`);
-L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
+L.push("",`Endereço: ${end}`,`Quando: ${quando}, ${st.turno==="Dia todo"?"dia todo (a partir das 8h)":st.turno==="Tanto faz"?"período a combinar":st.turno.toLowerCase()}`,`Acesso: ${$("andar").value}`);
 if($("nome").value.trim())L.push(`Nome: ${$("nome").value.trim()}`);if(A.km){const r2=calc();L.push(`Distância aprox.: ${Math.round(A.km)} km`+(r2.desl||r2.falta?` (taxa de visita: deslocamento ${brl(r2.desl)}${r2.falta?` + complemento do mínimo ${brl(r2.falta)}`:""})`:" (sem taxa de visita)"))}
 ITEMS.filter(i=>i.cat==="link"&&qty[i.id]&&i.src).forEach(i=>L.push(`Link: ${i.src}`));
 if(fotos.length)L.push(`Fotos: ${fotos.length} ${fotos.length>1?"imagens":"imagem"} em seguida`);
@@ -583,13 +587,25 @@ if($("obs").value.trim())L.push(`Obs.: ${$("obs").value.trim()}`);
 L.push("",`Valor estimado: ${brl(r.total)}${r.outros?" + outro móvel pela foto":""} (serviço ${r.lvl})`,"Estou ciente do que está e do que não está incluso no preço.");
 return L.join("\n");
 }
-function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!st.addr||!st.addr.ok)return["Digite o CEP do local da montagem.","s3"];if(!$("num").value.trim())return["Digite o número do endereço.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];return["",""]}
+const DIAS=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function diaEscolhido(){const n=new Date();if(st.quando==="hoje")return n;if(st.quando==="amanha"){const d=new Date(n);d.setDate(d.getDate()+1);return d}const v=$("data").value;if(!v)return null;const[y,m,dd]=v.split("-").map(Number);return new Date(y,m-1,dd)}
+function hojeOk(){const n=new Date(),w=n.getDay(),h=n.getHours();return w!==0&&(w===6?h<11:h<15)}
+function agendaErro(r){const d=diaEscolhido();if(!d)return"";const w=d.getDay();if(w===0)return"Domingo estamos fechados. Escolha outro dia.";if(w===6&&r.lvl==="grande")return"Serviço grande ocupa o dia todo, e no sábado atendemos só até as 14h. Escolha um dia de segunda a sexta.";return""}
+function check(r){if(!r.units.length)return["Escolha pelo menos um móvel.","s1"];if(!st.addr||!st.addr.ok)return["Digite o CEP do local da montagem.","s3"];if(!$("num").value.trim())return["Digite o número do endereço.","s3"];if(st.quando==="data"&&!$("data").value)return["Escolha a data.","s3"];const ae=agendaErro(r);if(ae)return[ae,"s3"];return["",""]}
 function seg(id,key){$(id).querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===st[key]))}
 let shown=0;function countTo(to,suf){const from=shown;shown=to;const els=[$("total"),$("mtotal")];if(from===to){els.forEach(e=>e.textContent=brl(to)+suf);return}els.forEach(e=>{e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")});if(matchMedia("(prefers-reduced-motion: reduce)").matches){els.forEach(e=>e.textContent=brl(to)+suf);return}const t0=performance.now(),d=450;cancelAnimationFrame(countTo.a);const step=t=>{const p=Math.min(1,(t-t0)/d),v=from+(to-from)*(1-Math.pow(1-p,3));els.forEach(e=>e.textContent=brl(v)+suf);if(p<1)countTo.a=requestAnimationFrame(step)};countTo.a=requestAnimationFrame(step)}
 let justAdded=null;
 function render(){
 drawCats();drawShelves();$("fx").textContent=st.fx;$("fxm").disabled=!st.fx;$("vd").textContent=st.vd;$("vdm").disabled=!st.vd;seg("quando","quando");seg("turno","turno");seg("lift","lift");
-const r=calc();$("liftBox").hidden=!r.hasBig;$("dataBox").hidden=st.quando!=="data";
+const r=calc();$("liftBox").hidden=!r.hasBig;
+{const n=new Date(),am=new Date(n);am.setDate(am.getDate()+1);const hb=$("quando").querySelector('[data-v="hoje"]'),ab=$("quando").querySelector('[data-v="amanha"]');hb.disabled=!hojeOk();ab.disabled=am.getDay()===0;
+if(st.quando==="hoje"&&hb.disabled)st.quando=ab.disabled?"data":"amanha";if(st.quando==="amanha"&&ab.disabled)st.quando="data";seg("quando","quando");
+$("data").min=ymd(am);const d=diaEscolhido(),sab=d&&d.getDay()===6,big=r.lvl==="grande";
+$("turno").hidden=big;$("diaTodo").hidden=!big;$("turnoHint").hidden=big;
+const tb=$("turno").querySelector('[data-v="Tarde"]');tb.disabled=!!sab;$("turnoHint").textContent=sab?"No sábado atendemos só de manhã, até as 14h. O horário certo a gente confirma pelo WhatsApp.":"É a sua preferência. O horário certo a gente confirma pelo WhatsApp, conforme a agenda.";if(!big){if(sab&&st.turno==="Tarde")st.turno="Manhã";if(st.turno==="Dia todo")st.turno="Manhã"}else st.turno="Dia todo";seg("turno","turno");
+const ae=r.units.length?agendaErro(r):"";$("qWarn").hidden=!ae;$("qWarn").textContent=ae;}
+$("dataBox").hidden=st.quando!=="data";
 countTo(r.total,r.outros?"+":"");$("ups").hidden=!r.falta;if(r.falta){$("upsT").textContent=`Ainda cabem ${brl(r.falta)} sem pagar a mais`}const stepOk=[r.units.length>0,fotos.length>0,!check(r)[0]&&r.units.length>0];["s1","s2","s3"].forEach((id,k)=>{const b=$(id).querySelector(".num");if(b.classList.contains("ok")!==stepOk[k]){b.classList.toggle("ok",stepOk[k]);b.textContent=stepOk[k]?"✓":String(k+1)}});const rd=!check(r)[0];$("send").classList.toggle("ready",rd);$("msend").classList.toggle("ready",rd);document.dispatchEvent(new CustomEvent("nv:render",{detail:r.units.length}));
 const n=r.units.length;$("mcount").textContent=n?`${n} ${n>1?"itens":"item"}`:"Nenhum móvel";
 $("time").textContent=n?`Serviço ${r.lvl}. O tempo depende da complexidade${r.lvl==="grande"?" e pode passar de um dia":""}.`:"Escolha pelo menos um móvel";
@@ -730,7 +746,7 @@ const onQty=e=>{const p=e.target.closest("[data-p]"),m=e.target.closest("[data-m
 $("mobsum").onclick=()=>document.querySelector(".tag").scrollIntoView({behavior:"smooth",block:"start"});
 $("fp").onchange=e=>{st.fp=e.target.value;drawShelves()};$("fo").onchange=e=>{st.fo=e.target.value;drawShelves()};
 $("fxp").onclick=()=>{st.fx++;render()};$("ups").addEventListener("click",e=>{const b=e.target.closest("[data-u]");if(!b)return;const u=b.dataset.u;if(u==="fx"){st.fx++;toast("Fixação na parede adicionada")}else if(u==="mais"){st.cat="quarto";st.q="";$("q").value="";drawCats();drawShelves();$("q").scrollIntoView({behavior:"smooth",block:"start"});return}else{qty[u]=(qty[u]||0)+1;toast("Adicionado ao pedido: "+BY[u].nome)}render()});$("vdp").onclick=()=>{st.vd++;render()};$("vdm").onclick=()=>{st.vd=Math.max(0,st.vd-1);render()};$("fxm").onclick=()=>{st.fx=Math.max(0,st.fx-1);render()};
-[["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b){st[k]=b.dataset.v;render()}}));
+[["quando","quando"],["turno","turno"],["lift","lift"]].forEach(([id,k])=>$(id).addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b&&!b.disabled){st[k]=b.dataset.v;render()}}));$("data").addEventListener("change",()=>render());
 ["andar","data"].forEach(id=>$(id).addEventListener("change",render));["nome","obs","num","comp"].forEach(id=>$(id).addEventListener("input",render));
 $("cep").addEventListener("input",e=>{let v=e.target.value.replace(/\D/g,"").slice(0,8);e.target.value=v.length>5?v.slice(0,5)+"-"+v.slice(5):v;if(v.length===8)buscaCep(v);else if(st.addr){st.addr=null;$("addr").textContent="";$("addrBox").hidden=true;render()}});
 $("pics").addEventListener("change",async e=>{const fl=[...e.target.files].slice(0,CONFIG.maxFotos-fotos.length);const novas=[];for(const f of fl){try{const c=await compress(f);fotos.push(c);novas.push(c)}catch(err){toast("Não foi possível ler uma das imagens.")}}drawPhotos();if(e.target.files.length>fl.length)toast(`Máximo de ${CONFIG.maxFotos} fotos.`);e.target.value="";drawPhotos();render()});
